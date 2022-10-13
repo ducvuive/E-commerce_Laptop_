@@ -14,6 +14,21 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+// config register
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Default Password settings.
+    options.Password.RequireDigit = true; // yeu cau 1 so tu 0-9
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredLength = 6;
+    // Default SignIn settings.
+    options.SignIn.RequireConfirmedEmail = false;
+    
+    // Default User settings.
+    options.User.RequireUniqueEmail = true;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
