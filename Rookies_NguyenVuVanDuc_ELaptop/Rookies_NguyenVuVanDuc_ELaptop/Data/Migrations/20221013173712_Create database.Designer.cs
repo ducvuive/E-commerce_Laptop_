@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rookies_NguyenVuVanDuc_ELaptop.Data;
 
@@ -11,9 +12,10 @@ using Rookies_NguyenVuVanDuc_ELaptop.Data;
 namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221013173712_Create database")]
+    partial class Createdatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,11 +234,11 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
 
             modelBuilder.Entity("Rookies_NguyenVuVanDuc_ELaptop.Models.CongKetNoi", b =>
                 {
-                    b.Property<int>("CongKetNoiId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CongKetNoiId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CongGiaoTiep")
                         .IsRequired()
@@ -262,7 +264,7 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CongKetNoiId");
+                    b.HasKey("Id");
 
                     b.ToTable("Congketnoi");
                 });
@@ -275,18 +277,26 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("BoNhoRamRamId")
+                    b.Property<int>("BXLId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BoXuLyId")
+                    b.Property<int>("BoNhoRamId")
                         .HasColumnType("int");
+
+                    b.Property<string>("BoXuLy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CardManHinh")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CongKetNoiId")
+                    b.Property<int>("CongKNId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CongKetNoi")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DacBiet")
                         .IsRequired()
@@ -296,7 +306,7 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DanhMucSanPhamDMSPId")
+                    b.Property<int>("DanhMucSanPhamId")
                         .HasColumnType("int");
 
                     b.Property<long>("DonGia")
@@ -307,14 +317,19 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HinhAnh")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("KichThuocTrongLuong")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ManHinhId")
+                    b.Property<int>("MHId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ManHinh")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MauSac")
                         .IsRequired()
@@ -332,11 +347,12 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RaMat")
+                    b.Property<int?>("RaMat")
                         .HasColumnType("int");
 
-                    b.Property<int>("RamId")
-                        .HasColumnType("int");
+                    b.Property<string>("Ram")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SoLuong")
                         .HasColumnType("int");
@@ -355,26 +371,26 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BoNhoRamRamId");
+                    b.HasIndex("BXLId");
 
-                    b.HasIndex("BoXuLyId");
+                    b.HasIndex("BoNhoRamId");
 
-                    b.HasIndex("CongKetNoiId");
+                    b.HasIndex("CongKNId");
 
-                    b.HasIndex("DanhMucSanPhamDMSPId");
+                    b.HasIndex("DanhMucSanPhamId");
 
-                    b.HasIndex("ManHinhId");
+                    b.HasIndex("MHId");
 
                     b.ToTable("Sanpham");
                 });
 
             modelBuilder.Entity("Test.Models.BoNhoRam", b =>
                 {
-                    b.Property<int>("RamId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RamId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("BusRam")
                         .IsRequired()
@@ -392,18 +408,18 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RamId");
+                    b.HasKey("Id");
 
                     b.ToTable("Bonhoram");
                 });
 
             modelBuilder.Entity("Test.Models.BoXuLy", b =>
                 {
-                    b.Property<int>("BoXuLyId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BoXuLyId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("BoNhoDem")
                         .IsRequired()
@@ -427,7 +443,7 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("BoXuLyId");
+                    b.HasKey("Id");
 
                     b.ToTable("Boxuly");
                 });
@@ -460,28 +476,28 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
 
             modelBuilder.Entity("Test.Models.DanhMucSanPham", b =>
                 {
-                    b.Property<int>("DMSPId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DMSPId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("TenDM")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("DMSPId");
+                    b.HasKey("Id");
 
                     b.ToTable("Danhmucsanpham");
                 });
 
             modelBuilder.Entity("Test.Models.HoaDon", b =>
                 {
-                    b.Property<int>("HoaDonId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HoaDonId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("DiaChiGiaoHang")
                         .IsRequired()
@@ -502,6 +518,7 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NguoiNhan")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SDT")
@@ -514,7 +531,7 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                     b.Property<int>("TrangThai")
                         .HasColumnType("int");
 
-                    b.HasKey("HoaDonId");
+                    b.HasKey("Id");
 
                     b.HasIndex("MaKhacHangId");
 
@@ -523,11 +540,11 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
 
             modelBuilder.Entity("Test.Models.ManHinh", b =>
                 {
-                    b.Property<int>("ManHinhId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ManHinhId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CamUng")
                         .IsRequired()
@@ -549,7 +566,7 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ManHinhId");
+                    b.HasKey("Id");
 
                     b.ToTable("Manhinh");
                 });
@@ -631,33 +648,33 @@ namespace Rookies_NguyenVuVanDuc_ELaptop.Data.Migrations
 
             modelBuilder.Entity("Rookies_NguyenVuVanDuc_ELaptop.Models.SanPham", b =>
                 {
-                    b.HasOne("Test.Models.BoNhoRam", "BoNhoRam")
+                    b.HasOne("Test.Models.BoXuLy", "BXL")
                         .WithMany("SanPham")
-                        .HasForeignKey("BoNhoRamRamId")
+                        .HasForeignKey("BXLId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Test.Models.BoXuLy", "BXL")
+                    b.HasOne("Test.Models.BoNhoRam", "BoNhoRam")
                         .WithMany("SanPham")
-                        .HasForeignKey("BoXuLyId")
+                        .HasForeignKey("BoNhoRamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Rookies_NguyenVuVanDuc_ELaptop.Models.CongKetNoi", "CongKN")
                         .WithMany("Sanphams")
-                        .HasForeignKey("CongKetNoiId")
+                        .HasForeignKey("CongKNId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Test.Models.DanhMucSanPham", "DanhMucSanPham")
                         .WithMany("SanPhams")
-                        .HasForeignKey("DanhMucSanPhamDMSPId")
+                        .HasForeignKey("DanhMucSanPhamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Test.Models.ManHinh", "MH")
                         .WithMany("Sanpham")
-                        .HasForeignKey("ManHinhId")
+                        .HasForeignKey("MHId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
