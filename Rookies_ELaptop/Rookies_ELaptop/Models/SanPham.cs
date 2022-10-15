@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using Test.Models;
 
 namespace Rookies_ELaptop.Models
 {
@@ -8,7 +9,7 @@ namespace Rookies_ELaptop.Models
         public int SanPhamId { get; set; }
         public int ManHinhId { get; set; }
         public int BoXuLyId { get; set; }
-        public int RamId { get; set; }
+        public int RamId { get; set; }      
         public int CongKetNoiId { get; set; }
         public int DMSPId { get; set; }
         public string? TenSP { get; set; }
@@ -28,6 +29,9 @@ namespace Rookies_ELaptop.Models
         public long DonGia { get; set; }
         public string? HinhAnh { get; set; }
 
+        public virtual CongKetNoi CongKN { get; set; }
+        public virtual BoNhoRam BoNhoRam {get; set; }
+        public virtual DanhMucSanPham DanhMucSanPham { get; set; }
         public virtual ManHinh MH { get; set; }
         public virtual BoXuLy BXL { get; set; }
         public virtual BoNhoRam Ram {get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rookies_NguyenVuVanDuc_ELaptop.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 // #nullable disable
 
 namespace Rookies_ELaptop.Models 
-{ 
+{
     public partial class HoaDon
     {
         public int HoaDonId { get; set; }

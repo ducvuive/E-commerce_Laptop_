@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rookies_NguyenVuVanDuc_ELaptop.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,6 +11,7 @@ namespace Rookies_ELaptop.Models
 {
     public partial class BoNhoRam
     {
+        [Key]
         public int RamId { get; set; }
         public string? DungLuongRam { get; set; }
         public string? LoaiRam { get; set; }

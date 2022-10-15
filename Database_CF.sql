@@ -274,7 +274,43 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
 
+DECLARE @var0 sysname;
+SELECT @var0 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Sanpham]') AND [c].[name] = N'RaMat');
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [Sanpham] DROP CONSTRAINT [' + @var0 + '];');
+ALTER TABLE [Sanpham] ALTER COLUMN [RaMat] int NOT NULL;
+ALTER TABLE [Sanpham] ADD DEFAULT 0 FOR [RaMat];
+GO
+
+DECLARE @var1 sysname;
+SELECT @var1 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Sanpham]') AND [c].[name] = N'HinhAnh');
+IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Sanpham] DROP CONSTRAINT [' + @var1 + '];');
+ALTER TABLE [Sanpham] ALTER COLUMN [HinhAnh] nvarchar(max) NULL;
+GO
+
+DECLARE @var2 sysname;
+SELECT @var2 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Hoadon]') AND [c].[name] = N'NguoiNhan');
+IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Hoadon] DROP CONSTRAINT [' + @var2 + '];');
+ALTER TABLE [Hoadon] ALTER COLUMN [NguoiNhan] nvarchar(max) NULL;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20221013183847_Create database 1', N'6.0.10');
+GO
+
+COMMIT;
+GO
 
 INSERT INTO [DanhMucSanPham] (TenDM) VALUES ('MacBook');
 INSERT INTO [DanhMucSanPham] (TenDM) VALUES ('Asus');
@@ -286,6 +322,8 @@ INSERT INTO [DanhMucSanPham] (TenDM) VALUES ('Msi');
 INSERT INTO [DanhMucSanPham] (TenDM) VALUES ('LG');
 INSERT INTO [DanhMucSanPham] (TenDM) VALUES ('GIGABYTE');
 
+ALTER TABLE [Sanpham] DROP CONSTRAINT [FK_Sanpham_Bonhoram_BoNhoRamId];
+GO
 
 insert into ManHinh values ('15.6 inch','Full HD (1920x1080)','144Hz','Chống chói Anti Glare, Tấm nền IPS','Không');
 insert into ManHinh values ('15.6 inch','Full HD (1920x1080)','60Hz','Công nghệ IPSLED','Không');
@@ -310,82 +348,128 @@ insert into ManHinh values ('15.6 inch','Full HD (1920x1080)','144Hz','Tấm n�
 insert into ManHinh values ('15.6 inch','Full HD (1920x1080)','120Hz','LED, WVA','không');
 insert into ManHinh values ('15.6 inch','QHD (2560 x 1600)','165Hz','Tấm nền IPS, AcerComfyview, LED backlit, TFT','Không');
 
+ALTER TABLE [Sanpham] DROP CONSTRAINT [FK_Sanpham_Congketnoi_CongKNId];
+GO
 
-        insert into congketnoi values ('2 x USB 3.2, 2 x USB Type-C, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45)','Bluetooth 5.1, Wi-Fi 6 (802.11ax)','','HD webcam','','Có');
-        insert into congketnoi values ('2 x USB 3.2, HDMI, USB 2.0, USB Type-C','Bluetooth 5.1, Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bản lề mở 180 độ','Có');
-        insert into congketnoi values ('Jack tai nghe 3.5 mm, Thunderbolt 4 USB-C, 3 x USB 3.2, HDMI, LAN (RJ45), Mini DisplayPort, USB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','SD','FHD (30fps@1080p)','Đèn bàn phím chuyển màu RGB','Có');
-        insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Thunderbolt 4 USB-C, USB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','','Camera IR','Mở khóa khuôn mặtĐèn bàn phím chuyển màu RGB','Có');
-        insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Thunderbolt 4 USB-C, USB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','SD','FHD (30fps@1080p)','Đèn bàn phím chuyển màu RGB','Có');
-        insert into congketnoi values ('Jack tai nghe 3.5 mm, 3 x USB 3.2, HDMI, LAN (RJ45), Mini DisplayPort','Bluetooth 5.2Wi-Fi 6 (802.11ax)','SD','HD webcam','Đèn bàn phím chuyển màu RGB','Có');
-        insert into congketnoi values ('2 x Thunderbolt 4 USB-C, 2 x USB 3.2, HDMI,Jack tai nghe 3.5 mm','Bluetooth 5.2Wi-Fi 6E (802.11ax)','Micro SD','Camera IR, HD webcam','Bảo mật vân tay, Công tắc khóa camera, Mở khóa khuôn mặt','Có');
-        insert into congketnoi values ('1 x USB 3.2, 2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mmUSB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','Micro SD','Camera IRHD webcam','Bảo mật vân tay, Công tắc khóa camera, Mở khóa khuôn mặt, Tiêu chuẩn Nền Intel Evo','Có');
-        insert into congketnoi values ('Jack tai nghe 3.5 mm, 3 x USB 3.2, HDMI, LAN (RJ45), Mini DisplayPort, USB Type-C','Wi-Fi 6 (802.11ax)Bluetooth 5.1','SD','HD webcam','Đèn bàn phím chuyển màu RGB','Có');
-        insert into congketnoi values ('2 x Thunderbolt 4 USB-C, 2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm','Bluetooth 5.1Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bảo mật vân tayTiêu chuẩn Nền Intel Evo','Có');
-        insert into congketnoi values ('2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Mini DisplayPort, USB 2.0, USB Type-C','Bluetooth 5.2Wi-Fi 6 (802.11ax)','SD','HD webcam','','Có');
-        insert into congketnoi values ('1 x USB 3.2, 2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mm','Bluetooth 5.1, Wi-Fi 6 (802.11ax)','','HD webcam','Bảo mật vân tay, Công tắc khóa camera, Tiêu chuẩn Nền Intel Evo','Có');
-        insert into congketnoi values ('2 x USB Type-C (Power Delivery and DisplayPort), USB Type-C, Jack tai nghe 3.5 mm','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','Micro SD','Sau 5 MP, trước 5 MPCamera IR','Digital Pen, Mở khóa khuôn mặt','có');
-        insert into congketnoi values ('2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mm, USB Type-C','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','','Camera IR , HD webcam','Bản lề mở 180 độ, Mở khóa khuôn mặt, Tiêu chuẩn Nền Intel Evo, Độ bền chuẩn quân đội MLT STD 810G','Có');
-        insert into congketnoi values ('1 x USB 3.2 (Always on), 2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mm','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','','HD webcam','Bảo mật vân tay, Công tắc khóa camera, Tiêu chuẩn Nền Intel Evo, TPM 2.0','Có');
-        insert into congketnoi values ('1 x USB 3.2, 1 x USB 3.2 (Always on), HDMI, Jack tai nghe 3.5 mm, Thunderbolt 4 USB-C, USB Type-C (support data transfer, Power Delivery 3.0 and DisplayPort 1.4)','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','Micro SD ','HD webcam','Bút cảm ứng, Bảo mật vân tay, Công tắc khóa camera','Có');
-        insert into congketnoi values ('2 x USB 3.2, 2 x USB Type-C, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45)','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','','HD webcam','Công tắc khóa camera','Có');
-        insert into congketnoi values ('1 x USB 3.2, 1 x USB 3.2 (Always on), HDMI, Jack tai nghe 3.5 mm, Thunderbolt 4 USB-C, USB Type-C (support data transfer, Power Delivery 3.0 and DisplayPort 1.4)','Bluetooth 5.1Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bút cảm ứng, Bảo mật vân tay, Công tắc khóa camera','có');
-        insert into congketnoi values ('2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Thunderbolt 4 USB-C, USB Type-C','Bluetooth 5.1Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bản lề mở 180 độ, Bảo mật vân tay, Công tắc khóa camera, Độ bền chuẩn quân đội MLT STD 810H','Không');
-        insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), USB Type-C','Bluetooth 5.1 Wi-Fi 6 (802.11ax)','','HD webcam','Đèn bàn phím chuyển màu RGB','Có');
-        insert into congketnoi values ('HDMIUSB 3.12 x USB 2.0LAN (RJ45)Jack tai nghe 3.5 mm','Bluetooth 5.0Wi-Fi 802.11 a/b/g/n/ac','','VGA webcam ','Bản lề mở 180 độ','Không');
-        insert into congketnoi values ('2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), USB 2.0','BluetoothWi-Fi 802.11 a/b/g/n/ac','SD','HD webcam','','không');
-        insert into congketnoi values ('Jack tai nghe 3.5 mm, 1 x USB 3.2, HDMI, LAN (RJ45), Thunderbolt 3, 2 x USB 2.0, Mini DisplayPort','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','SD','HD webcam','Bảo mật vân tay','có');
-        insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Mini DisplayPort, Thunderbolt 4 USB-C','Bluetooth 5.1Wi-Fi 6 (802.11ax)','','HD webcam','Công nghệ quạt AeroBlade 3D thế hệ 5 2 quạt tản nhiệtĐèn bàn phím chuyển màu RGB','Có');
-        insert into congketnoi values ('1 x USB 3.2 2 x USB 2.0 HDMI Jack tai nghe 3.5 mm USB Type-C','Bluetooth 4.1Wi-Fi 802.11 a/b/g/n/ac','',' VGA Webcam',' Bảo mật vân tay','Không');
-        insert into congketnoi values ('2 x Thunderbolt 3 (USB-C)Jack tai nghe 3.5 mm','Bluetooth 5.0Wi-Fi 6 (802.11ax)','','720p FaceTime Camera',' Bảo mật vân tay',' Có');     
-  
-        insert into BONHORAM values ('16 GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','3200MHz','64 GB');
-        insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','3200MHz','64 GB');
-        insert into BONHORAM values ('32 GB','DDR4 2 khe (1 khe 16GB + 1 khe 16GB)','3200MHz','64 GB');
-        insert into BONHORAM values ('16 GB','LPDDR4X (8GB On board + 8GB On board)','2133 MHz (Hãng công bố)','Không hỗ trợ nâng cấp');
-        insert into BONHORAM values ('16 GB','LPDDR4 (On board)','2133 MHz (Hãng công bố)','Không hỗ trợ nâng cấp');
-        insert into BONHORAM values ('16 GB','DDR4 (2 khe)','2666 MHz','32 GB');
-        insert into BONHORAM values ('16 GB','LPDDR4X (On board)','4266 MHz','Không hỗ trợ nâng cấp');
-        insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','4266 MHz','');
-        insert into BONHORAM values ('16GB','LPDDR4 (On board)','4266 MHz','Không hỗ trợ nâng cấp');
-        insert into BONHORAM values ('8GB','DDR4 (On board)','2666 MHz','Không hỗ trợ nâng cấp');
-        insert into BONHORAM values ('8GB','DDR4 (On board)','3200 MHz','Không hỗ trợ nâng cấp');
-		insert into BONHORAM values ('8GB','DDR4 2 khe (1 khe 8GB onboard + 1 khe trống)','3200MHz','40GB');
-        insert into BONHORAM values ('8GB','DDR4 (2 khe)','2933 MHz','16GB');
-        insert into BONHORAM values ('16GB','DDR4 2 khe (8GB onboard+ 1 khe 8GB)','3200 MHz','40 GB');
-        insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','3200 MHz','32 GB');
-        insert into BONHORAM values ('4 GB','DDR4 2 khe (1 khe 4GB + 1 khe rời)','2400 MHz','12 GB');
-        insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','2666 MHz','16 GB');
-        insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','2666 MHz','32GB');
-        insert into BONHORAM values ('16GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','2933 MHz','16GB');
-        insert into BONHORAM values ('16 GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','2700 MHz','32 GB');
-        insert into BONHORAM values ('16 GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','3200 MHz','32 GB');
-        insert into BONHORAM values ('8GB','','','');
-        insert into BONHORAM values ('16GB','','','');
-        insert into BONHORAM values ('32GB','','','');
-        insert into BONHORAM values ('8 GB','LPDDR4X (On board)','4267 MHz','Không hỗ trợ nâng cấp');
-        insert into BONHORAM values ('4GB','LPDDR4X (On board)','3200 MHz','20GB');
-        insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 4GB + 1 khe 4GB)','3200 MHz','32 GB');
-  
-        insert into BOXULY values ('Intel Core i5 Comet Lake - 10500H',6,12,'2.50 GHz','Turbo Boost 4,5GHZ','12MB');
-        insert into BOXULY values ('Intel Core i5 Tiger Lake - 1155G7',4,8,'2.50 GHz','Turbo Boost 4,5GHZ','8MB');
-        insert into BOXULY values ('Intel Core i7 Tiger Lake - 11800H',8,16,'2.30 GHz','Turbo Boost 4.6 GHz','24MB');
-        insert into BOXULY values ('Intel Core i7 Tiger Lake - 1195G7',4,8,'2.90 GHz','Turbo Boost 5.0 GHz','12MB');
-        insert into BOXULY values ('Intel Core i7 Tiger Lake - 1185G7',4,8,'3.00 GHz','Turbo Boost 4.8 GHz','12MB');
-        insert into BOXULY values ('Intel Core i7 Comet Lake - 10750H',6,12,'2.60 GHz','Turbo Boost 5.0 GHz','12MB');
-        insert into BOXULY values ('Intel Core i7 Tiger Lake - 1165G7',4,8,'2.80 GHz','Turbo Boost 4.7 GHz','12MB');
-        insert into BOXULY values ('Intel Core i5 Tiger Lake - 11400H',6,12,'2.70 GHz','Turbo Boost 4,5 GHZ','12MB');
-        insert into BOXULY values ('Intel Core i5 Comet Lake - 10500H',6,12,'2.50 GHz','Turbo Boost 4,5 GHZ','12MB');
-        insert into BOXULY values ('Intel Core i7 Comet Lake - 10510U',4,8,'1.80 GHz','Turbo Boost 4.9 GHz','8MB');
-        insert into BOXULY values ('Intel Core i5 Tiger Lake - 1135G7',4,8,'2.40 GHz','Turbo Boost 4.2 GHz','8 MB');
-        insert into BOXULY values ('Intel Core i5 Comet Lake - 10210U',4,8,'1.6GHz','Turbo Boost 4.2 GHz','6 MB');
-        insert into BOXULY values ('Intel Core i3 Ice Lake - 1005G1',2,4,'1.2 GHz','Turbo Boost 3.4 GHz','4 MB');
-        insert into BOXULY values ('Apple M1','','','','','');
-        insert into BOXULY values ('Intel Core i5 Tiger Lake - 1135G7',4,8,'2.40 GHz','Turbo Boost 4.2 GHz','8 MB');
-        insert into BOXULY values ('Intel Core i3 Tiger Lake - 1115G4',2,4,'3 GHz','Turbo Boost 4.1 GHz','6 MB');
-        insert into BOXULY values ('Intel Core i5 Tiger Lake - 1135G7',4,8,'2.40 GHz','Turbo Boost 4.2 GHz','8MB');
-        insert into BOXULY values ('AMD Ryzen 5 - 5600H',6,12,'3.30 GHz','Turbo Boost 4.2 GHz','16 MB');
-		
-insert into sanpham values (10,14,22,26,01,'Laptop Apple MacBook Air M1 2020 8GB/256GB/7-core GPU (MGN63SA/A)',3,'Trắng','256 GB SSD','Card tích hợp7 nhân GPU','','Mac OS','Vỏ kim loại nguyên khối','Dài 304.1 mm - Rộng 212.4 mm - Dày 4.1 mm đến 16.1 mm - Nặng 1.29 kg','','Khoảng 10 tiếng',2020,'','27490000','/HinhAnh/SP001.jpg');
+ALTER TABLE [Sanpham] DROP CONSTRAINT [FK_Sanpham_Danhmucsanpham_DanhMucSanPhamId];
+GO
+
+ALTER TABLE [Sanpham] DROP CONSTRAINT [FK_Sanpham_Manhinh_MHId];
+GO
+
+DROP INDEX [IX_Sanpham_MHId] ON [Sanpham];
+GO
+
+DECLARE @var3 sysname;
+SELECT @var3 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Sanpham]') AND [c].[name] = N'BoXuLy');
+IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [Sanpham] DROP CONSTRAINT [' + @var3 + '];');
+ALTER TABLE [Sanpham] DROP COLUMN [BoXuLy];
+GO
+
+DECLARE @var4 sysname;
+SELECT @var4 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Sanpham]') AND [c].[name] = N'CongKetNoi');
+IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [Sanpham] DROP CONSTRAINT [' + @var4 + '];');
+ALTER TABLE [Sanpham] DROP COLUMN [CongKetNoi];
+GO
+
+DECLARE @var5 sysname;
+SELECT @var5 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Sanpham]') AND [c].[name] = N'ManHinh');
+IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [Sanpham] DROP CONSTRAINT [' + @var5 + '];');
+ALTER TABLE [Sanpham] DROP COLUMN [ManHinh];
+GO
+
+DECLARE @var6 sysname;
+SELECT @var6 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Sanpham]') AND [c].[name] = N'Ram');
+IF @var6 IS NOT NULL EXEC(N'ALTER TABLE [Sanpham] DROP CONSTRAINT [' + @var6 + '];');
+ALTER TABLE [Sanpham] DROP COLUMN [Ram];
+GO
+
+EXEC sp_rename N'[Sanpham].[MHId]', N'RamId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Sanpham].[DanhMucSanPhamId]', N'ManHinhId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Sanpham].[CongKNId]', N'DanhMucSanPhamDMSPId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Sanpham].[BoNhoRamId]', N'CongKetNoiId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Sanpham].[BXLId]', N'BoXuLyId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Sanpham].[IX_Sanpham_DanhMucSanPhamId]', N'IX_Sanpham_ManHinhId', N'INDEX';
+GO
+
+EXEC sp_rename N'[Sanpham].[IX_Sanpham_CongKNId]', N'IX_Sanpham_DanhMucSanPhamDMSPId', N'INDEX';
+GO
+
+EXEC sp_rename N'[Sanpham].[IX_Sanpham_BXLId]', N'IX_Sanpham_BoXuLyId', N'INDEX';
+GO
+
+EXEC sp_rename N'[Sanpham].[IX_Sanpham_BoNhoRamId]', N'IX_Sanpham_CongKetNoiId', N'INDEX';
+GO
+
+EXEC sp_rename N'[Manhinh].[Id]', N'ManHinhId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Hoadon].[Id]', N'HoaDonId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Danhmucsanpham].[Id]', N'DMSPId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Congketnoi].[Id]', N'CongKetNoiId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Boxuly].[Id]', N'BoXuLyId', N'COLUMN';
+GO
+
+EXEC sp_rename N'[Bonhoram].[Id]', N'RamId', N'COLUMN';
+GO
+
+ALTER TABLE [Sanpham] ADD [BoNhoRamRamId] int NOT NULL DEFAULT 0;
+GO
+
+CREATE INDEX [IX_Sanpham_BoNhoRamRamId] ON [Sanpham] ([BoNhoRamRamId]);
+GO
+
+ALTER TABLE [Sanpham] ADD CONSTRAINT [FK_Sanpham_Bonhoram_BoNhoRamRamId] FOREIGN KEY ([BoNhoRamRamId]) REFERENCES [Bonhoram] ([RamId]) ON DELETE CASCADE;
+GO
+
+ALTER TABLE [Sanpham] ADD CONSTRAINT [FK_Sanpham_Boxuly_BoXuLyId] FOREIGN KEY ([BoXuLyId]) REFERENCES [Boxuly] ([BoXuLyId]) ON DELETE CASCADE;
+GO
+
+ALTER TABLE [Sanpham] ADD CONSTRAINT [FK_Sanpham_Congketnoi_CongKetNoiId] FOREIGN KEY ([CongKetNoiId]) REFERENCES [Congketnoi] ([CongKetNoiId]) ON DELETE CASCADE;
+GO
+
+ALTER TABLE [Sanpham] ADD CONSTRAINT [FK_Sanpham_Danhmucsanpham_DanhMucSanPhamDMSPId] FOREIGN KEY ([DanhMucSanPhamDMSPId]) REFERENCES [Danhmucsanpham] ([DMSPId]) ON DELETE CASCADE;
+GO
+
+ALTER TABLE [Sanpham] ADD CONSTRAINT [FK_Sanpham_Manhinh_ManHinhId] FOREIGN KEY ([ManHinhId]) REFERENCES [Manhinh] ([ManHinhId]) ON DELETE CASCADE;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20221013185235_Create database with foreign key', N'6.0.10');
+GO
+
+COMMIT;
+GO
+
+ insert into manhinh values ('15.6 inch','Full HD (1920x1080)','144Hz','Chống chói Anti Glare, Tấm nền IPS','Không'); insert into manhinh values ('15.6 inch','Full HD (1920x1080)','60Hz','Công nghệ IPSLED','Không'); insert into manhinh values ('15.6 inch','Full HD (1920x1080)','240Hz','100% DCI-P3, Tấm nền IPS, Chống chói Anti Glare','Không'); insert into manhinh values ('15.6 inch','Full HD (1920x1080)','360Hz','100% sRGB, Chống chói Anti Glare, Tấm nền IPS','Không'); insert into manhinh values ('17.3 inch','Full HD (1920x1080)','240Hz','Tấm nền IPS','Không'); insert into manhinh values ('16 inch','QHD+ (2560 x 1600)','120Hz','100% DCI-P3, Tấm nền IPS','Có'); insert into manhinh values ('13.4 inch','Full HD+ (1920 x 1200)','60Hz','100% sRGB, 500 nits Glossy, Tấm nền IPS','Có'); insert into manhinh values ('15.6 inch','Full HD (1920x1080)','144Hz','Tấm nền IPS','Không'); insert into manhinh values ('15.6 inch','Full HD (1920x1080)','144Hz','LED Tấm nền IPS','Không'); insert into manhinh values ('17 inch','WQXGA (2560 x 1600)','60 Hz','Chống chói Anti Glare, Tấm nền IPS','Không'); insert into manhinh values ('16 inch','WQXGA (2560 x 1600)','60 Hz','Chống chói Anti Glare, Tấm nền IPS','Không'); insert into manhinh values ('14 inch','WUXGA (1920 x 1200)','60 Hz','Chống chói Anti Glare, Tấm nền IPS','Không'); insert into manhinh values ('14 inch','4K/UHD(3840x21600)','60Hz','500 nits Glossy,  90% DCI-P3, HDR Ves400, Tấm nền IPS','có'); insert into manhinh values ('13 inch','WQHD (2160x1350)','60Hz','Tấm nền IPS, 450 nits Glossy, Dolby Vision','Có'); insert into manhinh values ('13.3 inch','QHD (2560 x 1600)','60Hz','300 nits Glossy, Chống chói Anti Glarem, Dolby Vision, Tấm nền IPS','Không'); insert into manhinh values ('14 inch','Full HD (1920 x 1080)','60Hz','300 nits Glossy, Tấm nền IPS','Không'); insert into manhinh values ('15.6 inch','Full HD (1920 x 1080)','120Hz','Tấm nền IPS, Chống chói Anti-Glare, 250 nits','có'); insert into manhinh values ('15.6 inch','Full HD (1920 x 1080)','60 Hz','TFT, AcerComfyview, LED backlit','Không'); insert into manhinh values ('14 inch','Full HD (1920x1080)','144Hz','Chống chói Anti Glare, Tấm nền IPS','Không'); insert into manhinh values ('15.6 inch','Full HD (1920x1080)','144Hz','Tấm nền IPS, AcerComfyview, LED backlit','Không'); insert into manhinh values ('15.6 inch','Full HD (1920x1080)','120Hz','LED, WVA','không'); insert into manhinh values ('15.6 inch','QHD (2560 x 1600)','165Hz','Tấm nền IPS, AcerComfyview, LED backlit, TFT','Không');           insert into congketnoi values ('2 x USB 3.2, 2 x USB Type-C, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45)','Bluetooth 5.1, Wi-Fi 6 (802.11ax)','','HD webcam','','Có');         insert into congketnoi values ('2 x USB 3.2, HDMI, USB 2.0, USB Type-C','Bluetooth 5.1, Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bản lề mở 180 độ','Có');         insert into congketnoi values ('Jack tai nghe 3.5 mm, Thunderbolt 4 USB-C, 3 x USB 3.2, HDMI, LAN (RJ45), Mini DisplayPort, USB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','SD','FHD (30fps@1080p)','Đèn bàn phím chuyển màu RGB','Có');         insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Thunderbolt 4 USB-C, USB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','','Camera IR','Mở khóa khuôn mặtĐèn bàn phím chuyển màu RGB','Có');         insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Thunderbolt 4 USB-C, USB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','SD','FHD (30fps@1080p)','Đèn bàn phím chuyển màu RGB','Có');         insert into congketnoi values ('Jack tai nghe 3.5 mm, 3 x USB 3.2, HDMI, LAN (RJ45), Mini DisplayPort','Bluetooth 5.2Wi-Fi 6 (802.11ax)','SD','HD webcam','Đèn bàn phím chuyển màu RGB','Có');         insert into congketnoi values ('2 x Thunderbolt 4 USB-C, 2 x USB 3.2, HDMI,Jack tai nghe 3.5 mm','Bluetooth 5.2Wi-Fi 6E (802.11ax)','Micro SD','Camera IR, HD webcam','Bảo mật vân tay, Công tắc khóa camera, Mở khóa khuôn mặt','Có');         insert into congketnoi values ('1 x USB 3.2, 2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mmUSB Type-C','Bluetooth 5.2Wi-Fi 6E (802.11ax)','Micro SD','Camera IRHD webcam','Bảo mật vân tay, Công tắc khóa camera, Mở khóa khuôn mặt, Tiêu chuẩn Nền Intel Evo','Có');         insert into congketnoi values ('Jack tai nghe 3.5 mm, 3 x USB 3.2, HDMI, LAN (RJ45), Mini DisplayPort, USB Type-C','Wi-Fi 6 (802.11ax)Bluetooth 5.1','SD','HD webcam','Đèn bàn phím chuyển màu RGB','Có');         insert into congketnoi values ('2 x Thunderbolt 4 USB-C, 2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm','Bluetooth 5.1Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bảo mật vân tayTiêu chuẩn Nền Intel Evo','Có');         insert into congketnoi values ('2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Mini DisplayPort, USB 2.0, USB Type-C','Bluetooth 5.2Wi-Fi 6 (802.11ax)','SD','HD webcam','','Có');         insert into congketnoi values ('1 x USB 3.2, 2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mm','Bluetooth 5.1, Wi-Fi 6 (802.11ax)','','HD webcam','Bảo mật vân tay, Công tắc khóa camera, Tiêu chuẩn Nền Intel Evo','Có');         insert into congketnoi values ('2 x USB Type-C (Power Delivery and DisplayPort), USB Type-C, Jack tai nghe 3.5 mm','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','Micro SD','Sau 5 MP, trước 5 MPCamera IR','Digital Pen, Mở khóa khuôn mặt','có');         insert into congketnoi values ('2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mm, USB Type-C','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','','Camera IR , HD webcam','Bản lề mở 180 độ, Mở khóa khuôn mặt, Tiêu chuẩn Nền Intel Evo, Độ bền chuẩn quân đội MLT STD 810G','Có');         insert into congketnoi values ('1 x USB 3.2 (Always on), 2 x Thunderbolt 4 USB-C, Jack tai nghe 3.5 mm','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','','HD webcam','Bảo mật vân tay, Công tắc khóa camera, Tiêu chuẩn Nền Intel Evo, TPM 2.0','Có');         insert into congketnoi values ('1 x USB 3.2, 1 x USB 3.2 (Always on), HDMI, Jack tai nghe 3.5 mm, Thunderbolt 4 USB-C, USB Type-C (support data transfer, Power Delivery 3.0 and DisplayPort 1.4)','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','Micro SD ','HD webcam','Bút cảm ứng, Bảo mật vân tay, Công tắc khóa camera','Có');         insert into congketnoi values ('2 x USB 3.2, 2 x USB Type-C, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45)','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','','HD webcam','Công tắc khóa camera','Có');         insert into congketnoi values ('1 x USB 3.2, 1 x USB 3.2 (Always on), HDMI, Jack tai nghe 3.5 mm, Thunderbolt 4 USB-C, USB Type-C (support data transfer, Power Delivery 3.0 and DisplayPort 1.4)','Bluetooth 5.1Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bút cảm ứng, Bảo mật vân tay, Công tắc khóa camera','có');         insert into congketnoi values ('2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Thunderbolt 4 USB-C, USB Type-C','Bluetooth 5.1Wi-Fi 6 (802.11ax)','Micro SD','HD webcam','Bản lề mở 180 độ, Bảo mật vân tay, Công tắc khóa camera, Độ bền chuẩn quân đội MLT STD 810H','Không');         insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), USB Type-C','Bluetooth 5.1 Wi-Fi 6 (802.11ax)','','HD webcam','Đèn bàn phím chuyển màu RGB','Có');         insert into congketnoi values ('HDMIUSB 3.12 x USB 2.0LAN (RJ45)Jack tai nghe 3.5 mm','Bluetooth 5.0Wi-Fi 802.11 a/b/g/n/ac','','VGA webcam ','Bản lề mở 180 độ','Không');         insert into congketnoi values ('2 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), USB 2.0','BluetoothWi-Fi 802.11 a/b/g/n/ac','SD','HD webcam','','không');         insert into congketnoi values ('Jack tai nghe 3.5 mm, 1 x USB 3.2, HDMI, LAN (RJ45), Thunderbolt 3, 2 x USB 2.0, Mini DisplayPort','Bluetooth 5.0 Wi-Fi 6 (802.11ax)','SD','HD webcam','Bảo mật vân tay','có');         insert into congketnoi values ('3 x USB 3.2, HDMI, Jack tai nghe 3.5 mm, LAN (RJ45), Mini DisplayPort, Thunderbolt 4 USB-C','Bluetooth 5.1Wi-Fi 6 (802.11ax)','','HD webcam','Công nghệ quạt AeroBlade 3D thế hệ 5 2 quạt tản nhiệtĐèn bàn phím chuyển màu RGB','Có');         insert into congketnoi values ('1 x USB 3.2 2 x USB 2.0 HDMI Jack tai nghe 3.5 mm USB Type-C','Bluetooth 4.1Wi-Fi 802.11 a/b/g/n/ac','',' VGA Webcam',' Bảo mật vân tay','Không');         insert into congketnoi values ('2 x Thunderbolt 3 (USB-C)Jack tai nghe 3.5 mm','Bluetooth 5.0Wi-Fi 6 (802.11ax)','','720p FaceTime Camera',' Bảo mật vân tay',' Có');                 insert into BONHORAM values ('16 GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','3200MHz','64 GB');         insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','3200MHz','64 GB');         insert into BONHORAM values ('32 GB','DDR4 2 khe (1 khe 16GB + 1 khe 16GB)','3200MHz','64 GB');         insert into BONHORAM values ('16 GB','LPDDR4X (8GB On board + 8GB On board)','2133 MHz (Hãng công bố)','Không hỗ trợ nâng cấp');         insert into BONHORAM values ('16 GB','LPDDR4 (On board)','2133 MHz (Hãng công bố)','Không hỗ trợ nâng cấp');         insert into BONHORAM values ('16 GB','DDR4 (2 khe)','2666 MHz','32 GB');         insert into BONHORAM values ('16 GB','LPDDR4X (On board)','4266 MHz','Không hỗ trợ nâng cấp');         insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','4266 MHz','');         insert into BONHORAM values ('16GB','LPDDR4 (On board)','4266 MHz','Không hỗ trợ nâng cấp');         insert into BONHORAM values ('8GB','DDR4 (On board)','2666 MHz','Không hỗ trợ nâng cấp');         insert into BONHORAM values ('8GB','DDR4 (On board)','3200 MHz','Không hỗ trợ nâng cấp'); 		insert into BONHORAM values ('8GB','DDR4 2 khe (1 khe 8GB onboard + 1 khe trống)','3200MHz','40GB');         insert into BONHORAM values ('8GB','DDR4 (2 khe)','2933 MHz','16GB');         insert into BONHORAM values ('16GB','DDR4 2 khe (8GB onboard+ 1 khe 8GB)','3200 MHz','40 GB');         insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','3200 MHz','32 GB');         insert into BONHORAM values ('4 GB','DDR4 2 khe (1 khe 4GB + 1 khe rời)','2400 MHz','12 GB');         insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','2666 MHz','16 GB');         insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 8GB + 1 khe rời)','2666 MHz','32GB');         insert into BONHORAM values ('16GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','2933 MHz','16GB');         insert into BONHORAM values ('16 GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','2700 MHz','32 GB');         insert into BONHORAM values ('16 GB','DDR4 2 khe (1 khe 8GB + 1 khe 8GB)','3200 MHz','32 GB');         insert into BONHORAM values ('8GB','','','');         insert into BONHORAM values ('16GB','','','');         insert into BONHORAM values ('32GB','','','');         insert into BONHORAM values ('8 GB','LPDDR4X (On board)','4267 MHz','Không hỗ trợ nâng cấp');         insert into BONHORAM values ('4GB','LPDDR4X (On board)','3200 MHz','20GB');         insert into BONHORAM values ('8 GB','DDR4 2 khe (1 khe 4GB + 1 khe 4GB)','3200 MHz','32 GB');            insert into BOXULY values ('Intel Core i5 Comet Lake - 10500H',6,12,'2.50 GHz','Turbo Boost 4,5GHZ','12MB');         insert into BOXULY values ('Intel Core i5 Tiger Lake - 1155G7',4,8,'2.50 GHz','Turbo Boost 4,5GHZ','8MB');         insert into BOXULY values ('Intel Core i7 Tiger Lake - 11800H',8,16,'2.30 GHz','Turbo Boost 4.6 GHz','24MB');         insert into BOXULY values ('Intel Core i7 Tiger Lake - 1195G7',4,8,'2.90 GHz','Turbo Boost 5.0 GHz','12MB');         insert into BOXULY values ('Intel Core i7 Tiger Lake - 1185G7',4,8,'3.00 GHz','Turbo Boost 4.8 GHz','12MB');         insert into BOXULY values ('Intel Core i7 Comet Lake - 10750H',6,12,'2.60 GHz','Turbo Boost 5.0 GHz','12MB');         insert into BOXULY values ('Intel Core i7 Tiger Lake - 1165G7',4,8,'2.80 GHz','Turbo Boost 4.7 GHz','12MB');         insert into BOXULY values ('Intel Core i5 Tiger Lake - 11400H',6,12,'2.70 GHz','Turbo Boost 4,5 GHZ','12MB');         insert into BOXULY values ('Intel Core i5 Comet Lake - 10500H',6,12,'2.50 GHz','Turbo Boost 4,5 GHZ','12MB');         insert into BOXULY values ('Intel Core i7 Comet Lake - 10510U',4,8,'1.80 GHz','Turbo Boost 4.9 GHz','8MB');         insert into BOXULY values ('Intel Core i5 Tiger Lake - 1135G7',4,8,'2.40 GHz','Turbo Boost 4.2 GHz','8 MB');         insert into BOXULY values ('Intel Core i5 Comet Lake - 10210U',4,8,'1.6GHz','Turbo Boost 4.2 GHz','6 MB');         insert into BOXULY values ('Intel Core i3 Ice Lake - 1005G1',2,4,'1.2 GHz','Turbo Boost 3.4 GHz','4 MB');         insert into BOXULY values ('Apple M1','','','','','');         insert into BOXULY values ('Intel Core i5 Tiger Lake - 1135G7',4,8,'2.40 GHz','Turbo Boost 4.2 GHz','8 MB');         insert into BOXULY values ('Intel Core i3 Tiger Lake - 1115G4',2,4,'3 GHz','Turbo Boost 4.1 GHz','6 MB');         insert into BOXULY values ('Intel Core i5 Tiger Lake - 1135G7',4,8,'2.40 GHz','Turbo Boost 4.2 GHz','8MB');         insert into BOXULY values ('AMD Ryzen 5 - 5600H',6,12,'3.30 GHz','Turbo Boost 4.2 GHz','16 MB'); 		 insert into sanpham values (10,14,22,26,01,'Laptop Apple MacBook Air M1 2020 8GB/256GB/7-core GPU (MGN63SA/A)',3,'Trắng','256 GB SSD','Card tích hợp7 nhân GPU','','Mac OS','Vỏ kim loại nguyên khối','Dài 304.1 mm - Rộng 212.4 mm - Dày 4.1 mm đến 16.1 mm - Nặng 1.29 kg','','Khoảng 10 tiếng',2020,'','27490000','/HinhAnh/SP001.jpg');
 insert into sanpham values (10,14,23,26,01,'Laptop Apple MacBook Pro M1 2020 16GB/512GB (Z11C)',5,'Xám','512 GB SSD','Card tích hợp8 nhân GPU','','Mac OS','Vỏ kim loại nguyên khối','Dài 304.1 mm - Rộng 212.4 mm - Dày 15.6 mm - Nặng 1.4 kg','','Khoảng 10 tiếng',2020,'','44990000','/HinhAnh/SP002.jpg');
 insert into sanpham values (10,14,23,26,01,'Laptop Apple MacBook Pro M1 2020 16GB/512GB (Z11A)',5,'Đen','512 GB SSD','Card tích hợp8 nhân GPU','','Mac OS','Vỏ kim loại nguyên khối','Dài 304.1 mm - Rộng 212.4 mm - Dày 15.6 mm - Nặng 1.4 kg','','Khoảng 10 tiếng',2020,'','44990001','/HinhAnh/SP003.jpg');
 insert into sanpham values (12,14,24,26,01,'Laptop Apple MacBook Pro 16 M1 Max 2021 10 core-CPU/32GB/1TB SSD/32 core-GPU (MK1A3SA/A)',4,'Đen','1 TB SSD','Card tích hợp32 core-GPU','','Mac OS','Vỏ kim loại nguyên khối','Dài 355.7 mm - Rộng 248.1 mm - Dày 16.8 mm - Nặng 2.2 kg','','Khoảng 10 tiếng',2021,'','90990000','/HinhAnh/SP004.jpg');
