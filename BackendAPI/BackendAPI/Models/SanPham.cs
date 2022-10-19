@@ -35,7 +35,6 @@ namespace BackendAPI.Models
         public virtual BoNhoRam Ram { get; set; }
         public virtual CongKetNoi CongKN { get; set; }
         public virtual DanhMucSanPham DMSP { get; set; }
-
         public virtual List<CTHD> CTHD { get; set; } = new List<CTHD>();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,44 +10,44 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BoNhoRamController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
-        public BoNhoRamController(UserDbContext context, IMapper mapper)
+        public UserController(UserDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: api/<BoNhoRamController>
+        // GET: api/<UserController>
         [HttpGet]
-        public ActionResult<List<BoNhoRamDTO>> Get()
+        public async Task<ActionResult<List<UserIdentityDTO>>> GetUser()
         {
-            var boNhoRam = _context.BoNhoRam.ToList();
-            return _mapper.Map<List<BoNhoRamDTO>>(boNhoRam);
+            var mh = await _context.AppUser.ToListAsync();
+            return _mapper.Map<List<UserIdentityDTO>>(mh);
         }
 
-        // GET api/<BoNhoRamController>/5
+        // GET api/<UserController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<BoNhoRamController>
+        // POST api/<UserController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<BoNhoRamController>/5
+        // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<BoNhoRamController>/5
+        // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

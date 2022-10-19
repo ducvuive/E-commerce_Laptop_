@@ -50,14 +50,26 @@ namespace BackendAPI.Controllers
         // PUT: api/BoXuLies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBoXuLy(int id, BoXuLy boXuLy)
+        public async Task<IActionResult> UpdateBoXuLy(int id, BoXuLyDTO boXuLyDTO)
         {
-            if (id != boXuLy.BoXuLyId)
+            if (id != boXuLyDTO.BoXuLyId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(boXuLy).State = EntityState.Modified;
+            var boXuLyItem = await _context.BoXuLy.FindAsync(id);
+            if (boXuLyItem == null)
+            {
+                return NotFound();
+            }
+
+            boXuLyItem.CongNgheCPU = boXuLyDTO.CongNgheCPU;
+            boXuLyItem.SoNhan = boXuLyDTO.SoNhan;
+            boXuLyItem.SoLuong = boXuLyDTO.SoLuong;
+            boXuLyItem.ToCDoToiDa = boXuLyDTO.ToCDoToiDa;
+            boXuLyItem.TocDoCPU = boXuLyDTO.TocDoCPU;
+            boXuLyItem.BoNhoDem = boXuLyDTO.BoNhoDem;
+
 
             try
             {
@@ -81,12 +93,22 @@ namespace BackendAPI.Controllers
         // POST: api/BoXuLies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BoXuLy>> PostBoXuLy(BoXuLy boXuLy)
+        public async Task<ActionResult<BoXuLyDTO>> PostBoXuLy(BoXuLyDTO BoXuLyDTO)
         {
+            var boXuLy = new BoXuLy
+            {
+                CongNgheCPU = BoXuLyDTO.CongNgheCPU,
+                SoNhan = BoXuLyDTO.SoNhan,
+                SoLuong = BoXuLyDTO.SoLuong,
+                ToCDoToiDa = BoXuLyDTO.ToCDoToiDa,
+                TocDoCPU = BoXuLyDTO.TocDoCPU,
+                BoNhoDem = BoXuLyDTO.BoNhoDem,
+            };
+
             _context.BoXuLy.Add(boXuLy);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBoXuLy", new { id = boXuLy.BoXuLyId }, boXuLy);
+            return CreatedAtAction("GetBoXuLy", new { id = boXuLy.BoXuLyId }, _mapper.Map<BoXuLyDTO>(boXuLy));
         }
 
         // DELETE: api/BoXuLies/5
