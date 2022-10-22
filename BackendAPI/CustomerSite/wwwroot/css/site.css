@@ -1,0 +1,38 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.checked {
+    font-family: "FontAwesome";
+}
+
+
+i {
+    cursor: pointer;
+}
+
+.top_seller {
+    background-color: #dbcc8f !important;
+}
+
+.product_slider {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 50vh;
+}
