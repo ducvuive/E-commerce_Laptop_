@@ -204,6 +204,19 @@ CREATE TABLE [CTHD] (
 );
 GO
 
+CREATE TABLE [Rating] (
+    [RatingID] int NOT NULL IDENTITY,
+    [Rate] int NULL,
+    [SanPhamId] int NOT NULL,
+    CONSTRAINT [PK_Rating] PRIMARY KEY ([RatingID]),
+    CONSTRAINT [FK_Rating_SanPham_SanPhamId] FOREIGN KEY ([SanPhamId]) REFERENCES [SanPham] ([SanPhamId]) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX [IX_Rating_SanPhamId] ON [Rating] ([SanPhamId]);
+GO
+
+
 CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
 GO
 

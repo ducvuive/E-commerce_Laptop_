@@ -20,6 +20,7 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
     public virtual DbSet<HoaDon> HoaDon { get; set; }
     public virtual DbSet<ManHinh> ManHinh { get; set; }
     public virtual DbSet<SanPham> SanPham { get; set; }
+    public virtual DbSet<Rating> Rating { get; set; }
     public virtual DbSet<UserIdentity> AppUser { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
