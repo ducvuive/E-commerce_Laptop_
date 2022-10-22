@@ -1,10 +1,7 @@
 ﻿using BackendAPI.Areas.Identity.Config;
-using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace BackendAPI.Areas.Identity.Data;
 
@@ -44,6 +41,6 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
         builder.ApplyConfiguration(new SanPhamConfig());
 
         base.OnModelCreating(builder);
-        
+
     }
 }

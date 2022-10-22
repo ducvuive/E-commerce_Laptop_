@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using BackendAPI.Areas.Identity.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("UserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'UserDbContextConnection' not found.");
 
@@ -28,7 +29,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();;
+app.UseAuthentication(); ;
+/*app.UseStaticFiles();*/
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")),
+    RequestPath = new PathString("/wwwroot")
+});
 
 app.UseAuthorization();
 

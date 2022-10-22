@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
 using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
-using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
-using System.Reflection.PortableExecutable;
 
 namespace BackendAPI.Controllers
 {
@@ -27,10 +21,11 @@ namespace BackendAPI.Controllers
 
         // GET: api/SanPhams
         [HttpGet]
+        [Route("all")]
         public async Task<ActionResult<List<SanPhamDTO>>> GetSanPham()
         {
-            var mh = await _context.SanPham.ToListAsync();
-            return _mapper.Map<List<SanPhamDTO>>(mh);
+            var sp = await _context.SanPham.ToListAsync();
+            return _mapper.Map<List<SanPhamDTO>>(sp);
         }
 
         // GET: api/SanPhams/5

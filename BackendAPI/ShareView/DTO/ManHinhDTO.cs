@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ShareView.DTO
 {
@@ -17,6 +12,6 @@ namespace ShareView.DTO
         public string? CongNgheMH { get; set; }
         public string? CamUng { get; set; }
 
-        public virtual List<SanPhamDTO> Sanpham { get; set; } = new List<SanPhamDTO>();
+        //public virtual List<SanPhamDTO> Sanpham { get; set; } = new List<SanPhamDTO>();
     }
 }

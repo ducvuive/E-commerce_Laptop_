@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
 using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
-using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
 
 namespace BackendAPI.Controllers
@@ -27,6 +22,7 @@ namespace BackendAPI.Controllers
 
         // GET: api/ManHinhs
         [HttpGet]
+        [Route("all")]
         public async Task<ActionResult<List<ManHinhDTO>>> GetManHinh()
         {
             var mh = await _context.ManHinh.ToListAsync();

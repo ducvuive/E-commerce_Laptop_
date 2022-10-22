@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ShareView.DTO
+﻿namespace ShareView.DTO
 {
     public class BoNhoRamDTO
     {
