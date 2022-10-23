@@ -17,6 +17,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IProductClient, ProductClient>();
+builder.Services.AddScoped<IDMClient, DanhMucClient>();
 
 builder.Services.AddHttpClient("", opt =>
 {

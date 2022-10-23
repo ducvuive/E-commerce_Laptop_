@@ -27,6 +27,18 @@ namespace BackendAPI.Controllers
             var sp = await _context.SanPham.ToListAsync();
             return _mapper.Map<List<SanPhamDTO>>(sp);
         }
+        [HttpGet]
+        [Route("month")]
+        public async Task<ActionResult<List<SanPhamDTO>>> GetSanPhamTopRaMat()
+        {
+            var results = _context.SanPham.OrderByDescending(x => x.RaMat).Take(6);
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
 
         // GET: api/SanPhams/5
         [HttpGet("{id}")]
@@ -41,6 +53,22 @@ namespace BackendAPI.Controllers
 
             return _mapper.Map<SanPhamDTO>(sanPham);
         }
+        // GET: api/SanPhams/5
+        [HttpGet("GetSanPhamTheoTrang/{page}")]
+        public async Task<ActionResult> GetSanPhamTheoTrang(int page = 1)
+        {
+            //var sanPham = await _context.SanPham.FindAsync(id);
+            var skip = 12 * (page - 1);
+            //var sanPham = await _context.SanPham.FindAsync(id);
+            var results = _context.SanPham.OrderByDescending(x => x.DonGia).Skip(skip).Take(12);
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
+
 
         // PUT: api/SanPhams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

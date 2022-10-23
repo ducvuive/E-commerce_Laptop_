@@ -1,7 +1,8 @@
 ﻿@using ShareView.DTO
 @model List<SanPhamDTO>
+@*@model List<DanhMucSanPhamDTO>*@
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Product Page";
 }
 
 <div class="product_slider" style="background-image: url(https://localhost:7123/wwwroot/images_bg/bg_6.jpg)">
@@ -21,18 +22,21 @@
             <div class="col-lg-2">
                 <h2 class="fs-3 fw-bold">Categories</h2>
                 <div class="mt-4" role="tab" id="headingOne">
-                    <div class="d-flex justify-content-between mt-2">
-                        <h4 class="fs-5 text-muted">Usus</h4>
-                        <i class="fa-solid fa-angle-right"></i>
-                    </div>
-                    <div class="d-flex justify-content-between mt-2">
+                    @foreach (var item in ViewBag.Dmsp)
+                    {
+                        <div class="d-flex justify-content-between mt-2 dmsp">
+                            <a class="fs-5 text-muted" href="#">@item.TenDM</a>
+                            <i class="fa-solid fa-angle-right"></i>
+                        </div>
+                    }
+  @*                  <div class="d-flex justify-content-between mt-2">
                         <h4 class="fs-5 text-muted">Macbook</h4>
                         <i class="fa-solid fa-angle-right"></i>
                     </div>
                     <div class="d-flex justify-content-between mt-2">
                         <h4 class="fs-5 text-muted">MSI</h4>
                         <i class="fa-solid fa-angle-right"></i>
-                    </div>
+                    </div>*@
                 </div>
             </div>
             <div class="col-lg-10">
@@ -51,107 +55,58 @@
                         </button>
                     </div>
                 </form>
-                <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="https://localhost:7123/wwwroot/images_pd/SP001.jpg" class="card-img-top" alt="..." />
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">
-                                    This is a longer card with supporting text below as a
-                                    natural lead-in to additional content. This content is a
-                                    little bit longer.
-                                </p>
-                                <div class="card-text d-flex justify-content-between">
-                                    <div class="chan">Đánh giá</div>
-                                    <div>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star"></i>
+                <div class="row row-cols-1 row-cols-md-3 g-4 mt-3 ">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col card-pd ">
+                            <div class="card h-100 position-relative">
+                                <div class="zoom">
+                                    <img src="https://localhost:7123/wwwroot/@item.HinhAnh" class="card-img-top" alt="..." />
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-title name-pd fs-6 fw-bold" asp-route-id="@item.SanPhamId">@item.TenSP</p>
+                                </div>
+                                <div class=" bt-10 position-absolute w-100">
+                                    <div class="card-text mb-3 d-flex justify-content-between">
+                                        <span class="ms-3 fs-5 fw-bold">Giá</span>
+                                        <p class=" me-3 card-text fs-5">
+                                            @item.DonGia.ToString("#,##0 VNĐ")
+                                        </p>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="ms-3 fs-5 fw-bold">Đánh giá</div>
+                                        <div class="me-3">
+                                            @for (int i = 1; i <= 5; i++){
+                                                if(i<=item.DanhGia){
+                                                   <i class="fa-regular fa-star checked"></i>
+                                                }
+                                                else{
+                                                    <i class="fa-regular fa-star"></i>
+                                                }
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="https://localhost:7123/wwwroot/images_pd/SP001.jpg" class="card-img-top" alt="..." />
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">
-                                    This is a longer card with supporting text below as a
-                                    natural lead-in to additional content. This content is a
-                                    little bit longer.
-                                </p>
-                                <div class="card-text d-flex justify-content-between">
-                                    <div class="chan">Đánh giá</div>
-                                    <div>
-                                        <i class="fa-regular fa-star checked pointer"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="https://localhost:7123/wwwroot/images_pd/SP001.jpg" class="card-img-top" alt="..." />
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">
-                                    This is a longer card with supporting text below as a
-                                    natural lead-in to additional content. This content is a
-                                    little bit longer.
-                                </p>
-                                <div class="card-text d-flex justify-content-between">
-                                    <div class="chan">Đánh giá</div>
-                                    <div>
-                                        <i class="fa-regular fa-star checked pointer"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card h-100">
-                            <img src="https://localhost:7123/wwwroot/images_pd/SP001.jpg" class="card-img-top" alt="..." />
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">
-                                    This is a longer card with supporting text below as a
-                                    natural lead-in to additional content. This content is a
-                                    little bit longer.
-                                </p>
-                                <div class="card-text d-flex justify-content-between">
-                                    <div class="chan">Đánh giá</div>
-                                    <div>
-                                        <i class="fa-regular fa-star checked pointer"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star checked"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                        <i class="fa-regular fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
                 <div class="row mt-5">
-                    <div class="d-flex align-items-center justify-content-center">
-                        <div class="mx-4">01</div>
-                        <div class="mx-4">02</div>
-                        <div class="mx-4">03</div>
-                        <div class="mx-4">04</div>
-                    </div>
+                    <ul class="d-flex align-items-center justify-content-center">
+                        @for (var i = 1; i <= ViewBag.totalPage; i++)
+                        {
+                            if(i == ViewBag.page){
+                                <li id="@i" class="mx-4">
+                                    <a class="text-warning" href="@Url.Action("Index", "SanPham", new { page = @i })">@i</a>
+                                </li>
+                            }
+                            else{
+                                <li id="@i" class="mx-4">
+                                    <a href="@Url.Action("Index", "SanPham", new { page = @i })">@i</a>
+                                </li>
+                            }
+                        }
+                    </ul>
                 </div>
             </div>
         </div>
