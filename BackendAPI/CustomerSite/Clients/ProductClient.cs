@@ -8,6 +8,7 @@ namespace CustomerSite.Clients
         Task<int> GetPage();
         Task<List<SanPhamDTO>> GetSanPhamTheoTrang(int page);
         Task<List<SanPhamDTO>> GetSanPhamTopRaMat();
+        Task<SanPhamDTO> GetSanPham(int Id);
     }
     public class ProductClient : BaseClient, IProductClient
     {
@@ -41,13 +42,13 @@ namespace CustomerSite.Clients
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
             return products ?? new List<SanPhamDTO>();
         }
-        /*        public async Task<List<DanhMucSanPhamDTO>> GetDMSP(int page)
-                {
-                    var response = await httpClient.GetAsync("api/DanhMucSanPhams" + page);
-                    var contents = await response.Content.ReadAsStringAsync();
+        public async Task<SanPhamDTO> GetSanPham(int Id)
+        {
+            var response = await httpClient.GetAsync("api/SanPhams/" + Id);
+            var contents = await response.Content.ReadAsStringAsync();
 
-                    var danhmucs = JsonConvert.DeserializeObject<List<DanhMucSanPhamDTO>>(contents);
-                    return danhmucs ?? new List<DanhMucSanPhamDTO>();
-                }*/
+            var sanpham = JsonConvert.DeserializeObject<SanPhamDTO>(contents);
+            return sanpham ?? new SanPhamDTO();
+        }
     }
 }

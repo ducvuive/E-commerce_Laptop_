@@ -17,34 +17,51 @@ namespace CustomerSite.Controllers
         private readonly ILogger<SanPhamController> _logger;
         private readonly IProductClient productClient;
         private readonly IDMClient dMClient;
-        public SanPhamController(ILogger<SanPhamController> logger, IProductClient productClient, IDMClient dMClient)
+        private readonly IManHinhClient manHinhlient;
+        private readonly IBoNhoRamClient boNhoRamClient;
+        private readonly IBoXuLyClient boXuLyClient;
+        public SanPhamController(ILogger<SanPhamController> logger, IProductClient productClient, IDMClient dMClient, IManHinhClient manHinhlient, IBoNhoRamClient boNhoRamClient, IBoXuLyClient boXuLyClient)
         {
             _logger = logger;
             this.productClient = productClient;
             this.dMClient = dMClient;
+            this.manHinhlient = manHinhlient;
+            this.boNhoRamClient = boNhoRamClient;
+            this.boXuLyClient = boXuLyClient;
         }
-        public async Task<IActionResult> IndexAsync(int page = 1)
+        /*        [Route("Index")]*/
+        public async Task<IActionResult> Index(int page = 1)
         {
-            /*var response = await productService.GetAsync("api/SanPhams/all");
-            var contents = await response.Content.ReadAsStringAsync();
-
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);*/
-            //var products = await productClient.GetAllProduct();
-            var products1 = await productClient.GetSanPhamTheoTrang(page);
+            var products = await productClient.GetSanPhamTheoTrang(page);
             var totalPage = await productClient.GetPage();
             var dmsp = await dMClient.GetDMSP();
             ViewBag.Dmsp = dmsp;
             ViewBag.totalPage = totalPage;
             ViewBag.page = page;
-            return View(products1);
+            return View(products);
         }
-        /*        [HttpGet("sanpham/GetDanhMucSanPham")]
-                public async Task<IActionResult> DanhMucSanPham()
+        /*        public async Task<IActionResult> Page()
                 {
-
-                    var t = 1;
-                    return Ok(dmsp);
+                    var products = await productClient.GetSanPhamTheoTrang(page);
+                    var totalPage = await productClient.GetPage();
+                    var dmsp = await dMClient.GetDMSP();
+                    ViewBag.Dmsp = dmsp;
+                    ViewBag.totalPage = totalPage;
+                    ViewBag.page = page;
+                    return View(products);
                 }*/
+        [Route("pd")]
+        public async Task<IActionResult> ProductSingle(int Id)
+        {
+            var products = await productClient.GetSanPham(Id);
+            var manhinh = await manHinhlient.GetManHinh(products.ManHinhId);
+            var boNhoRam = await boNhoRamClient.GetBoNhoRam(products.RamId);
+            var boXuLy = await boXuLyClient.GetBoXuLy(products.ManHinhId);
+            ViewBag.manHinh = manhinh;
+            ViewBag.boNhoRam = boNhoRam;
+            ViewBag.boXuLy = boXuLy;
 
+            return View(products);
+        }
     }
 }

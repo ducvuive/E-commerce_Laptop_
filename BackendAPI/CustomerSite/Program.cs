@@ -18,6 +18,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IProductClient, ProductClient>();
 builder.Services.AddScoped<IDMClient, DanhMucClient>();
+builder.Services.AddScoped<IManHinhClient, ManHinhClient>();
+builder.Services.AddScoped<IBoXuLyClient, BoXuLyClieny>();
+builder.Services.AddScoped<IBoNhoRamClient, BoNhoRamClient>();
 
 builder.Services.AddHttpClient("", opt =>
 {

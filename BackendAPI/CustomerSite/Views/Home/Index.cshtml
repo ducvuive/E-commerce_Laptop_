@@ -38,7 +38,7 @@
                             <img src="https://localhost:7123/wwwroot/@item.HinhAnh" class="card-img-top" alt="..." />
                         </div>
                         <div class="card-body">
-                            <p class="card-title name-pd fs-6 fw-bold" asp-route-id="@item.SanPhamId">@item.TenSP</p>
+                            <a class="card-title name-pd fs-6 fw-bold" asp-controller="Sanpham" asp-action="ProductSingle" asp-route-id="@item.SanPhamId">@item.TenSP</a>
                         </div>
                         <div class=" bt-10 position-absolute w-100">
                             <div class="card-text mb-3 d-flex justify-content-between">

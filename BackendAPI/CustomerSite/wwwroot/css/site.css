@@ -92,3 +92,22 @@ a {
     color: burlywood !important;
 }
 
+
+.button {
+    background: none;
+    border: none;
+    outline: inherit;
+    height: 40px;
+    width: 40px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+tr {
+    line-height: 65px;
+}

@@ -1,0 +1,163 @@
+﻿@using ShareView.DTO
+@{
+    ViewData["Title"] = "Product Page";
+    Layout = "~/Views/Shared/_Layout_Slider.cshtml";
+    var mh = ViewBag.manHinh as ManHinhDTO;
+    var bxl = ViewBag.boXuLy as BoXuLyDTO;
+    var ram = ViewBag.boNhoRam as BoNhoRamDTO;
+}
+
+<section class="bg-light pt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="">
+                    <img src="https://localhost:7123/wwwroot/@Model.HinhAnh" class="card-img-top" alt="..." />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="col">
+                    <h5 class="fs-2 fw-semibold">
+                        @Model.TenSP
+                    </h5>
+                    <div class="mt-5">
+                        <div class="d-flex align-items-center">
+                            <div class="fs-5 fw-bold me-5">Đánh giá</div>
+                            <div class="">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= @Model.DanhGia)
+                                    {
+                                        <i class="fa-regular fa-star checked"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-regular fa-star"></i>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-5 fs-3 fw-semibold">@Model.DonGia.ToString("#,##0 VNĐ")</p>
+                    <form class="col-md-6 d-flex mb-3">
+                        <span class="me-2">
+                            <button type="button"
+                                    class="button btn-minus"
+                                    data-type="minus"
+                                    data-field="">
+                                <i class="fa-solid fa-minus"></i>
+                            </button>
+                        </span>
+                        <input type="number"
+                               id="quantity"
+                               name="quantity"
+                               class="form-control w-25 text-center"
+                               value="1"
+                               min="1"
+                               max="100" />
+                        <span class="ms-2">
+                            <button type="button"
+                                    class="button btn-plus"
+                                    data-type="plus"
+                                    data-field="">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </span>
+                        <button type="submit" class="btn btn-primary ms-5 w-100">
+                            Mua ngay
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="detail mt-5">
+            <table class="mb-0 table table-hover text-center">
+                <thead class="table-secondary p-5">
+                    <tr>
+                        <th class="fw-bold fs-3" colspan="2">Bộ xử lý</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="p-3">
+                        <th scope="row">Công nghệ CPU</th>
+                        <td>@bxl.CongNgheCPU</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Số nhân</th>
+                        <td>@bxl.SoNhan</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Số luồng</th>
+                        <td>@bxl.SoLuong</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Tốc độ CPU</th>
+                        <td>@bxl.TocDoCPU</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Tốc độ tối đa</th>
+                        <td>@bxl.ToCDoToiDa</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Bộ nhớ đệm</th>
+                        <td>@bxl.BoNhoDem</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-hover text-center mb-0">
+                <thead class="table-secondary">
+                    <tr class="p-3">
+                        <th class="fw-bold fs-3" colspan="2">Màn hình</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="p-3">
+                        <th scope="row">Kích Thước</th>
+                        <td scope="row">@mh.KichThuoc</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Độ phân giải</th>
+                        <td scope="row">@mh.DoPhanGiai</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Tần số quét</th>
+                        <td>@mh.TanSoQuet</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Cộng nghệ màn hình</th>
+                        <td scope="row">@mh.CongNgheMH</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Cảm ứng</th>
+                        <td scope="row">@mh.CamUng</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-hover text-center mb-0">
+                <thead class="table-secondary">
+                    <tr class="p-3">
+                        <th class="fw-bold fs-3" colspan="2">Bộ nhớ ram</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="p-3">
+                        <th scope="row">RAM</th>
+                        <td>@ram.DungLuongRam</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Loại RAM</th>
+                        <td>@ram.LoaiRam</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Tốc độ Bus RAM</th>
+                        <td>@ram.BusRam</td>
+                    </tr>
+                    <tr class="p-3">
+                        <th scope="row">Hỗ trợ RAM tối đa</th>
+                        <td>@ram.HoTroToiDa</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
