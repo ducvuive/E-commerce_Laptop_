@@ -1,5 +1,6 @@
 ﻿using CustomerSite.Clients;
 using Microsoft.AspNetCore.Mvc;
+using ShareView.DTO;
 
 namespace CustomerSite.Controllers
 {
@@ -30,24 +31,51 @@ namespace CustomerSite.Controllers
             this.boXuLyClient = boXuLyClient;
         }
         /*        [Route("Index")]*/
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(int dm/*, string tensp = "abc"*/, int page = 1)
         {
-            var products = await productClient.GetSanPhamTheoTrang(page);
-            var totalPage = await productClient.GetPage();
+            int totalPage;
+            List<SanPhamDTO> products = new List<SanPhamDTO>();
+            products = await productClient.GetTatCaSanPham();
+            /*  if (string.IsNullOrEmpty(tensp))
+              {*/
+            products = await productClient.GetTatCaSanPham();
+            if (dm <= 0)
+            {
+                products = await productClient.GetTatCaSanPham();
+                float temp = products.Count() / (float)12;
+                totalPage = (int)Math.Ceiling(temp);
+                products = await productClient.GetSanPhamTheoTrang(page);
+
+            }
+            else
+            {
+                products = await productClient.GetSanPhamTheoDM(dm);
+                float temp = products.Count() / (float)12;
+                totalPage = (int)Math.Ceiling(temp);
+                products = await productClient.GetSanPhamTheoDmTheoTrang(dm, page);
+            }
+            /*     }
+                 else
+                 {
+                     products = await productClient.GetSanPhamTheoTen(tensp);
+                     float temp = products.Count() / (float)12;
+                     totalPage = (int)Math.Ceiling(temp);
+                     products = await productClient.GetSanPhamTheoTenTheoTrang(tensp, page);
+                 }*/
             var dmsp = await dMClient.GetDMSP();
             ViewBag.Dmsp = dmsp;
             ViewBag.totalPage = totalPage;
             ViewBag.page = page;
+            ViewBag.dm = dm;
             return View(products);
         }
-        /*        public async Task<IActionResult> Page()
+        /*        [Route("dm")]
+                public async Task<IActionResult> GetSanPhamTheoDM(int dm)
                 {
-                    var products = await productClient.GetSanPhamTheoTrang(page);
-                    var totalPage = await productClient.GetPage();
+                    var products = await productClient.GetSanPhamTheoDM(dm);
+                    var totalPage = (products.Count() / 12) + 1;
                     var dmsp = await dMClient.GetDMSP();
-                    ViewBag.Dmsp = dmsp;
                     ViewBag.totalPage = totalPage;
-                    ViewBag.page = page;
                     return View(products);
                 }*/
         [Route("pd")]

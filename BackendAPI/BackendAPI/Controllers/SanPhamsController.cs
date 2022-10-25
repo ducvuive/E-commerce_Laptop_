@@ -69,6 +69,59 @@ namespace BackendAPI.Controllers
             return Ok(results);
         }
 
+        [HttpGet("GetSanPhamTheoDmTheoTrang/{dm}/{page}")]
+        public async Task<ActionResult> GetSanPhamTheoDmTheoTrang(int dm, int page)
+        {
+            var skip = 12 * (page - 1);
+            var results = _context.SanPham.Where(s => s.DMSPId == dm).Skip(skip).Take(12);
+            ;
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
+
+        [HttpGet("GetSanPhamTheoDm/{dm}/")]
+        public async Task<ActionResult> GetSanPhamTheoDm(int dm)
+        {
+            var results = _context.SanPham.Where(s => s.DMSPId == dm);
+            ;
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
+
+        [HttpGet("GetSanPhamTheoTen/{ten}/")]
+        public async Task<ActionResult> GetSanPhamTheoTen(string ten)
+        {
+            var results = _context.SanPham.Where(s => s.TenSP.Contains(ten));
+            ;
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
+
+        [HttpGet("GetSanPhamTheoTenTheoTrang/{ten}/{page}")]
+        public async Task<ActionResult> GetSanPhamTheoTenTheoTrang(string ten, int page)
+        {
+            var skip = 12 * (page - 1);
+            var results = _context.SanPham.Where(s => s.TenSP.Contains(ten)).Skip(skip).Take(12);
+            ;
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
 
         // PUT: api/SanPhams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

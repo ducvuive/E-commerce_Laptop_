@@ -14,10 +14,14 @@
                     @foreach (var item in ViewBag.Dmsp)
                     {
                         <div class="d-flex justify-content-between mt-2 dmsp">
-                            <a class="fs-5 text-muted" href="#">@item.TenDM</a>
+                            <a class="fs-5 text-muted" href="@Url.Action("index", "SanPham", new { dm = @item.DMSPId})">@item.TenDM</a>
                             <i class="fa-solid fa-angle-right"></i>
                         </div>
                     }
+                    <div class="d-flex justify-content-between mt-2 dmsp">
+                        <a class="fs-5 text-muted" href="/SanPham">Xem tất cả</a>
+                        <i class="fa-solid fa-angle-right"></i>
+                    </div>
   @*                  <div class="d-flex justify-content-between mt-2">
                         <h4 class="fs-5 text-muted">Macbook</h4>
                         <i class="fa-solid fa-angle-right"></i>
@@ -29,7 +33,7 @@
                 </div>
             </div>
             <div class="col-lg-10">
-                <form class="d-flex align-items-center justify-content-end">
+                <form class="d-flex align-items-center justify-content-end" method="get" asp-action="/index">
                     <div class="mx-4 w-25">
                         <input type="text"
                                name="tensp"
@@ -39,7 +43,7 @@
                                style="border-radius: 10px" />
                     </div>
                     <div class="">
-                        <button type="submit" class="btn btn-primary py-3">
+                        <button type="submit" value="submit" class="btn btn-primary py-3">
                             Tìm kiếm
                         </button>
                     </div>
@@ -86,12 +90,12 @@
                         {
                             if(i == ViewBag.page){
                                 <li id="@i" class="mx-4">
-                                    <a class="text-warning" href="@Url.Action("index", "SanPham", new { page = @i })">@i</a>
+                                    <a class="text-warning" href="@Url.Action("index", "SanPham", new {dm=@ViewBag.dm, page = @i })">@i</a>
                                 </li>
                             }
                             else{
                                 <li id="@i" class="mx-4">
-                                    <a href="@Url.Action("index", "SanPham", new { page = @i })">@i</a>
+                                    <a href="@Url.Action("index", "SanPham", new {dm=@ViewBag.dm, page = @i })">@i</a>
                                 </li>
                             }
                         }
