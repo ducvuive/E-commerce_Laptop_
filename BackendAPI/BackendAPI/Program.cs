@@ -1,5 +1,6 @@
 using BackendAPI.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("UserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'UserDbContextConnection' not found.");
@@ -18,6 +19,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+/*builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.IsEssential = true;
+});*/
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,14 +36,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+/*app.UseSession();*/
 app.UseHttpsRedirection();
 app.UseAuthentication(); ;
-app.UseStaticFiles();
-/*app.UseStaticFiles(new StaticFileOptions
+/*app.UseStaticFiles();*/
+app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")),
     RequestPath = new PathString("/wwwroot")
-});*/
+});
 
 app.UseAuthorization();
 

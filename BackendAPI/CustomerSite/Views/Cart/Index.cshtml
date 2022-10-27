@@ -1,0 +1,59 @@
+﻿@using ShareView.DTO
+@{
+    ViewData["Title"] = "Cart Page";
+    Layout = "~/Views/Shared/_Layout_Slider.cshtml";
+}
+@{
+    decimal tongTien = 0;
+}
+<section class="cart container mt-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Sản phẩm</th>
+                <th scope="col">Giá</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col">Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count == 0)
+            {
+            <th colspan="5" class="text-center">Không có sản phẩm trong giỏ hàng</th>
+            }
+            else
+            {
+                @foreach (var item in Model){
+                    decimal thanhTien = item.SL * (decimal)item.Sanpham.DonGia;
+                    tongTien += thanhTien;
+                    <tr>
+                    <th scope="row" >
+                        <a asp-action="RemoveCart" asp-route-id="@item.Sanpham.SanPhamId">x</a>
+                    </th>
+                        <td>
+                            @item.Sanpham.TenSP
+                        </td>
+                        <td>@item.Sanpham.DonGia.ToString("#,##0 VNĐ")</td>
+                        <td class="text-center">@item.SL</td>
+                        <td>@thanhTien.ToString("#,##0 VNĐ")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+        <div class="card align-items-center mx-auto" style="width: 18rem">
+                <span>Tổng tiền</span>
+                <span>@tongTien.ToString("#,##0 VNĐ")</span>
+        </div>
+    <div class="d-flex justify-content-end">
+        @{
+            if(@tongTien ==0){
+            <a href="" class="ms-3 text-black p-3 bg-info rounded disabled btn ">Thanh toán ngay</a>
+             }
+            else{
+            <a href="" class="ms-3 text-black p-3 bg-info rounded btn ">Thanh toán ngay</a>
+            }
+        }
+    </div>
+</section>

@@ -16,12 +16,6 @@ namespace CustomerSite.Controllers
             this.productClient = productClient;
         }
 
-        /*                public async Task<IActionResult> Product()
-                        {
-                            //var boNhoRam = await _context.BoNhoRam.ToListAsync();
-                            var products = await productClient.GetAllProduct();
-                            return View(products);
-                        }*/
         public async Task<IActionResult> Index()
         {
             var products = await productClient.GetSanPhamTopRaMat();

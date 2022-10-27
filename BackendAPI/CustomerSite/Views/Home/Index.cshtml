@@ -63,6 +63,10 @@
                                     }
                                 </div>
                             </div>
+                            <div class="mx-3 mt-2 d-flex justify-content-between">
+                                <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.SanPhamId">Thêm vào giỏ hàng</a>
+                                <a class="p-2 button align-items-center text-black"  asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.SanPhamId">Mua ngay</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,3 +77,22 @@
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade"
+     id="exampleModal"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">Bạn đã thêm 1 sản phẩm</div>
+        </div>
+    </div>
+</div>
