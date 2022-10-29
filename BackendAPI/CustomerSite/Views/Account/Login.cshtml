@@ -1,0 +1,21 @@
+﻿@using ShareView.DTO
+@model LoginRequestModel
+@{
+    ViewData["Title"] = "Login";
+}
+<h1>Login</h1>
+
+<form method="post" asp-controller="Account" asp-action="Login">
+    <label asp-for="UserName"></label>
+    <input asp-for="UserName" />
+    <span asp-validation-for="UserName" class="text-danger"></span>
+
+    <br />
+    <label asp-for="Password"></label>
+    <input asp-for="Password" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+    <br />
+    <input type="submit" title="Login" />
+    <br />
+   @* @Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+</form>

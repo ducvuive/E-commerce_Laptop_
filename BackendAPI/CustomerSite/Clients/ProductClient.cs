@@ -17,7 +17,10 @@ namespace CustomerSite.Clients
     }
     public class ProductClient : BaseClient, IProductClient
     {
+        public ProductClient(IHttpClientFactory clientFactory, IHttpContextAccessor httpContextAccessor) : base(clientFactory, httpContextAccessor)
+        {
 
+        }
         public ProductClient(IHttpClientFactory clientFactory) : base(clientFactory)
         {
         }

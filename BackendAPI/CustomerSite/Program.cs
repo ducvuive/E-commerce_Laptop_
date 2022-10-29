@@ -23,17 +23,17 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddHttpClient("", opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["ApiUrl"] ?? "");
+});
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IProductClient, ProductClient>();
 builder.Services.AddScoped<IDMClient, DanhMucClient>();
 builder.Services.AddScoped<IManHinhClient, ManHinhClient>();
 builder.Services.AddScoped<IBoXuLyClient, BoXuLyClieny>();
 builder.Services.AddScoped<IBoNhoRamClient, BoNhoRamClient>();
-
-builder.Services.AddHttpClient("", opt =>
-{
-    opt.BaseAddress = new Uri(builder.Configuration["ApiUrl"] ?? "");
-});
 
 var app = builder.Build();
 

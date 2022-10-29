@@ -4,6 +4,7 @@ using BackendAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
+using System.Data;
 
 namespace BackendAPI.Controllers
 {
@@ -29,6 +30,7 @@ namespace BackendAPI.Controllers
         }
         [HttpGet]
         [Route("month")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<SanPhamDTO>>> GetSanPhamTopRaMat()
         {
             var results = _context.SanPham.OrderByDescending(x => x.RaMat).Take(6);

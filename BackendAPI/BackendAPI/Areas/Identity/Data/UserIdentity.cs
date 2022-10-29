@@ -7,14 +7,14 @@ namespace BackendAPI.Areas.Identity.Data;
 public class UserIdentity : IdentityUser
 {
     [MaxLength(100)]
-    public string FullName { set; get; }
+    public string? FullName { set; get; }
 
     [MaxLength(255)]
-    public string DiaChi { set; get; }
+    public string? DiaChi { set; get; }
 
     [DataType(DataType.Date)]
     public DateTime? NgaySinh { set; get; }
 
-    public string GioiTinh { set; get; }
+    public string? GioiTinh { set; get; }
 }
 
