@@ -63,7 +63,7 @@ namespace BackendAPI.Controllers
         [Route("login")]
         public async Task<IResult> Login([FromBody] LoginRequestModel loginRequestModel)
         {
-            var result = await signInManager.PasswordSignInAsync(loginRequestModel.UserName, loginRequestModel.Password, false, lockoutOnFailure: false);
+            var result = await signInManager.PasswordSignInAsync(loginRequestModel.UserName, loginRequestModel.Password, false, lockoutOnFailure: true);
 
             if (result.Succeeded)
             {

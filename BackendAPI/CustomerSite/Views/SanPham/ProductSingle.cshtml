@@ -39,7 +39,10 @@
                         </div>
                     </div>
                     <p class="mt-5 fs-3 fw-semibold">@Model.DonGia.ToString("#,##0 VNĐ")</p>
-                    <form class="col-md-6 d-flex mb-3">
+                    <form class="col-md-6 d-flex mb-3" asp-controller="Cart" asp-action="AddToCartQuantity" method="post">
+                        <div style="display:none">
+                            <input id="id" name="id" value="@Model.SanPhamId" />
+                        </div>
                         <span class="me-2">
                             <button type="button"
                                     class="button-quantity btn-minus"
@@ -54,7 +57,7 @@
                                class="form-control w-25 text-center"
                                value="1"
                                min="1"
-                               max="100" />
+                               max="@Model.SoLuong" />
                         <span class="ms-2">
                             <button type="button"
                                     class="button-quantity btn-plus"

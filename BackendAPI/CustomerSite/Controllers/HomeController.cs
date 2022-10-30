@@ -23,6 +23,7 @@ namespace CustomerSite.Controllers
         }
 
 
+
         public IActionResult Privacy()
         {
             return View();

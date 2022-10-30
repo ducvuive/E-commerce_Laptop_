@@ -5,10 +5,12 @@ namespace ShareView.DTO
     public class LoginRequestModel
     {
 
-        [Required(ErrorMessage = "Name should not be empty")]
+        [Required]
+        [EmailAddress(ErrorMessage = "Không đúng định dạng email")]
+        [Display(Name = "Email")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Password should not be empty")]
+        [Required(ErrorMessage = "Mật khẩu không được để trống")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }
