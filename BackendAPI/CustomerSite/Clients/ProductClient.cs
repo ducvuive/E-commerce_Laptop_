@@ -79,7 +79,7 @@ namespace CustomerSite.Clients
 
         public async Task<List<SanPhamDTO>> GetSanPhamTheoTenTheoTrang(string ten, int page)
         {
-            var response = await httpClient.GetAsync("api/SanPhams/GetSanPhamTheoDmTheoTrang/" + ten + "/" + page);
+            var response = await httpClient.GetAsync("api/SanPhams/GetSanPhamTheoTenTheoTrang/" + ten + "/" + page);
             var contents = await response.Content.ReadAsStringAsync();
 
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
