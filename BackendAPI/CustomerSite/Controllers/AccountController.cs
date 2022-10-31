@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ShareView.Constants;
 using ShareView.DTO;
 using System.Text;
 
@@ -34,7 +35,9 @@ namespace CustomerSite.Controllers
 
                 if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    Request.HttpContext.Session.SetString("JWT", data.Value);
+                    //var jwtToken = (JwtSecurityToken)response;
+                    //var userInfo = tokenHandler.ReadJwtToken(session);
+                    Request.HttpContext.Session.SetString(Variable.JWT, data.Value);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -44,6 +47,13 @@ namespace CustomerSite.Controllers
             }
 
             return View(model);
+        }
+        public IActionResult Logout()
+        {
+            var session = HttpContext.Session;
+            session.Remove(Variable.JWT);
+            session.Remove(Variable.CARTKEY);
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Register()

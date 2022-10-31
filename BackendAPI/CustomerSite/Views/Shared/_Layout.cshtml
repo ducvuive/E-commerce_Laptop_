@@ -1,4 +1,32 @@
-﻿<!DOCTYPE html>
+﻿@using System.IdentityModel.Tokens.Jwt
+@using System.Security.Claims
+@using ShareView.Constants
+<!DOCTYPE html>
+@{
+    //var token = Context.Request.Cookies["JwtToken"];
+    var session = Context.Session.GetString(Variable.JWT);
+    var role = "";
+    var userName = "";
+    if (session != null)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var userInfo = tokenHandler.ReadJwtToken(session);
+        userName = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
+        role = (userInfo.Claims.FirstOrDefault(o => o.Type == "role")?.Value);
+    }
+}
+@*<ul class="nav navbar-nav navbar-right">
+    @if (session ==null)
+    {
+        <li><a><span><i class="ion-ios-contact"></i> @User.Identity.Name</span></a></li>
+        <li><a asp-controller="Carts" asp-action="Index"><i class="ion-android-cart"></i> Cart </a></li>
+        <li><a asp-controller="Account" asp-action="SignOut"> <i class="ion-android-exit"></i> Logout </a></li>
+    }
+    else
+    {
+        <li><a asp-controller="Account" asp-action="SignIn"> <i class="ion-android-person"></i> Login </a></li>
+    }
+</ul>*@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,12 +61,36 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Sanpham" asp-action="Index">Sản phẩm</a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Đăng kí</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Đăng nhập</a>
-                        </li>
+                        </li>*@
+                        @if (session !=null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark">@userName</a>
+                            </li>
+                            @if (@role!=null && @role == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Admin</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Đăng xuất</a>
+                            </li>            
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Đăng kí</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="/cart">
                                 <i class="fa-solid fa-cart-shopping"></i>

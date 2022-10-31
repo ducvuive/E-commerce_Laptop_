@@ -2,6 +2,7 @@
 using CustomerSite.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ShareView.Constants;
 using ShareView.DTO;
 using System.Diagnostics;
 
@@ -11,7 +12,7 @@ namespace CustomerSite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductClient productClient;
-        public const string CARTKEY = "cart";
+        /*public const string CARTKEY = "cart";*/
 
         public CartController(ILogger<HomeController> logger, IProductClient productClient)
         {
@@ -27,7 +28,7 @@ namespace CustomerSite.Controllers
         List<CartDTO> GetCartItems()
         {
             var session = HttpContext.Session;
-            string jsoncart = session.GetString(CARTKEY);
+            string jsoncart = session.GetString(Variable.CARTKEY);
             if (jsoncart != null)
             {
                 return JsonConvert.DeserializeObject<List<CartDTO>>(jsoncart);
@@ -38,14 +39,14 @@ namespace CustomerSite.Controllers
         void ClearCart()
         {
             var session = HttpContext.Session;
-            session.Remove(CARTKEY);
+            session.Remove(Variable.CARTKEY);
         }
 
         void SaveCartSession(List<CartDTO> ls)
         {
             var session = HttpContext.Session;
             string jsoncart = JsonConvert.SerializeObject(ls);
-            session.SetString(CARTKEY, jsoncart);
+            session.SetString(Variable.CARTKEY, jsoncart);
         }
         public async Task<IActionResult> Index()
         {
