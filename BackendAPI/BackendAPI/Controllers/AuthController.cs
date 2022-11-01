@@ -105,7 +105,9 @@ namespace BackendAPI.Controllers
                 return Results.Ok(stringToken);
             }
 
-            return Results.Unauthorized();
+            //return Results.Unauthorized();
+            throw new Exception("wrong password");
+            return Results.BadRequest(new { message = "wrong password" });
         }
 
 

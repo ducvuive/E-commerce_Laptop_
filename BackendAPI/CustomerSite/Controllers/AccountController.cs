@@ -17,6 +17,7 @@ namespace CustomerSite.Controllers
 
         public IActionResult Login()
         {
+            TempData["Error"] = null;
             return View();
         }
 
@@ -29,8 +30,32 @@ namespace CustomerSite.Controllers
                 //var a = 1;
                 var jsonInString = JsonConvert.SerializeObject(model);
 
+                //var response = await clientFactory.PostAsync("login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
                 var response = await clientFactory.PostAsync("login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                //var contents = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                {
+                    TempData["Error"] = "Tên đăng nhập hoặc mật khẩu không chính xác";
+                    return View();
+                }
                 var contents = await response.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<LoginResponseModel>(contents);
+
+                if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    Request.HttpContext.Session.SetString(Variable.JWT, data.Value);
+                    return RedirectToAction("Index", "Home");
+                }
+                /*                    else
+                                    {
+                                        ModelState.AddModelError("", "Invalid username or password");
+                                    }*/
+
+                /*                catch (Exception ex)
+                                {
+                                    Ok(ex);
+                                }*/
+                /*var contents = await response.Content.ReadAsStringAsync();
                 var data = JsonConvert.DeserializeObject<LoginResponseModel>(contents);
 
                 if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
@@ -43,7 +68,7 @@ namespace CustomerSite.Controllers
                 else
                 {
                     ModelState.AddModelError("", "Invalid username or password");
-                }
+                }*/
             }
 
             return View(model);

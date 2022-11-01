@@ -35,5 +35,6 @@ namespace BackendAPI.Models
         public virtual CongKetNoi CongKN { get; set; }
         public virtual DanhMucSanPham DMSP { get; set; }
         public virtual List<CTHD> CTHD { get; set; } = new List<CTHD>();
+        public virtual List<Rating> Rating { get; set; } = new List<Rating>();
     }
 }

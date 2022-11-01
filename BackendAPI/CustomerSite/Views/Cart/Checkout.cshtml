@@ -1,0 +1,106 @@
+﻿@using ShareView.Constants
+@using System.IdentityModel.Tokens.Jwt
+@{
+    ViewData["Title"] = "Cart Page";
+    Layout = "~/Views/Shared/_Layout_Slider.cshtml";
+}
+@{
+    decimal tongTien = 0;
+}
+@{
+    //var token = Context.Request.Cookies["JwtToken"];
+    var session = Context.Session.GetString(Variable.JWT);
+    var userName = "";
+    if (session != null)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var userInfo = tokenHandler.ReadJwtToken(session);
+        userName = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
+    }
+}
+<section class="cart container mt-5">
+    <h3 class="">Chi tiết đơn hàng</h3>
+    <form class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="hoten">Họ tên</label>
+                <input type="text"
+                       name="hoten"
+                       id="hoten"
+                       class="form-control"
+                       placeholder="Nhập họ tên người nhận" />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="diachi">Địa chỉ giao hàng</label>
+                <input type="text"
+                       name="diachi"
+                       id="diachi"
+                       class="form-control"
+                       placeholder="Địa chỉ nhận hàng" />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label for="sdt">SĐT</label>
+                <input type="text"
+                       name="sdt"
+                       id="sdt"
+                       class="form-control"
+                       placeholder="SĐT người nhận" />
+            </div>
+        </div>
+        <div class="col-6">
+        <fieldset disabled class="mt-0">
+            <div class="form-group ">
+                <label for="email">Email</label>
+                <input type="text"
+                       name="email"
+                       id="email"
+                       class="form-control disabled"
+                       value="@userName" />
+            </div>
+        </fieldset>
+        </div>
+    </form>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Sản phẩm</th>
+                <th scope="col">Giá</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col">Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count == 0)
+            {
+            <th colspan="5" class="text-center">Không có sản phẩm trong giỏ hàng</th>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    decimal thanhTien = item.SL * (decimal)item.Sanpham.DonGia;
+                    tongTien += thanhTien;
+                <tr>
+                    <td>
+                            @item.Sanpham.TenSP
+                    </td>
+                    <td>@item.Sanpham.DonGia.ToString("#,##0 VNĐ")</td>
+                    <td class="text-center">@item.SL</td>
+                    <td>@thanhTien.ToString("#,##0 VNĐ")</td>
+                </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="card align-items-center mx-auto" style="width: 18rem">
+        <span>Tổng tiền</span>
+        <span>@tongTien.ToString("#,##0 VNĐ")</span>
+    </div>
+    <div class="d-flex justify-content-end">
+                <a href="" class="ms-3 text-black p-3 bg-info rounded btn ">Thanh toán ngay</a>
+    </div>
+</section>

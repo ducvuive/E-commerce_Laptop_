@@ -1,7 +1,9 @@
 ﻿using CustomerSite.Clients;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using ShareView.Constants;
 using ShareView.DTO;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace CustomerSite.Controllers
 {
@@ -21,8 +23,9 @@ namespace CustomerSite.Controllers
         private readonly IManHinhClient manHinhlient;
         private readonly IBoNhoRamClient boNhoRamClient;
         private readonly IBoXuLyClient boXuLyClient;
-        public const string CARTKEY = "cart";
-        public SanPhamController(ILogger<SanPhamController> logger, IProductClient productClient, IDMClient dMClient, IManHinhClient manHinhlient, IBoNhoRamClient boNhoRamClient, IBoXuLyClient boXuLyClient)
+        private readonly IUserClient userClient;
+        /*public const string CARTKEY = "cart";*/
+        public SanPhamController(ILogger<SanPhamController> logger, IProductClient productClient, IDMClient dMClient, IManHinhClient manHinhlient, IBoNhoRamClient boNhoRamClient, IBoXuLyClient boXuLyClient, IUserClient userClient)
         {
             _logger = logger;
             this.productClient = productClient;
@@ -30,9 +33,8 @@ namespace CustomerSite.Controllers
             this.manHinhlient = manHinhlient;
             this.boNhoRamClient = boNhoRamClient;
             this.boXuLyClient = boXuLyClient;
+            this.userClient = userClient;
         }
-        /*        [Route("Index")]*/
-        /*[HttpGet("Index/{tensp}")]*/
         public async Task<IActionResult> Index(int category, string searchString, int page = 1)
         {
             int totalPage;
@@ -70,6 +72,31 @@ namespace CustomerSite.Controllers
             return View(products);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Rating([FromForm] string comment, [FromForm] int ratingsValue, [FromForm] int SanPhamId)
+        {
+            var session = Request.HttpContext.Session.GetString(Variable.JWT);
+            var email = "";
+            if (session == null)
+            {
+                return Redirect("/Account/Login");
+            }
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var userInfo = tokenHandler.ReadJwtToken(session);
+            email = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
+            //var user = await userClient.GetUser(email);
+            //var sanPham = await productClient.GetSanPham(SanPhamId);
+            var rating = new RatingDTO();
+            rating.Comments = comment;
+            rating.Rate = ratingsValue;
+            rating.PublishedDate = DateTime.Now;
+            rating.sanPhamId = SanPhamId;
+
+            rating = await productClient.CreateRating(rating, email);
+            /*rating.MaKhacHangId = user;*/
+            return Redirect("/SanPham/pd?id=" + SanPhamId);
+        }
+
         [Route("pd")]
         public async Task<IActionResult> ProductSingle(int Id)
         {
@@ -82,7 +109,7 @@ namespace CustomerSite.Controllers
             ViewBag.boXuLy = boXuLy;
 
             var session = HttpContext.Session;
-            string jsoncart = session.GetString(CARTKEY);
+            string jsoncart = session.GetString(Variable.CARTKEY);
             if (jsoncart != null)
             {
                 List<CartDTO> cart = JsonConvert.DeserializeObject<List<CartDTO>>(jsoncart);

@@ -46,14 +46,20 @@ namespace BackendAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SanPhamDTO>> GetSanPham(int id)
         {
-            var sanPham = await _context.SanPham.FindAsync(id);
+            var sanPham = await _context.SanPham.Where(p => p.SanPhamId == id).Include(p => p.Rating).ThenInclude(r => r.KhachHang).FirstOrDefaultAsync();
 
             if (sanPham == null)
             {
                 return NotFound();
             }
+            var mapper = _mapper.Map<SanPhamDTO>(sanPham);
 
-            return _mapper.Map<SanPhamDTO>(sanPham);
+            /*            foreach(var item in sanPham.Rating)
+                        {
+                           _mapper.Map<UserIdentityDTO>(item);
+
+                        }*/
+            return mapper;
         }
         // GET: api/SanPhams/5
         [HttpGet("GetSanPhamTheoTrang/{page}")]

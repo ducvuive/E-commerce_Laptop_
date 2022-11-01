@@ -24,6 +24,7 @@
         public long DonGia { get; set; }
         public string? HinhAnh { get; set; }
         public float? DanhGia { get; set; }
+        public List<RatingDTO> Rating { get; set; }
 
         /*        public virtual ManHinhDTO MH { get; set; }
                 public virtual BoXuLyDTO BXL { get; set; }

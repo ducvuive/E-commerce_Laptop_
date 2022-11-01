@@ -4,6 +4,7 @@ using BackendAPI.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAPI.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221031165511_update-hoadon")]
+    partial class updatehoadon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,16 +324,6 @@ namespace BackendAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RatingID"), 1L, 1);
 
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KhachHang")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("PublishedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("Rate")
                         .HasColumnType("int");
 
@@ -339,8 +331,6 @@ namespace BackendAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("RatingID");
-
-                    b.HasIndex("KhachHang");
 
                     b.HasIndex("SanPhamId");
 
@@ -605,17 +595,11 @@ namespace BackendAPI.Migrations
 
             modelBuilder.Entity("BackendAPI.Models.Rating", b =>
                 {
-                    b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "KhachHangId")
-                        .WithMany()
-                        .HasForeignKey("KhachHang");
-
                     b.HasOne("BackendAPI.Models.SanPham", "sanPham")
-                        .WithMany("Rating")
+                        .WithMany()
                         .HasForeignKey("SanPhamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("KhachHangId");
 
                     b.Navigation("sanPham");
                 });
@@ -747,8 +731,6 @@ namespace BackendAPI.Migrations
             modelBuilder.Entity("BackendAPI.Models.SanPham", b =>
                 {
                     b.Navigation("CTHD");
-
-                    b.Navigation("Rating");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,10 +1,8 @@
 ﻿using CustomerSite.Clients;
-using CustomerSite.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShareView.Constants;
 using ShareView.DTO;
-using System.Diagnostics;
 
 namespace CustomerSite.Controllers
 {
@@ -126,10 +124,19 @@ namespace CustomerSite.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> CheckOut(/*string userName*/)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (Request.HttpContext.Session.GetString(Variable.JWT) == null)
+            {
+                return Redirect("/Account/Login");
+            }
+            /*if (userName == null)
+            {
+                return Redirect("/Account/Login");
+            }*/
+            var cart = GetCartItems();
+
+            return View(cart);
         }
     }
 }

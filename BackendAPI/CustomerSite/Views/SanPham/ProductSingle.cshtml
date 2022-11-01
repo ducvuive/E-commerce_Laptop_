@@ -70,6 +70,9 @@
                             Mua ngay
                         </button>
                     </form>
+                    <button type="button" class="btn ms-5 w-50 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Đánh giá
+                    </button>
                 </div>
             </div>
         </div>
@@ -162,5 +165,58 @@
                 </tbody>
             </table>
         </div>
+        <table class="table table-hover text-center mb-0 mt-5">
+            <thead class="table-secondary">
+                <tr class="p-3">
+                    <th class="fw-bold fs-3" colspan="2">Bình luận</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Rating)
+                {
+                    <tr class="p-3">
+                        <th scope="row">@item.KhachHang.Email</th>
+                        <td>@item.Comments</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </section>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" asp-controller="SanPham" asp-action="Rating" method="post">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Đánh giá sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between">
+                    <span>Rating star</span>
+                    <div>
+                        <i class="ratingStar fa-regular fa-star" data-value="1"></i>
+                        <i class="ratingStar fa-regular fa-star" data-value="2"></i>
+                        <i class="ratingStar fa-regular fa-star" data-value="3"></i>
+                        <i class="ratingStar fa-regular fa-star" data-value="4"></i>
+                        <i class="ratingStar fa-regular fa-star" data-value="5"></i>
+                    </div>
+                </div>
+                <div>
+                    <input type="hidden" name="ratingsValue" id="ratingsValue" />
+                    <input type="hidden" name="SanPhamId" id="SanPhamId" value="@Model.SanPhamId" />
+                    <input type="text"
+                           id="comment"
+                           name="comment"
+                           class="form-control w-100"/>
+                </div>          
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="submit" class="btn btn-primary">Đánh giá</button>
+            </div>
+        </form>
+    </div>
+</div>

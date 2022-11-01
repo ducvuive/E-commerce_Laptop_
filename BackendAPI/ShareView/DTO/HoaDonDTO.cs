@@ -11,8 +11,9 @@ namespace ShareView.DTO
         public string? SDT { get; set; }
         public string DiaChiGiaoHang { get; set; }
         public long TongTien { get; set; }
-        public int? TrangThai { get; set; }
-        public virtual UserIdentityDTO? MaKhacHangId { get; set; }
+        /*public int? TrangThai { get; set; }*/
+        public UserIdentityDTO? MaKhacHangId { get; set; }
+        //public virtual UserIdentityDTO? MaKhacHangId { get; set; }
         //public virtual List<CTHD_DTO> CTHD { get; set; } = new List<CTHD_DTO>();
     }
 }

@@ -27,3 +27,11 @@ add_cart.on("click",function (event) {
     event.preventDefault();
     alert("The required page will not be open");
 });
+
+$(".ratingStar").click(function () {
+    $(".ratingStar").removeClass("checked");
+    $(this).addClass("checked");
+    $(this).prevAll(".ratingStar").addClass("checked");
+    var starValue = $(this).attr("data-value");
+    $("#ratingsValue").val(starValue);
+});

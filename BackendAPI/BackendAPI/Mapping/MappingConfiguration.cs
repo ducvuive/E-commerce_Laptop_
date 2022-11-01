@@ -18,8 +18,10 @@ namespace BackendAPI.Mapping
             CreateMap<HoaDonDTO, HoaDon>().ReverseMap();
             CreateMap<SanPham, SanPhamDTO>().ReverseMap();
             CreateMap<CTHD_DTO, CTHD>().ReverseMap();
-            CreateMap<UserIdentityDTO, UserIdentity>().ReverseMap();
+            CreateMap<UserIdentity, UserIdentityDTO>().ReverseMap();
             CreateMap<CongKetNoiDTO, CongKetNoi>().ReverseMap();
+            CreateMap<RatingDTO, Rating>().ReverseMap();
+            CreateMap<Rating, RatingDTO>();
         }
     }
 }

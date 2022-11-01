@@ -24,15 +24,22 @@ namespace BackendAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<UserIdentityDTO>>> GetUser()
         {
-            var mh = await _context.AppUser.ToListAsync();
-            return _mapper.Map<List<UserIdentityDTO>>(mh);
+            var user = await _context.UserIdentity.ToListAsync();
+            return _mapper.Map<List<UserIdentityDTO>>(user);
         }
 
         // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{email}")]
+        public async Task<ActionResult<UserIdentityDTO>> Get(string email)
         {
-            return "value";
+            var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<UserIdentityDTO>(user);
         }
 
         // POST api/<UserController>

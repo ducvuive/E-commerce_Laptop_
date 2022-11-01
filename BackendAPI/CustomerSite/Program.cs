@@ -34,6 +34,7 @@ builder.Services.AddScoped<IDMClient, DanhMucClient>();
 builder.Services.AddScoped<IManHinhClient, ManHinhClient>();
 builder.Services.AddScoped<IBoXuLyClient, BoXuLyClieny>();
 builder.Services.AddScoped<IBoNhoRamClient, BoNhoRamClient>();
+builder.Services.AddScoped<IUserClient, UserClient>();
 
 var app = builder.Build();
 

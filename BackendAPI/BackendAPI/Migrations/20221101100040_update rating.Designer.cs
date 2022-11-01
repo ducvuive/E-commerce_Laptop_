@@ -4,6 +4,7 @@ using BackendAPI.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAPI.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221101100040_update rating")]
+    partial class updaterating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,7 +328,7 @@ namespace BackendAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("KhachHang")
+                    b.Property<string>("KhachHangIdId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("PublishedDate")
@@ -340,7 +342,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("RatingID");
 
-                    b.HasIndex("KhachHang");
+                    b.HasIndex("KhachHangIdId");
 
                     b.HasIndex("SanPhamId");
 
@@ -607,7 +609,7 @@ namespace BackendAPI.Migrations
                 {
                     b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "KhachHangId")
                         .WithMany()
-                        .HasForeignKey("KhachHang");
+                        .HasForeignKey("KhachHangIdId");
 
                     b.HasOne("BackendAPI.Models.SanPham", "sanPham")
                         .WithMany("Rating")

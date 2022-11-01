@@ -2,10 +2,15 @@
 @model LoginRequestModel
 @{
     ViewData["Title"] = "Login";
+    var error = TempData["Error"] as string;
 }
 <h1>Login</h1>
+@if(error != null){
+    <h3 class="text-danger">@error</h3>
+}
 
 <form method="post" asp-controller="Account" asp-action="Login">
+
     <label asp-for="UserName"></label>
     <input asp-for="UserName" />
     <span asp-validation-for="UserName" class="text-danger"></span>
