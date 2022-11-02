@@ -46,23 +46,21 @@ namespace BackendAPI.Controllers
         [HttpPost("{userName}")]
         public async Task<ActionResult<RatingDTO>> PostRating([FromBody] RatingDTO ratingDTO, string userName)
         {
-            /*            var session = Request.HttpContext.Session.GetString(Variable.JWT);
-                        var email = "";
-                        if (session == null)
-                        {
-                            return Redirect("/Account/Login");
-                        }
-                        var tokenHandler = new JwtSecurityTokenHandler();
-                        var userInfo = tokenHandler.ReadJwtToken(session);
-                        email = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
-                        *//*var user = await userClient.GetUser(email);*/
+            float rateAvg = 0;
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == userName);
             var sanPham = await _context.SanPham.FirstOrDefaultAsync(i => i.SanPhamId == ratingDTO.sanPhamId);
+            var ratings = await _context.Rating.Where(s => s.sanPham.SanPhamId == ratingDTO.sanPhamId).ToListAsync();
             Rating rating = _mapper.Map<Rating>(ratingDTO);
             rating.KhachHang = user;
             rating.sanPham = sanPham;
-
             _context.Rating.Add(rating);
+            foreach (var item in ratings)
+            {
+                rateAvg += (float)item.Rate;
+            }
+            rateAvg = (rateAvg + (float)ratingDTO.Rate) / (ratings.Count() + 1);
+            int rateAvg_ = (int)Math.Ceiling(rateAvg);
+            sanPham.DanhGia = rateAvg_;
             await _context.SaveChangesAsync();
             return await _context.Rating.ProjectTo<RatingDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
             //return CreatedAtAction("GetRating", new { id = rating.RatingID }, rating);
