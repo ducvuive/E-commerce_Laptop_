@@ -8,6 +8,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("UserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'UserDbContextConnection' not found.");
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -23,6 +24,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//add cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                          policy =>
+                          {
+                              policy.WithOrigins("https://localhost:7179",
+                                                  "")
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                              policy.WithOrigins("http://localhost:3000",
+                                               "")
+                                               .AllowAnyHeader()
+                                               .AllowAnyMethod();
+                          });
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -84,7 +102,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseAuthorization();
-
+app.UseCors(MyAllowSpecificOrigins);
 app.MapControllers();
 
 app.Run();
