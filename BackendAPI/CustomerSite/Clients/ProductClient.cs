@@ -21,7 +21,6 @@ namespace CustomerSite.Clients
     {
         public ProductClient(IHttpClientFactory clientFactory, IHttpContextAccessor httpContextAccessor) : base(clientFactory, httpContextAccessor)
         {
-
         }
         public ProductClient(IHttpClientFactory clientFactory) : base(clientFactory)
         {

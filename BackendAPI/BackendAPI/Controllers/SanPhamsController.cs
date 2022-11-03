@@ -30,7 +30,7 @@ namespace BackendAPI.Controllers
         }
         [HttpGet]
         [Route("month")]
-        //[Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]*/
         public async Task<ActionResult<List<SanPhamDTO>>> GetSanPhamTopRaMat()
         {
             var results = _context.SanPham.OrderByDescending(x => x.RaMat).Take(6);
@@ -46,7 +46,16 @@ namespace BackendAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SanPhamDTO>> GetSanPham(int id)
         {
-            var sanPham = await _context.SanPham.Where(p => p.SanPhamId == id).Include(p => p.Rating).ThenInclude(r => r.KhachHang).FirstOrDefaultAsync();
+            var sanPham = await _context.SanPham.Where(p => p.SanPhamId == id)
+                                                .Include(p => p.Rating)
+                                                .ThenInclude(r => r.KhachHang)
+                                                /*.Where(p => p.SanPhamId == id)*/
+                                                /*.Select(o => new
+                                                {
+                                                    sanpham = o,
+                                                    Rating = o.Rating.OrderByDescending(i => i.RatingID)
+                                                })*/
+                                                .FirstOrDefaultAsync();
 
             if (sanPham == null)
             {

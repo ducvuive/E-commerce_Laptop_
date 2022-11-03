@@ -16,10 +16,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDistributedMemoryCache();
-
+builder.Services.AddMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
@@ -54,10 +55,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseSession();
-app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRouting();
 
 app.MapControllerRoute(
     name: "default",

@@ -13,6 +13,12 @@ namespace ShareView.DTO
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        [Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
+        [DataType(DataType.Password)]
+        public string ConfirmPassword { get; set; }
+        [Phone(ErrorMessage = "Số điện thoại không đúng định dạng")]
+        [StringLength(10, ErrorMessage = "Số điện thoại phải dưới 10 ký tự")]
+        public string PhoneNumber { get; set; }
     }
 
 

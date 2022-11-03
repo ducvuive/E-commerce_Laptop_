@@ -1,7 +1,7 @@
 ﻿@using System.IdentityModel.Tokens.Jwt
 @using System.Security.Claims
 @using ShareView.Constants
-@{
+@*@{
     //var token = Context.Request.Cookies["JwtToken"];
     var session = Context.Session.GetString(Variable.JWT);
     var role = "";
@@ -11,6 +11,18 @@
         var tokenHandler = new JwtSecurityTokenHandler();
         var userInfo = tokenHandler.ReadJwtToken(session);
         userName = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
+        role = (userInfo.Claims.FirstOrDefault(o => o.Type == "role")?.Value);
+    }
+}*@
+@{
+    var token = Context.Request.Cookies[Variable.JWT_Token];
+    var userName = "";
+    var role = "";
+    if (token != null)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var userInfo = tokenHandler.ReadJwtToken(token);
+        userName = userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value;
         role = (userInfo.Claims.FirstOrDefault(o => o.Type == "role")?.Value);
     }
 }
@@ -55,7 +67,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="#">Đăng xuất</a>
                         </li>*@
-                        @if (session != null)
+                        @if (token != null)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark">@userName</a>

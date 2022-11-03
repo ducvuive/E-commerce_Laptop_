@@ -21,6 +21,8 @@ namespace BackendAPI.Controllers
         }
 
         // GET: api/DanhMucSanPhams
+        //[Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetDanhMucSanPham()
         {

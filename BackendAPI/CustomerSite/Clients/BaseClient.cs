@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using ShareView.Constants;
+using System.Net.Http.Headers;
 
 namespace CustomerSite.Clients
 {
@@ -10,7 +11,8 @@ namespace CustomerSite.Clients
         {
             httpClient = clientFactory.CreateClient();
 
-            var token = httpContextAccessor.HttpContext?.Session.GetString("JWT");
+            //var token = httpContextAccessor.HttpContext?.Session.GetString(Variable.JWT);
+            var token = httpContextAccessor.HttpContext?.Request.Cookies[Variable.JWT_Token];
 
             if (!string.IsNullOrEmpty(token))
             {

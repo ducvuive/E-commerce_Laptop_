@@ -40,13 +40,16 @@ builder.Services.AddCors(options =>
                                                .AllowAnyHeader()
                                                .AllowAnyMethod();
                           });
+    //options.AddPolicy("Admin", authBuilder => { authBuilder.RequireRole("Admin"); });
 });
+
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
 }).AddJwtBearer(o =>
 {
     o.TokenValidationParameters = new TokenValidationParameters
@@ -69,18 +72,18 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 3;
     options.Password.RequiredUniqueChars = 1;
     // Default SignIn settings.
     options.SignIn.RequireConfirmedEmail = false;
 });
-/*builder.Services.AddDistributedMemoryCache();
+builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.IsEssential = true;
-});*/
+});
 
 var app = builder.Build();
 
@@ -91,7 +94,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/*app.UseSession();*/
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseAuthentication(); ;
 /*app.UseStaticFiles();*/

@@ -36,6 +36,7 @@ namespace BackendAPI.Controllers
                 {
                     UserName = registerRequestModel.UserName,
                     Email = registerRequestModel.UserName,
+                    PhoneNumber = registerRequestModel.PhoneNumber,
                 };
 
                 // tao user trong database
@@ -63,7 +64,7 @@ namespace BackendAPI.Controllers
         [Route("login")]
         public async Task<IResult> Login([FromBody] LoginRequestModel loginRequestModel)
         {
-            var result = await signInManager.PasswordSignInAsync(loginRequestModel.UserName, loginRequestModel.Password, false, lockoutOnFailure: true);
+            var result = await signInManager.PasswordSignInAsync(loginRequestModel.UserName, loginRequestModel.Password, false, lockoutOnFailure: false);
 
             if (result.Succeeded)
             {

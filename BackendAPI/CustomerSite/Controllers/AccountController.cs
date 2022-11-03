@@ -24,6 +24,7 @@ namespace CustomerSite.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestModel model)
         {
+            var a = 1;
             if (ModelState.IsValid)
             {
                 //var client = clientFactory.CreateClient();
@@ -43,9 +44,19 @@ namespace CustomerSite.Controllers
 
                 if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    Request.HttpContext.Session.SetString(Variable.JWT, data.Value);
+                    //Request.HttpContext.Session.SetString(Variable.JWT, data.Value);
+                    var cookieOption = new CookieOptions()
+                    {
+                        HttpOnly = true,
+                        Expires = DateTime.UtcNow.AddMinutes(15),
+                        IsEssential = true
+                    };
+                    Response.Cookies.Append(Variable.JWT_Token, data.Value, cookieOption);
+
                     return RedirectToAction("Index", "Home");
                 }
+
+
                 /*                    else
                                     {
                                         ModelState.AddModelError("", "Invalid username or password");
@@ -76,7 +87,8 @@ namespace CustomerSite.Controllers
         public IActionResult Logout()
         {
             var session = HttpContext.Session;
-            session.Remove(Variable.JWT);
+            Response.Cookies.Delete(Variable.JWT_Token);
+            //session.Remove(Variable.JWT);
             session.Remove(Variable.CARTKEY);
             return RedirectToAction("Index", "Home");
         }

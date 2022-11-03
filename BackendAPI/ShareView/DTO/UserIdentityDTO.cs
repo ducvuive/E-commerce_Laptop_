@@ -4,9 +4,11 @@ namespace ShareView.DTO
 {
     public class UserIdentityDTO : IdentityUser
     {
-        public string? FullName { set; get; }
+        public string? Email { set; get; }
+        public string? UserName { set; get; }
+        /*        public string? FullName { set; get; }*/
         public string? DiaChi { set; get; }
         public DateTime? NgaySinh { set; get; }
-        public string? GioiTinh { set; get; }
+        public int? PhoneNumber { set; get; }
     }
 }

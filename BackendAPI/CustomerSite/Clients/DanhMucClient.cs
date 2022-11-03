@@ -10,12 +10,13 @@ namespace CustomerSite.Clients
     public class DanhMucClient : BaseClient, IDMClient
     {
 
-        public DanhMucClient(IHttpClientFactory clientFactory) : base(clientFactory)
+        public DanhMucClient(IHttpClientFactory clientFactory, IHttpContextAccessor httpContextAccessor) : base(clientFactory, httpContextAccessor)
         {
         }
 
         public async Task<List<DanhMucSanPhamDTO>> GetDMSP()
         {
+
             var response = await httpClient.GetAsync("api/DanhMucSanPhams");
             var contents = await response.Content.ReadAsStringAsync();
             var dmsp = JsonConvert.DeserializeObject<List<DanhMucSanPhamDTO>>(contents);
