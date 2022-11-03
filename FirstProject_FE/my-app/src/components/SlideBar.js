@@ -6,7 +6,7 @@ import {
   FaRegChartBar,
   FaCommentAlt,
   FaShoppingBag,
-  FaThList,
+  FaUserEdit,
   FaAlignJustify,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
@@ -27,6 +27,11 @@ const Sidebar = ({ children }) => {
       path: "/categories",
       name: "Categories",
       icon: <FaAlignJustify />,
+    },
+    {
+      path: "/users",
+      name: "Users",
+      icon: <FaUserEdit />,
     },
   ];
   return (

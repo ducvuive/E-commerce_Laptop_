@@ -15,6 +15,8 @@ import NavBar from "./components/NavBar";
 import DetailCategories from "./pages/Categories/DetailCategories";
 import CreateCategories from "./pages/Categories/CreateCategories";
 import UpdateCategories from "./pages/Categories/UpdateCategories";
+import Users from "./pages/Users";
+import DetailUser from "./pages/Users/DetailUser";
 function App() {
   return (
     // <Fragment className="vh-100">
@@ -35,15 +37,17 @@ function App() {
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/listProduct" element={<ListProduct />}></Route>
+          <Route path="/users" element={<Users />}></Route>
+          <Route path="/users/detail/:email" element={<DetailUser />}></Route>
           <Route path="/categories" element={<Categories />}></Route>
           <Route
             path="/categories/Detail/:id"
             element={<DetailCategories />}
           ></Route>
-          <Route
+          {/* <Route
             path="/categories/Update/:id"
             element={<UpdateCategories />}
-          ></Route>
+          ></Route> */}
           <Route
             path="/categories/Create"
             element={<CreateCategories />}

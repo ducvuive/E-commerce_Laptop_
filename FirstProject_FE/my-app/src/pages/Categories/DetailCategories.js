@@ -1,29 +1,33 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Button from "react-bootstrap/esm/Button";
 const schemaValidation = yup.object({
   tenDM: yup
     .string()
-    .required("Vui lòng nhập danh mục")
+    //.required("Vui lòng nhập danh mục")
+    .max(50, "Danh mục có dưới 50 kí tự"),
+  description: yup
+    .string()
+    //.required("Vui lòng nhập mô tả")
     .max(50, "Danh mục có dưới 50 kí tự"),
 });
 
 const DetailCategories = () => {
-  const [categories, setCategogies] = useState();
+  const [categories, setCategogies] = useState("");
   const navigate = useNavigate();
-  console.log("Detail ~ categories", categories);
   const { id } = useParams();
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schemaValidation),
   });
-  console.log("Detail ~ id", typeof id);
   useEffect(() => {
     axios
       .get(`https://localhost:7123/api/DanhMucSanPhams/${id}`)
@@ -31,14 +35,20 @@ const DetailCategories = () => {
         setCategogies(response.data);
       });
   }, []);
+  setValue("tenDM", categories.tenDM);
+  setValue("description", categories.description);
   const onSubmit = (data) => {
+    //alert(JSON.stringify(data));
+    console.log("onSubmit ~ data", data);
     if (isValid) {
-      //console.log("onSubmit ~ data", data);
-      //console.log("onSubmit ~ data1", id, typeof parseInt(id));
+      alert("Cập nhật thông tin thành công");
+      console.log("onSubmit ~ data", data);
+      console.log("onSubmit ~ data1", id, typeof parseInt(id));
       axios
-        .put(`https://localhost:7123/api/DanhMucSanPhams/`, {
+        .put(`https://localhost:7123/api/DanhMucSanPhams/${id}`, {
           dmspId: parseInt(id),
           tenDM: data.tenDM,
+          description: data.description,
         })
         .then(navigate("/categories"))
         .catch(function (error) {
@@ -52,21 +62,33 @@ const DetailCategories = () => {
         <h3>Thông tin danh mục</h3>
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="">Tên danh mục</label>
+        <label htmlFor="tenDM">Tên danh mục</label>
         <input
           type="text"
+          id="tenDM"
           {...register("tenDM")}
-          //value={categories.tenDM}
-          placeholder="Vui lòng nhập tên danh mục"
-          className=""
+          //defaultValue={categories.tenDM}
           // {...register("tenDM")}
         />
         {errors.tenDM && (
           <div className="text-danger">{errors.tenDM.message}</div>
         )}
       </div>
+      <div className="mb-2 d-flex flex-column">
+        <label htmlFor="description">Mô tả</label>
+        <input
+          type="text"
+          id="description"
+          {...register("description")}
+          defaultValue={categories.description}
+          placeholder="Vui lòng nhập tên mô tả"
+        />
+        {errors.description && (
+          <div className="text-danger">{errors.description.message}</div>
+        )}
+      </div>
       <div className="d-flex ">
-        <button className="p-2 ms-auto bg-primary text-light" type="">
+        <button type="submit" className="p-2 ms-auto bg-primary text-light">
           Thay đổi thông tin
         </button>
         {/* <button

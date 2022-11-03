@@ -14,7 +14,7 @@ const Categories = () => {
   useEffect(() => {
     console.log("use effect");
     loadCate();
-  }, []);
+  }, [categories]);
 
   function DeleteCate(id) {
     console.log("123");
@@ -25,6 +25,13 @@ const Categories = () => {
 
   return (
     <div>
+      <Link
+        to={`Create`}
+        className="px-5 py-4 mb-5 d-inline-block button_action bg-primary"
+        variant="info"
+      >
+        Tạo mới
+      </Link>
       {/* <h1>Category</h1> */}
       {/* <TableList link={link}></TableList> */}
       <Table striped bordered className="text-center">
@@ -42,13 +49,13 @@ const Categories = () => {
               <td>{index + 1}</td>
               <td>{data.tenDM}</td>
               <td className="d-flex align-items-center justify-content-center">
-                <Link
+                {/* <Link
                   to={`Create`}
                   className="px-6 py-2 button_action bg-primary"
                   variant="info"
                 >
                   Tạo mới
-                </Link>
+                </Link> */}
                 <Button
                   onClick={() => DeleteCate(data.dmspId)}
                   className="px-6 py-2 button_action bg-danger"
@@ -56,13 +63,13 @@ const Categories = () => {
                 >
                   Xóa
                 </Button>{" "}
-                <Link
+                {/* <Link
                   to={`Update/${data.dmspId}`}
                   className="px-6 py-2 button_action bg-info"
                   variant="info"
                 >
                   Cập nhật
-                </Link>
+                </Link> */}
                 <Link
                   to={`Detail/${data.dmspId}`}
                   className="px-6 py-2 button_action bg-info"

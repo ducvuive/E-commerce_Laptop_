@@ -40,8 +40,8 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-
-            return _mapper.Map<DanhMucSanPhamDTO>(dmsp);
+            var mapper = _mapper.Map<DanhMucSanPhamDTO>(dmsp);
+            return mapper;
         }
 
         // PUT: api/DanhMucSanPhams/5
@@ -49,6 +49,11 @@ namespace BackendAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDanhMucSanPham(int id, DanhMucSanPhamDTO danhMucSanPhamDTO)
         {
+            var dmsp = await _context.DanhMucSanPham.FindAsync(id);
+            dmsp.TenDM = danhMucSanPhamDTO.TenDM;
+            dmsp.Description = danhMucSanPhamDTO.Description;
+            dmsp.DMSPId = danhMucSanPhamDTO.DMSPId;
+
             if (id != danhMucSanPhamDTO.DMSPId)
             {
                 return BadRequest();
@@ -56,7 +61,7 @@ namespace BackendAPI.Controllers
 
             //var boNhoRam = await _context.BoXuLy.FindAsync(id);
 
-            DanhMucSanPham dmsp = _mapper.Map<DanhMucSanPham>(danhMucSanPhamDTO);
+            //DanhMucSanPham dmsp = _mapper.Map<DanhMucSanPham>(danhMucSanPhamDTO);
             _context.Entry(dmsp).State = EntityState.Modified;
             if (dmsp == null)
             {
@@ -85,12 +90,13 @@ namespace BackendAPI.Controllers
         // POST: api/DanhMucSanPhams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DanhMucSanPhamDTO>> PostDanhMucSanPham(DanhMucSanPhamDTO danhMucSanPhamDTO)
+        public async Task<ActionResult<DanhMucSanPham>> PostDanhMucSanPham(DanhMucSanPham danhMucSanPham)
         {
-            var danhMucSanPham = new DanhMucSanPham
+            /*var danhMucSanPham = new DanhMucSanPham
             {
                 TenDM = danhMucSanPhamDTO.TenDM,
-            };
+
+            };*/
 
             _context.DanhMucSanPham.Add(danhMucSanPham);
             await _context.SaveChangesAsync();

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
-    <div>
+    <div className="">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container">
+        <div className="px-5 container-fluid">
           <a className="navbar-brand fw-bold fs-4 text-uppercase" href="/home">
             laptopstore
           </a>
@@ -21,7 +21,7 @@ const NavBar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+            <ul className="mb-2 navbar-nav me-auto mb-lg-0"></ul>
             <ul className="d-flex navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link text-dark">Đăng kí</Link>

@@ -12,6 +12,8 @@ namespace BackendAPI.Models
         public int DMSPId { get; set; }
         [Required]
         public string TenDM { get; set; }
+        [MaxLength(100)]
+        public string? Description { get; set; }
 
         public virtual List<SanPham> SanPhams { get; set; } = new List<SanPham>();
     }

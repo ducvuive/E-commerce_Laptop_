@@ -56,7 +56,7 @@ const UpdateCategories = () => {
         <input
           type="text"
           {...register("tenDM")}
-          //value={categories.tenDM}
+          defaultValue={categories.tenDM}
           placeholder="Vui lòng nhập tên danh mục"
           className=""
           // {...register("tenDM")}
