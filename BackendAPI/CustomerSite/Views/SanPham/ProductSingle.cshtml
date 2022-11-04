@@ -207,35 +207,39 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form class="modal-content" asp-controller="SanPham" asp-action="Rating" method="post">
+@*        <div class="modal-content">*@
+        <form class="modal-content needs-validation" asp-controller="SanPham" asp-action="Rating" method="post" novalidate>
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Đánh giá sản phẩm</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex justify-content-between">
-                    <span>Rating star</span>
-                    <div>
-                        <i class="ratingStar fa-regular fa-star" data-value="1"></i>
-                        <i class="ratingStar fa-regular fa-star" data-value="2"></i>
-                        <i class="ratingStar fa-regular fa-star" data-value="3"></i>
-                        <i class="ratingStar fa-regular fa-star" data-value="4"></i>
-                        <i class="ratingStar fa-regular fa-star" data-value="5"></i>
+                @*<form class=" needs-validation" asp-controller="SanPham" asp-action="Rating" method="post" novalidate>*@
+                    <div class="d-flex justify-content-between">
+                        <span>Rating star</span>
+                        <div>
+                            <i class="ratingStar fa-regular fa-star" data-value="1"></i>
+                            <i class="ratingStar fa-regular fa-star" data-value="2"></i>
+                            <i class="ratingStar fa-regular fa-star" data-value="3"></i>
+                            <i class="ratingStar fa-regular fa-star" data-value="4"></i>
+                            <i class="ratingStar fa-regular fa-star" data-value="5"></i>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <input type="hidden" name="ratingsValue" id="ratingsValue" />
-                    <input type="hidden" name="SanPhamId" id="SanPhamId" value="@Model.SanPhamId" />
-                    <input type="text"
-                           id="comment"
-                           name="comment"
-                           class="form-control w-100"/>
-                </div>          
+                    <div>
+                        <input type="hidden" name="ratingsValue" id="ratingsValue" />
+                        <input type="hidden" name="SanPhamId" id="SanPhamId" value="@Model.SanPhamId" />
+                        <input type="text"
+                               id="comment"
+                               name="comment"
+                               class="form-control w-100"
+                               required />
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 <button type="submit" class="btn btn-primary">Đánh giá</button>
             </div>
+@*        </div>*@
         </form>
     </div>
 </div>

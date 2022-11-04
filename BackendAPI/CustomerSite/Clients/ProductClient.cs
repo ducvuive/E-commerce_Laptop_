@@ -15,7 +15,7 @@ namespace CustomerSite.Clients
         Task<List<SanPhamDTO>> GetSanPhamTheoDmTheoTrang(int dm, int page);
         Task<List<SanPhamDTO>> GetSanPhamTheoTenTheoTrang(string ten, int page);
         Task<List<SanPhamDTO>> GetSanPhamTheoTen(string ten);
-        Task<RatingDTO> CreateRating(RatingDTO rating, string userName);
+        Task CreateRating(RatingDTO rating, string userName);
     }
     public class ProductClient : BaseClient, IProductClient
     {
@@ -103,15 +103,11 @@ namespace CustomerSite.Clients
             var sanpham = JsonConvert.DeserializeObject<SanPhamDTO>(contents);
             return sanpham ?? new SanPhamDTO();
         }
-        public async Task<RatingDTO> CreateRating(RatingDTO rating, string userName)
+        public async Task CreateRating(RatingDTO rating, string userName)
         {
             var rating_ = JsonConvert.SerializeObject(rating);
             var response = await httpClient.PostAsync("api/Rating/" + userName, new StringContent(rating_, Encoding.UTF8, "application/json"));
-            /*var response = await httpClient.PostAsync("api/Rating/" + rating + userName);*/
             var contents = await response.Content.ReadAsStringAsync();
-
-            var sanpham = JsonConvert.DeserializeObject<RatingDTO>(contents);
-            return sanpham ?? new RatingDTO();
         }
     }
 }

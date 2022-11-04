@@ -76,24 +76,24 @@ namespace CustomerSite.Controllers
         public async Task<IActionResult> Rating([FromForm] string comment, [FromForm] int ratingsValue, [FromForm] int SanPhamId)
         {
             var session = Request.HttpContext.Session.GetString(Variable.JWT);
+            var token = Request.Cookies["JwtToken"];
             var email = "";
-            if (session == null)
+            if (token == null)
             {
                 return Redirect("/Account/Login");
             }
             var tokenHandler = new JwtSecurityTokenHandler();
-            var userInfo = tokenHandler.ReadJwtToken(session);
+            var userInfo = tokenHandler.ReadJwtToken(token);
             email = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
-            //var user = await userClient.GetUser(email);
-            //var sanPham = await productClient.GetSanPham(SanPhamId);
+
             var rating = new RatingDTO();
             rating.Comments = comment;
             rating.Rate = ratingsValue;
             rating.PublishedDate = DateTime.Now;
             rating.sanPhamId = SanPhamId;
 
-            rating = await productClient.CreateRating(rating, email);
-            /*rating.MaKhacHangId = user;*/
+            await productClient.CreateRating(rating, email);
+
             return Redirect("/SanPham/pd?id=" + SanPhamId);
         }
 

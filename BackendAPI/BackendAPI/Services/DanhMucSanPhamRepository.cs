@@ -42,10 +42,6 @@ namespace BackendAPI.Services
 
         public async Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPham danhMucSanPham)
         {
-            /*            var _danhMucSanPham = new DanhMucSanPham(
-                             TenDM = danhMucSanPham.TenDM,
-                             Description = danhMucSanPham.Description
-                            );*/
             _context.DanhMucSanPham.Add(danhMucSanPham);
             await _context.SaveChangesAsync();
             return danhMucSanPham;

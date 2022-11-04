@@ -43,11 +43,6 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult<DanhMucSanPhamDTO>> GetDanhMucSanPham(int id)
         {
             DanhMucSanPham dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham(id);
-            /*
-                        if (dmsp == null)
-                        {
-                            return NotFound();
-                        }*/
             var mapper = _mapper.Map<DanhMucSanPhamDTO>(dmsp);
             return mapper;
         }
@@ -55,25 +50,11 @@ namespace BackendAPI.Controllers
         // POST: api/DanhMucSanPhams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DanhMucSanPhamDTO_Admin>> PostDanhMucSanPham(DanhMucSanPhamDTO_Admin danhMucSanPham)
+        public async Task<ActionResult<DanhMucSanPhamDTO>> PostDanhMucSanPham(DanhMucSanPhamDTO danhMucSanPham)
         {
-            var _danhMucSanPham = new DanhMucSanPham
-            {
-                TenDM = danhMucSanPham.TenDM,
-                Description = danhMucSanPham.Description
-            };
-            //DanhMucSanPham mapper = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
+            DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
             await _danhMucSanPhamRepository.PostDanhMucSanPham(_danhMucSanPham);
             return Ok("Create success");
-            /*            try
-                        {
-                        }
-                        catch
-                        {
-                            return BadRequest("Create false");
-                        }*/
-
-            //return CreatedAtAction("GetDanhMucSanPham", new { id = danhMucSanPham.DMSPId }, danhMucSanPham);
         }
 
         // PUT: api/DanhMucSanPhams/5

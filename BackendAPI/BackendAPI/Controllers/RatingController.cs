@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -62,8 +61,9 @@ namespace BackendAPI.Controllers
             int rateAvg_ = (int)Math.Ceiling(rateAvg);
             sanPham.DanhGia = rateAvg_;
             await _context.SaveChangesAsync();
-            return await _context.Rating.ProjectTo<RatingDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
-            //return CreatedAtAction("GetRating", new { id = rating.RatingID }, rating);
+
+            return Ok("Danh gia thanh cong");
+
         }
 
         // DELETE: api/HoaDons/5
