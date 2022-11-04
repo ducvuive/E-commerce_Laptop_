@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
+using BackendAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
 
 namespace BackendAPI.Controllers
@@ -11,13 +10,20 @@ namespace BackendAPI.Controllers
     [ApiController]
     public class DanhMucSanPhamsController : ControllerBase
     {
-        private readonly UserDbContext _context;
+        //private readonly UserDbContext _context;
         private readonly IMapper _mapper;
-
-        public DanhMucSanPhamsController(UserDbContext context, IMapper mapper)
+        private readonly IDanhMucSanPhamRepository _danhMucSanPhamRepository;
+        /*        public DanhMucSanPhamsController(UserDbContext context, IMapper mapper)
+                {
+                    _context = context;
+                    _mapper = mapper;
+                }*/
+        public DanhMucSanPhamsController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper)
         {
-            _context = context;
+            _danhMucSanPhamRepository = danhMucSanPhamRepository;
+            //_context = context;
             _mapper = mapper;
+
         }
 
         // GET: api/DanhMucSanPhams
@@ -26,22 +32,48 @@ namespace BackendAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetDanhMucSanPham()
         {
-            var dmsp = await _context.DanhMucSanPham.ToListAsync();
-            return _mapper.Map<List<DanhMucSanPhamDTO>>(dmsp);
+            /*var dmsp = await _context.DanhMucSanPham.ToListAsync();
+            return _mapper.Map<List<DanhMucSanPhamDTO>>(dmsp);*/
+            List<DanhMucSanPham> dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham();
+            return Ok(_mapper.Map<List<DanhMucSanPhamDTO>>(dmsp));
         }
 
         // GET: api/DanhMucSanPhams/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DanhMucSanPhamDTO>> GetDanhMucSanPham(int id)
         {
-            var dmsp = await _context.DanhMucSanPham.FindAsync(id);
-
-            if (dmsp == null)
-            {
-                return NotFound();
-            }
+            DanhMucSanPham dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham(id);
+            /*
+                        if (dmsp == null)
+                        {
+                            return NotFound();
+                        }*/
             var mapper = _mapper.Map<DanhMucSanPhamDTO>(dmsp);
             return mapper;
+        }
+
+        // POST: api/DanhMucSanPhams
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<DanhMucSanPhamDTO_Admin>> PostDanhMucSanPham(DanhMucSanPhamDTO_Admin danhMucSanPham)
+        {
+            var _danhMucSanPham = new DanhMucSanPham
+            {
+                TenDM = danhMucSanPham.TenDM,
+                Description = danhMucSanPham.Description
+            };
+            //DanhMucSanPham mapper = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
+            await _danhMucSanPhamRepository.PostDanhMucSanPham(_danhMucSanPham);
+            return Ok("Create success");
+            /*            try
+                        {
+                        }
+                        catch
+                        {
+                            return BadRequest("Create false");
+                        }*/
+
+            //return CreatedAtAction("GetDanhMucSanPham", new { id = danhMucSanPham.DMSPId }, danhMucSanPham);
         }
 
         // PUT: api/DanhMucSanPhams/5
@@ -49,80 +81,68 @@ namespace BackendAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDanhMucSanPham(int id, DanhMucSanPhamDTO danhMucSanPhamDTO)
         {
-            var dmsp = await _context.DanhMucSanPham.FindAsync(id);
+            var dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham(id);
             dmsp.TenDM = danhMucSanPhamDTO.TenDM;
             dmsp.Description = danhMucSanPhamDTO.Description;
             dmsp.DMSPId = danhMucSanPhamDTO.DMSPId;
 
-            if (id != danhMucSanPhamDTO.DMSPId)
-            {
-                return BadRequest();
-            }
+            /*            if (id != danhMucSanPhamDTO.DMSPId)
+                        {
+                            await _danhMucSanPhamRepository.UpdateDanhMucSanPham(id, dmsp);
+                        }*/
 
             //var boNhoRam = await _context.BoXuLy.FindAsync(id);
 
             //DanhMucSanPham dmsp = _mapper.Map<DanhMucSanPham>(danhMucSanPhamDTO);
-            _context.Entry(dmsp).State = EntityState.Modified;
+            //_context.Entry(dmsp).State = EntityState.Modified;
             if (dmsp == null)
             {
                 return NotFound();
             }
-
-            try
+            else
             {
-                await _context.SaveChangesAsync();
+                await _danhMucSanPhamRepository.UpdateDanhMucSanPham(id, dmsp);
+                return Ok("Cap nhat thanh cong");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DanhMucSanPhamExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            /*
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!DanhMucSanPhamExists(id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }*/
 
             return NoContent();
-        }
-
-        // POST: api/DanhMucSanPhams
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<DanhMucSanPham>> PostDanhMucSanPham(DanhMucSanPham danhMucSanPham)
-        {
-            /*var danhMucSanPham = new DanhMucSanPham
-            {
-                TenDM = danhMucSanPhamDTO.TenDM,
-
-            };*/
-
-            _context.DanhMucSanPham.Add(danhMucSanPham);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetDanhMucSanPham", new { id = danhMucSanPham.DMSPId }, danhMucSanPham);
         }
 
         // DELETE: api/DanhMucSanPhams/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDanhMucSanPham(int id)
         {
-            var danhMucSanPham = await _context.DanhMucSanPham.FindAsync(id);
-            if (danhMucSanPham == null)
+            var dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham(id);
+            if (dmsp == null)
             {
                 return NotFound();
             }
 
-            _context.DanhMucSanPham.Remove(danhMucSanPham);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            //_context.DanhMucSanPham.Remove(danhMucSanPham);
+            await _danhMucSanPhamRepository.DeleteDanhMucSanPham(dmsp);
+            return Ok("Cap nhat thanh cong");
+            //return NoContent();
         }
 
-        private bool DanhMucSanPhamExists(int id)
-        {
-            return _context.DanhMucSanPham.Any(e => e.DMSPId == id);
-        }
+        /*        private bool DanhMucSanPhamExists(int id)
+                {
+                    return _context.DanhMucSanPham.Any(e => e.DMSPId == id);
+                }*/
     }
 }

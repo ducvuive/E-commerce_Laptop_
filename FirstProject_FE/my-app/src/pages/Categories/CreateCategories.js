@@ -9,6 +9,10 @@ const schemaValidation = yup.object({
     .string()
     .required("Vui lòng nhập danh mục")
     .max(50, "Danh mục có dưới 50 kí tự"),
+  description: yup
+    .string()
+    .required("Vui lòng nhập mô tả")
+    .max(50, "Danh mục có dưới 50 kí tự"),
 });
 const CreateCategories = () => {
   const [categories, setCategogies] = useState("");
@@ -30,6 +34,7 @@ const CreateCategories = () => {
       axios
         .post(`https://localhost:7123/api/DanhMucSanPhams/`, {
           tenDM: data.tenDM,
+          description: data.description,
         })
         .then(navigate("/categories"))
         .catch(function (error) {
@@ -55,6 +60,19 @@ const CreateCategories = () => {
         />
         {errors.tenDM && (
           <div className="text-danger">{errors.tenDM.message}</div>
+        )}
+      </div>
+      <div className="mb-2 d-flex flex-column">
+        <label htmlFor="description">Mô tả</label>
+        <input
+          type="text"
+          id="description"
+          {...register("description")}
+          defaultValue={categories.description}
+          placeholder="Vui lòng nhập tên mô tả"
+        />
+        {errors.description && (
+          <div className="text-danger">{errors.description.message}</div>
         )}
       </div>
       <div className="d-flex ">

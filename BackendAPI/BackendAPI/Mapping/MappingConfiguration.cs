@@ -15,6 +15,7 @@ namespace BackendAPI.Mapping
             CreateMap<BoNhoRamDTO, BoNhoRam>().ReverseMap();
             CreateMap<BoXuLy, BoXuLyDTO>().ReverseMap();
             CreateMap<DanhMucSanPham, DanhMucSanPhamDTO>().ReverseMap();
+            CreateMap<DanhMucSanPham, DanhMucSanPhamDTO_Admin>().ReverseMap();
             CreateMap<HoaDonDTO, HoaDon>().ReverseMap();
             CreateMap<SanPham, SanPhamDTO>().ReverseMap();
             CreateMap<CTHD_DTO, CTHD>().ReverseMap();

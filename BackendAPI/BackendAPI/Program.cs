@@ -1,4 +1,5 @@
 using BackendAPI.Areas.Identity.Data;
+using BackendAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,10 @@ builder.Services.AddDefaultIdentity<UserIdentity>(options => options.SignIn.Requ
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<IDanhMucSanPhamRepository, DanhMucSanPhamRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 //add cors
 builder.Services.AddCors(options =>
 {
