@@ -6,7 +6,7 @@
 
 namespace BackendAPI.Models
 {
-    public partial class DanhMucSanPham
+    public class DanhMucSanPham
     {
         [Key]
         public int DMSPId { get; set; }

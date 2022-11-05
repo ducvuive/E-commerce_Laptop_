@@ -13,14 +13,6 @@ namespace BackendAPI.Services
             _context = context;
             //_mapper = mapper;
         }
-        /*        public void DeleteDanhMucSanPham(int id)
-                {
-                    throw new NotImplementedException();
-                }*/
-        /*        List<DanhMucSanPhamDTO> IDanhMucSanPhamRepository.GetDanhMucSanPham()
-                {
-                    throw new NotImplementedException();
-                }*/
         public async Task<List<DanhMucSanPham>> GetDanhMucSanPham()
         {
             var dmsp = await _context.DanhMucSanPham.ToListAsync();
@@ -42,6 +34,7 @@ namespace BackendAPI.Services
 
         public async Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPham danhMucSanPham)
         {
+            /* Console.WriteLine("abc");*/
             _context.DanhMucSanPham.Add(danhMucSanPham);
             await _context.SaveChangesAsync();
             return danhMucSanPham;
@@ -56,38 +49,6 @@ namespace BackendAPI.Services
 
             await _context.SaveChangesAsync();
             return true;
-
-            /*            if (id != danhMucSanPham.DMSPId)
-                        {
-                            return BadRequest();
-                        }*/
-
-            //var boNhoRam = await _context.BoXuLy.FindAsync(id);
-
-            //DanhMucSanPham dmsp = _mapper.Map<DanhMucSanPham>(danhMucSanPhamDTO);
-            /*            _context.Entry(dmsp).State = EntityState.Modified;
-                        if (dmsp == null)
-                        {
-                            return NotFound();
-                        }
-
-                        try
-                        {
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            if (!DanhMucSanPhamExists(id))
-                            {
-                                return NotFound();
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-
-                        return NoContent();*/
         }
         public async Task<bool> DeleteDanhMucSanPham(DanhMucSanPham danhMucSanPham)
         {

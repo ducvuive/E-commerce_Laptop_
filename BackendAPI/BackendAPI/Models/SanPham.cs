@@ -28,6 +28,8 @@ namespace BackendAPI.Models
         public long DonGia { get; set; }
         public string? HinhAnh { get; set; }
         public float? DanhGia { get; set; }
+        public DateTime NgayTao { get; set; }
+        public DateTime NgayCapNhat { get; set; }
 
         public virtual ManHinh MH { get; set; }
         public virtual BoXuLy BXL { get; set; }

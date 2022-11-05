@@ -28,6 +28,14 @@ namespace BackendAPI.Controllers
             var sp = await _context.SanPham.ToListAsync();
             return _mapper.Map<List<SanPhamDTO>>(sp);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<SanPham>>> GetSanPhamAdmin()
+        {
+            var sp = await _context.SanPham.ToListAsync();
+            return sp;
+        }
+
         [HttpGet]
         [Route("month")]
         /*[Authorize(Roles = "Admin")]*/
@@ -38,8 +46,8 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(results);
+            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            return Ok(mapper);
         }
 
         // GET: api/SanPhams/5
@@ -49,12 +57,6 @@ namespace BackendAPI.Controllers
             var sanPham = await _context.SanPham.Where(p => p.SanPhamId == id)
                                                 .Include(p => p.Rating)
                                                 .ThenInclude(r => r.KhachHang)
-                                                /*.Where(p => p.SanPhamId == id)*/
-                                                /*.Select(o => new
-                                                {
-                                                    sanpham = o,
-                                                    Rating = o.Rating.OrderByDescending(i => i.RatingID)
-                                                })*/
                                                 .FirstOrDefaultAsync();
 
             if (sanPham == null)
@@ -62,12 +64,6 @@ namespace BackendAPI.Controllers
                 return NotFound();
             }
             var mapper = _mapper.Map<SanPhamDTO>(sanPham);
-
-            /*            foreach(var item in sanPham.Rating)
-                        {
-                           _mapper.Map<UserIdentityDTO>(item);
-
-                        }*/
             return mapper;
         }
         // GET: api/SanPhams/5
@@ -82,8 +78,8 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(results);
+            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            return Ok(mapper);
         }
 
         [HttpGet("GetSanPhamTheoDmTheoTrang/{dm}/{page}")]
@@ -96,12 +92,12 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(results);
+            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            return Ok(mapper);
         }
 
         [HttpGet("GetSanPhamTheoDm/{dm}/")]
-        public async Task<ActionResult> GetSanPhamTheoDm(int dm)
+        public async Task<ActionResult<SanPhamDTO>> GetSanPhamTheoDm(int dm)
         {
             var results = _context.SanPham.Where(s => s.DMSPId == dm);
             ;
@@ -109,8 +105,8 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(results);
+            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            return Ok(mapper);
         }
 
         [HttpGet("GetSanPhamTheoTen/{ten}/")]
@@ -122,8 +118,8 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(results);
+            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            return Ok(mapper);
         }
 
         [HttpGet("GetSanPhamTheoTenTheoTrang/{ten}/{page}")]
@@ -136,8 +132,8 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(results);
+            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            return Ok(mapper);
         }
 
         // PUT: api/SanPhams/5

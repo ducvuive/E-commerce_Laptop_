@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
 using BackendAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace BackendAPI.Controllers
     [ApiController]
     public class DanhMucSanPhamsController : ControllerBase
     {
-        //private readonly UserDbContext _context;
+        private readonly UserDbContext _context;
         private readonly IMapper _mapper;
         private readonly IDanhMucSanPhamRepository _danhMucSanPhamRepository;
         /*        public DanhMucSanPhamsController(UserDbContext context, IMapper mapper)
@@ -18,12 +19,11 @@ namespace BackendAPI.Controllers
                     _context = context;
                     _mapper = mapper;
                 }*/
-        public DanhMucSanPhamsController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper)
+        public DanhMucSanPhamsController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper, UserDbContext context)
         {
             _danhMucSanPhamRepository = danhMucSanPhamRepository;
-            //_context = context;
+            _context = context;
             _mapper = mapper;
-
         }
 
         // GET: api/DanhMucSanPhams
@@ -52,9 +52,16 @@ namespace BackendAPI.Controllers
         [HttpPost]
         public async Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPhamDTO_Admin danhMucSanPham)
         {
-            DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
-            DanhMucSanPham dmsp = await _danhMucSanPhamRepository.PostDanhMucSanPham(_danhMucSanPham);
-            return dmsp;
+            //DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
+            DanhMucSanPham _danhMucSanPham = new DanhMucSanPham()
+            {
+                TenDM = danhMucSanPham.TenDM,
+                Description = danhMucSanPham.Description,
+            };
+            _context.DanhMucSanPham.Add(_danhMucSanPham);
+            await _context.SaveChangesAsync();
+            //var dmsp = _danhMucSanPhamRepository.PostDanhMucSanPham(_danhMucSanPham);
+            return _danhMucSanPham;
         }
 
 

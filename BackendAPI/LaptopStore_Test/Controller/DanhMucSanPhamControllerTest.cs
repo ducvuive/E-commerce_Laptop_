@@ -4,6 +4,7 @@ using BackendAPI.Controllers;
 using BackendAPI.Models;
 using BackendAPI.Services;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
 
@@ -26,6 +27,7 @@ namespace LaptopStore_Test.Controller
             _options = new DbContextOptionsBuilder<UserDbContext>().UseInMemoryDatabase("CategoriesTestDB").Options;
             _context = new UserDbContext(_options);
             _danhMucSanPhamRepository = A.Fake<IDanhMucSanPhamRepository>();
+            _mapper = A.Fake<IMapper>();
 
             _danhMucSanPhams = new()
                     {
@@ -52,6 +54,22 @@ namespace LaptopStore_Test.Controller
                    result.Should().NotBeNull();
                    //Assert.IsType<OkResult>; 
                }*/
+        [Fact]
+        public async Task DanhMucSanPhamController_GetDanhMucSanPham_ReturnOk()
+        {
+            //Arrange
+            var controller = new DanhMucSanPhamsController(_danhMucSanPhamRepository, _mapper, _context);
+            var dmsp = A.Fake<ICollection<DanhMucSanPhamDTO>>();
+            var dmspList = A.Fake<List<DanhMucSanPhamDTO>>();
+            var _dmspList = A.Fake<List<DanhMucSanPham>>();
+            A.CallTo(() => _danhMucSanPhamRepository.GetDanhMucSanPham()).Returns(_dmspList);
+            A.CallTo(() => _mapper.Map<List<DanhMucSanPhamDTO>>(dmsp)).Returns(dmspList);
+            //Act
+            var result = controller.GetDanhMucSanPham();
+            //Assert
+            result.Should().NotBeNull();
+            //Assert.IsType<OkResult>; 
+        }
         /*        [Fact]
                 public void DanhMucSanPhamController_GetDanhMucSanPham_ReturnAction()
                 {
@@ -84,28 +102,24 @@ namespace LaptopStore_Test.Controller
                     //result.Should().BeOfType(typeof(IActionResult));
                     //Assert.Equal("Create success", result);
                 }*/
-
         [Theory]
-        [InlineData(4, "Danh muc 4", "Danh muc 4")]
-        [InlineData(5, "Danh muc 5", "Danh muc 5")]
-        [InlineData(6, "Danh muc 6", "Danh muc 6")]
-        //[InlineData(7, "customer_7", "123456789", "customer7@gmail.com")]
-        //[InlineData(8, "customer_8", "123456789", "customer8@gmail.com")]
-        public async Task Create_SuccessAsync(int id, string name, string description)
+        [InlineData("Danh muc 4", "mo ta 4")]
+        [InlineData("Danh muc 5", "mo ta 5")]
+        [InlineData("Danh muc 6", "mo ta 6")]
+        public async Task Create_SuccessAsync(string name, string description)
         {
             //ARRANGE
-            //DanhMucSanPhamsController danhmucsanphamController = new DanhMucSanPhamsController(_context);
-            var dmsp = A.Fake<DanhMucSanPham>();
+            //DanhMucSanPhamsController danhmucsanphamController = new DanhMucSanPhamsController(_danhMucSanPhamRepository,_mapper);
+            var dmsp = new DanhMucSanPham();
             /*var dmspDTO = A.Fake<ICollection<DanhMucSanPhamDTO_Admin>>();*/
-            DanhMucSanPhamsController controller = new DanhMucSanPhamsController(_danhMucSanPhamRepository, _mapper);
-            DanhMucSanPhamDTO_Admin p = new DanhMucSanPhamDTO_Admin() { DMSPId = id, TenDM = name, Description = description };
+            var controller = new DanhMucSanPhamsController(_danhMucSanPhamRepository, _mapper, _context);
+            DanhMucSanPhamDTO_Admin p = new DanhMucSanPhamDTO_Admin() { TenDM = name, Description = description };
             //A.CallTo(() => _mapper.Map<DanhMucSanPham>(p)).Returns(dmsp);
-            //A.CallTo(() => _mapper.Map<DanhMucSanPhamDTO>(dmsp)).Returns(dmsp);
+            //A.CallTo(() => _mapper.Map<DanhMucSanPhamDTO>(p)).Returns(dmsp);
             //ACT
-            DanhMucSanPham result = await controller.PostDanhMucSanPham(p);
+            DanhMucSanPham result = controller.PostDanhMucSanPham(p).Result;
             // Assert
             Assert.NotNull(result);
-            //Assert.Equal(_context.DanhMucSanPham.LastOrDefault().DMSPId, id);
             Assert.Equal(_context.DanhMucSanPham.LastOrDefault().TenDM, name);
             Assert.Equal(_context.DanhMucSanPham.LastOrDefault().Description, description);
         }
