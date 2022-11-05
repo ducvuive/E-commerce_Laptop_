@@ -35,7 +35,7 @@ namespace BackendAPI.Controllers
             /*var dmsp = await _context.DanhMucSanPham.ToListAsync();
             return _mapper.Map<List<DanhMucSanPhamDTO>>(dmsp);*/
             List<DanhMucSanPham> dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham();
-            return Ok(_mapper.Map<List<DanhMucSanPhamDTO>>(dmsp));
+            return _mapper.Map<List<DanhMucSanPhamDTO>>(dmsp);
         }
 
         // GET: api/DanhMucSanPhams/5
@@ -50,12 +50,15 @@ namespace BackendAPI.Controllers
         // POST: api/DanhMucSanPhams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DanhMucSanPhamDTO>> PostDanhMucSanPham(DanhMucSanPhamDTO danhMucSanPham)
+        public async Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPhamDTO_Admin danhMucSanPham)
         {
             DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
-            await _danhMucSanPhamRepository.PostDanhMucSanPham(_danhMucSanPham);
-            return Ok("Create success");
+            DanhMucSanPham dmsp = await _danhMucSanPhamRepository.PostDanhMucSanPham(_danhMucSanPham);
+            return dmsp;
         }
+
+
+
 
         // PUT: api/DanhMucSanPhams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

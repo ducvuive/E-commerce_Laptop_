@@ -1,0 +1,131 @@
+﻿@using System.IdentityModel.Tokens.Jwt
+@using System.Security.Claims
+@using ShareView.Constants
+<!DOCTYPE html>
+@{
+    //var token = Context.Request.Cookies["JwtToken"];
+    var session = Context.Session.GetString(Variable.JWT);
+    //var role = "";
+    //var userName = "";
+    if (session != null)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var userInfo = tokenHandler.ReadJwtToken(session);
+        //userName = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
+        //role = (userInfo.Claims.FirstOrDefault(o => o.Type == "role")?.Value);
+    }
+}
+@{
+    var token = Context.Request.Cookies[Variable.JWT_Token];
+    var userName = "";
+    var role = "";
+    if (token != null)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var userInfo = tokenHandler.ReadJwtToken(token);
+        userName = userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value;
+        role = (userInfo.Claims.FirstOrDefault(o => o.Type == "role")?.Value);
+    }
+}
+@*<ul class="nav navbar-nav navbar-right">
+    @if (session ==null)
+    {
+        <li><a><span><i class="ion-ios-contact"></i> @User.Identity.Name</span></a></li>
+        <li><a asp-controller="Carts" asp-action="Index"><i class="ion-android-cart"></i> Cart </a></li>
+        <li><a asp-controller="Account" asp-action="SignOut"> <i class="ion-android-exit"></i> Logout </a></li>
+    }
+    else
+    {
+        <li><a asp-controller="Account" asp-action="SignIn"> <i class="ion-android-person"></i> Login </a></li>
+    }
+</ul>*@
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CustomerSite</title>
+    <script src="https://kit.fontawesome.com/71b859d49c.js"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/index.scss" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand fw-bold fs-4 text-uppercase" href="/home">laptopstore</a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+                    <ul class="d-flex navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" aria-current="page" href="/home">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Sanpham" asp-action="Index">Sản phẩm</a>
+                        </li>
+                        @*<li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Đăng kí</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                        </li>*@
+                        @if (token != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark">@userName</a>
+                            </li>
+                            @if (@role!=null && @role == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="#">Admin</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Đăng xuất</a>
+                            </li>            
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Đăng kí</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/cart">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+@*    <footer class="border-top footer text-muted">
+        <div class="container">&copy; 2022 - LaptopStore</div>
+    </footer>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/less@4.1.1"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

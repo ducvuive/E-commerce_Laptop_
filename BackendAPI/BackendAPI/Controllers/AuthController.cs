@@ -51,9 +51,9 @@ namespace BackendAPI.Controllers
                 {
                     foreach (var error in createUserResult.Errors)
                     {
-                        ModelState.AddModelError("name", error.Description);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
-                    return Results.BadRequest(createUserResult.Errors);
+                    return Results.BadRequest(ModelState.Values.SelectMany(x => x.Errors));
                 }
             }
 

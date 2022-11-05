@@ -77,6 +77,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
     // Default SignIn settings.
     options.SignIn.RequireConfirmedEmail = false;
+    options.User.RequireUniqueEmail = true;
 });
 builder.Services.AddDistributedMemoryCache();
 
