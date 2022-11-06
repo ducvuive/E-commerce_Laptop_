@@ -23,10 +23,10 @@ namespace BackendAPI.Controllers
         // GET: api/SanPhams
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<List<SanPhamDTO>>> GetSanPham()
+        public async Task<ActionResult<List<SanPhamDTO>>> GetProduct()
         {
             var sp = await _context.SanPham.ToListAsync();
-            return _mapper.Map<List<SanPhamDTO>>(sp);
+            return Ok(_mapper.Map<List<SanPhamDTO>>(sp));
         }
 
         [HttpGet]
@@ -54,17 +54,43 @@ namespace BackendAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SanPhamDTO>> GetSanPham(int id)
         {
-            var sanPham = await _context.SanPham.Where(p => p.SanPhamId == id)
+            var sanPham = await _context.SanPham
+                                                //Join dm in _context.DanhMucSanPham on 
+                                                .Where(p => p.SanPhamId == id)
                                                 .Include(p => p.Rating)
                                                 .ThenInclude(r => r.KhachHang)
                                                 .FirstOrDefaultAsync();
-
             if (sanPham == null)
             {
                 return NotFound();
             }
             var mapper = _mapper.Map<SanPhamDTO>(sanPham);
             return mapper;
+        }
+        // GET: api/SanPhams/5
+        //[Route("api/SanPhams/admin_product")]
+        [HttpGet("admin_product/{id}")]
+        public async Task<ActionResult<SanPhamDTO_Admin>> GetSanPhamAdmin(int id)
+        {
+            /*var sanPham = await _context.SanPham
+                                                .Where(p => p.SanPhamId == id)
+                                                .Include(p => p.Rating)
+                                                .ThenInclude(r => r.KhachHang)
+                                                .FirstOrDefaultAsync();*/
+            var sanPham = await _context.SanPham.FindAsync(id);
+            if (sanPham == null)
+            {
+                return NotFound();
+            }
+            /*var mapper = new SanPhamDTO_Admin()
+            {
+                SanPhamId = sanPham.SanPhamId,
+                TenDM = sanPham.DMSPId.tenDM,
+
+            }*/
+            var mapper = _mapper.Map<SanPhamDTO_Admin>(sanPham);
+            //var mapper = new 
+            return Ok(sanPham);
         }
         // GET: api/SanPhams/5
         [HttpGet("GetSanPhamTheoTrang/{page}")]

@@ -17,6 +17,7 @@ import CreateCategories from "./pages/Categories/CreateCategories";
 import UpdateCategories from "./pages/Categories/UpdateCategories";
 import Users from "./pages/Users";
 import DetailUser from "./pages/Users/DetailUser";
+import DetailProduct from "./pages/Product/DetailProduct";
 function App() {
   return (
     // <Fragment className="vh-100">
@@ -43,6 +44,10 @@ function App() {
           <Route
             path="/categories/Detail/:id"
             element={<DetailCategories />}
+          ></Route>
+          <Route
+            path="/listProduct/Detail/:id"
+            element={<DetailProduct />}
           ></Route>
           {/* <Route
             path="/categories/Update/:id"

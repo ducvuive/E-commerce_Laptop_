@@ -54,7 +54,7 @@ const ListProduct = () => {
                   Xóa
                 </Button>
                 <Link
-                  to={`Detail/${data.email}`}
+                  to={`Detail/${data.sanPhamId}`}
                   className="px-6 py-2 button_action bg-info"
                   variant="info"
                 >

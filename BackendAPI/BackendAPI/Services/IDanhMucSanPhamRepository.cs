@@ -4,11 +4,11 @@ namespace BackendAPI.Services
 {
     public interface IDanhMucSanPhamRepository
     {
-        Task<List<DanhMucSanPham>> GetDanhMucSanPham();
-        Task<DanhMucSanPham> GetDanhMucSanPham(int id);
+        Task<List<DanhMucSanPham>> GetCategories();
+        Task<DanhMucSanPham> GetCategory(int id);
         //public Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPham danhMucSanPham);
-        public Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPham danhMucSanPham);
-        public Task<bool> UpdateDanhMucSanPham(int id, DanhMucSanPham danhMucSanPham);
-        public Task<bool> DeleteDanhMucSanPham(DanhMucSanPham danhMucSanPham);
+        public Task CreateCategory(DanhMucSanPham danhMucSanPham);
+        public Task<bool> UpdateCategory();
+        public Task<bool> DeleteCategory(DanhMucSanPham danhMucSanPham);
     }
 }

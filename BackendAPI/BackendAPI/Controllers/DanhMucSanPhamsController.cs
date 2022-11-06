@@ -19,10 +19,10 @@ namespace BackendAPI.Controllers
                     _context = context;
                     _mapper = mapper;
                 }*/
-        public DanhMucSanPhamsController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper, UserDbContext context)
+        public DanhMucSanPhamsController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper)
         {
             _danhMucSanPhamRepository = danhMucSanPhamRepository;
-            _context = context;
+            //_context = context;
             _mapper = mapper;
         }
 
@@ -30,110 +30,76 @@ namespace BackendAPI.Controllers
         //[Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         //[Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetDanhMucSanPham()
+        public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetCategories()
         {
-            /*var dmsp = await _context.DanhMucSanPham.ToListAsync();
-            return _mapper.Map<List<DanhMucSanPhamDTO>>(dmsp);*/
-            List<DanhMucSanPham> dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham();
-            return _mapper.Map<List<DanhMucSanPhamDTO>>(dmsp);
+            List<DanhMucSanPham> categories = await _danhMucSanPhamRepository.GetCategories();
+            return Ok(_mapper.Map<List<DanhMucSanPhamDTO>>(categories));
         }
 
         // GET: api/DanhMucSanPhams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DanhMucSanPhamDTO>> GetDanhMucSanPham(int id)
+        public async Task<ActionResult<DanhMucSanPhamDTO>> GetCategory(int id)
         {
-            DanhMucSanPham dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham(id);
-            var mapper = _mapper.Map<DanhMucSanPhamDTO>(dmsp);
-            return mapper;
+            DanhMucSanPham category = await _danhMucSanPhamRepository.GetCategory(id);
+            var mapper = _mapper.Map<DanhMucSanPhamDTO>(category);
+            if (mapper is null)
+            {
+                return BadRequest("Khong tim thay danh muc");
+            }
+            return Ok(mapper);
         }
 
         // POST: api/DanhMucSanPhams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPhamDTO_Admin danhMucSanPham)
+        public async Task<ActionResult> CreateCategory(DanhMucSanPhamDTO_Admin danhMucSanPham)
         {
             //DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
-            DanhMucSanPham _danhMucSanPham = new DanhMucSanPham()
+            DanhMucSanPham category = new DanhMucSanPham()
             {
                 TenDM = danhMucSanPham.TenDM,
                 Description = danhMucSanPham.Description,
             };
-            _context.DanhMucSanPham.Add(_danhMucSanPham);
-            await _context.SaveChangesAsync();
-            //var dmsp = _danhMucSanPhamRepository.PostDanhMucSanPham(_danhMucSanPham);
-            return _danhMucSanPham;
+            //_context.DanhMucSanPham.Add(_danhMucSanPham);
+            //await _context.SaveChangesAsync();
+            await _danhMucSanPhamRepository.CreateCategory(category);
+            //return _danhMucSanPham;
+            //return dmsp;
+            return Ok("Cap nhat thanh cong");
         }
-
-
-
 
         // PUT: api/DanhMucSanPhams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDanhMucSanPham(int id, DanhMucSanPhamDTO danhMucSanPhamDTO)
+        public async Task<IActionResult> UpdateCategory(int id, DanhMucSanPhamDTO_Admin danhMucSanPhamDTO)
         {
-            var dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham(id);
-            dmsp.TenDM = danhMucSanPhamDTO.TenDM;
-            dmsp.Description = danhMucSanPhamDTO.Description;
-            dmsp.DMSPId = danhMucSanPhamDTO.DMSPId;
-
-            /*            if (id != danhMucSanPhamDTO.DMSPId)
-                        {
-                            await _danhMucSanPhamRepository.UpdateDanhMucSanPham(id, dmsp);
-                        }*/
-
-            //var boNhoRam = await _context.BoXuLy.FindAsync(id);
-
-            //DanhMucSanPham dmsp = _mapper.Map<DanhMucSanPham>(danhMucSanPhamDTO);
-            //_context.Entry(dmsp).State = EntityState.Modified;
-            if (dmsp == null)
+            var category = await _danhMucSanPhamRepository.GetCategory(id);
+            category.TenDM = danhMucSanPhamDTO.TenDM;
+            category.Description = danhMucSanPhamDTO.Description;
+            category.DMSPId = danhMucSanPhamDTO.DMSPId;
+            if (category == null)
             {
                 return NotFound();
             }
             else
             {
-                await _danhMucSanPhamRepository.UpdateDanhMucSanPham(id, dmsp);
+                await _danhMucSanPhamRepository.UpdateCategory();
                 return Ok("Cap nhat thanh cong");
             }
-            /*
-                        try
-                        {
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            if (!DanhMucSanPhamExists(id))
-                            {
-                                return NotFound();
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }*/
-
             return NoContent();
         }
 
         // DELETE: api/DanhMucSanPhams/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDanhMucSanPham(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
-            var dmsp = await _danhMucSanPhamRepository.GetDanhMucSanPham(id);
-            if (dmsp == null)
+            var category = await _danhMucSanPhamRepository.GetCategory(id);
+            if (category == null)
             {
                 return NotFound();
             }
-
-            //_context.DanhMucSanPham.Remove(danhMucSanPham);
-            await _danhMucSanPhamRepository.DeleteDanhMucSanPham(dmsp);
-            return Ok("Cap nhat thanh cong");
-            //return NoContent();
+            await _danhMucSanPhamRepository.DeleteCategory(category);
+            return Ok("Xoa thanh cong");
         }
-
-        /*        private bool DanhMucSanPhamExists(int id)
-                {
-                    return _context.DanhMucSanPham.Any(e => e.DMSPId == id);
-                }*/
     }
 }
