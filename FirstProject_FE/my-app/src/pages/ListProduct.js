@@ -5,23 +5,28 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 const ListProduct = () => {
   const [customers, setCustomers] = useState([]);
-  const loadCate = () => {
-    console.log(customers);
-    axios.get("https://localhost:7123/api/SanPhams/all").then((response) => {
-      setCustomers(response.data);
-      console.log(response.data);
-    });
+  const loadCate = async () => {
+    await axios
+      .get("https://localhost:7123/api/SanPhams/all")
+      .then((response) => {
+        setCustomers(response.data);
+        console.log(response.data);
+      });
   };
   useEffect(() => {
-    console.log("use effect");
     loadCate();
-    console.log(customers);
   }, []);
 
+  function DeleteCate(id) {
+    console.log("DeleteCate ~ id", id);
+    axios
+      .delete(`https://localhost:7123/api/SanPhams/${id}`)
+      .then(setCustomers(customers.filter((o, i) => o.sanPhamId !== id)));
+  }
   return (
     <div>
       <Link
-        // to={`Create`}
+        to={`Create`}
         className="px-5 py-4 mb-5 d-inline-block button_action bg-primary"
         variant="info"
       >
@@ -47,7 +52,7 @@ const ListProduct = () => {
               <td>{data.donGia}</td>
               <td className="d-flex align-items-center justify-content-center">
                 <Button
-                  onClick={() => console.log(1)}
+                  onClick={() => DeleteCate(data.sanPhamId)}
                   className="px-6 py-2 button_action bg-danger"
                   variant="info"
                 >

@@ -20,14 +20,13 @@
         public string? Webcam { get; set; }
         public string? Pin { get; set; }
         public int? RaMat { get; set; }
-        public string MoTa { get; set; }
-        public long DonGia { get; set; }
+        public string? MoTa { get; set; }
+        public long? DonGia { get; set; }
         public string? HinhAnh { get; set; }
         public float? DanhGia { get; set; }
-        public DateTime NgayTao { get; set; }
-        public DateTime NgayCapNhat { get; set; }
-        public string TenDM { get; set; }
-        public List<RatingDTO> Rating { get; set; }
+        public DateTime? NgayTao { get; set; }
+        public DateTime? NgayCapNhat { get; set; }
+        //public List<RatingDTO> Rating { get; set; }
 
         /*        public virtual ManHinhDTO MH { get; set; }
                 public virtual BoXuLyDTO BXL { get; set; }

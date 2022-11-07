@@ -8,16 +8,17 @@ import Button from "react-bootstrap/esm/Button";
 const schemaValidation = yup.object({
   tenDM: yup
     .string()
-    //.required("Vui lòng nhập danh mục")
+    .required("Vui lòng nhập danh mục")
     .max(50, "Danh mục có dưới 50 kí tự"),
   description: yup
     .string()
-    //.required("Vui lòng nhập mô tả")
+    .required("Vui lòng nhập mô tả")
     .max(50, "Danh mục có dưới 50 kí tự"),
 });
 
 const DetailCategories = () => {
   const [categories, setCategogies] = useState("");
+  console.log("DetailCategories ~ categories", categories);
   const navigate = useNavigate();
   const { id } = useParams();
   const {
@@ -29,13 +30,16 @@ const DetailCategories = () => {
     resolver: yupResolver(schemaValidation),
   });
   useEffect(() => {
+    console.log("render");
     axios
       .get(`https://localhost:7123/api/DanhMucSanPhams/${id}`)
       .then((response) => {
         setCategogies(response.data);
       });
   }, []);
+  console.log(123);
   setValue("tenDM", categories.tenDM);
+  console.log("set value");
   setValue("description", categories.description);
   const onSubmit = (data) => {
     //alert(JSON.stringify(data));
@@ -80,7 +84,6 @@ const DetailCategories = () => {
           type="text"
           id="description"
           {...register("description")}
-          defaultValue={categories.description}
           placeholder="Vui lòng nhập tên mô tả"
         />
         {errors.description && (
@@ -91,16 +94,6 @@ const DetailCategories = () => {
         <button type="submit" className="p-2 ms-auto bg-primary text-light">
           Thay đổi thông tin
         </button>
-        {/* <button
-          type="Submit"
-          className=""
-        >
-          {isSubmitting ? (
-            <div className=""></div>
-          ) : (
-            "Thay đổi thông tin"
-          )}
-        </button> */}
       </div>
     </form>
   );

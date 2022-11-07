@@ -5,27 +5,28 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "react-bootstrap/esm/Button";
+import Moment from "react-moment";
 const schemaValidation = yup.object({
-  nameProduct: yup
+  tenSP: yup
     .string()
-    .required("Vui lòng nhập danh mục")
-    .max(100, "Danh mục có dưới 100 kí tự"),
-  price: yup.number().required("Vui lòng nhập số tiền"),
+    //.required("Vui lòng nhập danh mục")
+    .max(50, "Danh mục có dưới 50 kí tự"),
+  // description: yup
+  //   .string()
+  //   //.required("Vui lòng nhập mô tả")
+  //   .max(50, "Danh mục có dưới 50 kí tự"),
 });
 
-const DetailProduct = () => {
+const CreateProduct = () => {
   const [product, setProduct] = useState("");
-  const [nameCategory, setnameCategory] = useState("");
   const [screen, setScreen] = useState([]);
+  console.log("CreateProduct ~ screen", screen);
   const [ram, setRam] = useState([]);
   const [processor, setProcessor] = useState([]);
   const [connect, setConnect] = useState([]);
   const [listCategory, setListCategory] = useState([]);
-  console.log("DetailProduct ~ nameCategory", nameCategory);
-  console.log("DetailProduct ~ product", product);
+
   const navigate = useNavigate();
-  const { id } = useParams();
-  console.log("DetailProduct ~ id", id);
   const {
     register,
     handleSubmit,
@@ -65,13 +66,7 @@ const DetailProduct = () => {
         setConnect(response.data);
       });
   };
-  useEffect(() => {
-    axios
-      .get(`https://localhost:7123/api/SanPhams/admin_product/${id}`)
-      .then((response) => {
-        setProduct(response.data);
-      });
-  }, []);
+  let date = new Date();
   useEffect(() => {
     loadCate();
     loadConnect();
@@ -79,40 +74,17 @@ const DetailProduct = () => {
     loadScreen();
     loadRam();
   }, []);
-  useEffect(() => {
-    if (product) {
-      axios
-        .get(`https://localhost:7123/api/DanhMucSanPhams/${product.dmspId}`)
-        .then((response) => {
-          setnameCategory(response.data);
-        });
-    }
-  }, [product]);
-
-  setValue("nameProduct", product.tenSP);
-  setValue("price", product.donGia);
-  setValue("nameCategory", nameCategory.tenDM);
-  setValue("createDate", product.ngayTao);
-  setValue("updateDate", product.ngayCapNhat);
-  setValue("number", product.soLuong);
-  setValue("screen", product.manHinhId);
-  setValue("processor", product.boXuLyId);
-  setValue("ram", product.ramId);
-  setValue("category", product.dmspId);
-  setValue("connect", product.congKetNoiId);
-
   const onSubmit = (data) => {
-    //alert(JSON.stringify(data));
-    let yourDate = new Date().toISOString();
-    console.log("onSubmit ~ yourDate", yourDate);
     console.log("onSubmit ~ data", data);
+    let yourDate = new Date().toISOString();
+    //const offset = yourDate.getTimezoneOffset();
+    console.log("day", yourDate);
     if (isValid) {
-      alert("Cập nhật thông tin thành công");
+      alert("Thêm sản phẩm thành công");
       axios
-        .put(`https://localhost:7123/api/SanPhams/${id}`, {
-          sanPhamId: id,
+        .post(`https://localhost:7123/api/SanPhams/`, {
           manHinhId: data.screen,
-          dmspId: data.category,
+          dmspId: data.listCategory,
           congKetNoiId: data.connect,
           ramId: data.ram,
           boXuLyId: data.processor,
@@ -120,7 +92,7 @@ const DetailProduct = () => {
           donGia: data.price,
           soLuong: data.number,
           ngayCapNhat: yourDate,
-          ngayTao: product.ngayTao,
+          ngayTao: yourDate,
         })
         .then(navigate("/listProduct"))
         .catch(function (error) {
@@ -131,7 +103,7 @@ const DetailProduct = () => {
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
-        <h3>Thông tin sản phẩm</h3>
+        <h3>Tạo sản phẩm</h3>
       </div>
       <div className="mb-2 d-flex flex-column">
         <label htmlFor="nameProduct">Tên sản phẩm</label>
@@ -155,28 +127,21 @@ const DetailProduct = () => {
             id="price"
             {...register("price")}
           />
-          {errors.price && (
-            <div className="text-danger">{errors.price.message}</div>
-          )}
         </div>
         <div className="mb-2 col d-flex flex-column">
           <label htmlFor="nameCategory">Danh mục sản phẩm</label>
           <select
             className="form-select"
             aria-label="Default select example"
-            {...register("category")}
+            {...register("listCategory")}
           >
-            <option selected value={product.dmspId}>
-              {nameCategory.tenDM}
-            </option>
+            <option selected>Vui lòng chọn danh mục</option>
             {listCategory.map((item, index) => {
-              if (item.tenDM != nameCategory.tenDM) {
-                return (
-                  <option value={item.dmspId} key={index}>
-                    {item.tenDM}
-                  </option>
-                );
-              }
+              return (
+                <option value={item.dmspId} key={index}>
+                  {item.tenDM}
+                </option>
+              );
             })}
           </select>
         </div>
@@ -189,11 +154,15 @@ const DetailProduct = () => {
             aria-label="Default select example"
             {...register("screen")}
           >
-            <option selected>{product.manHinhId}</option>
+            <option selected>Vui lòng chọn màn hình</option>
             {screen.map((item, index) => {
               return (
-                <option value={item.manHinhId} key={index}>
-                  {item.kichThuoc} {item.doPhanGiai}
+                <option
+                  value={item.manHinhId}
+                  key={index}
+                  //{...register("screen")}
+                >
+                  {index} {item.manHinhId} {item.kichThuoc} {item.doPhanGiai}
                 </option>
               );
             })}
@@ -206,10 +175,10 @@ const DetailProduct = () => {
             aria-label="Default select example"
             {...register("processor")}
           >
-            <option selected>{product.boXuLyId}</option>
+            <option selected>Vui lòng chọn bộ xử lý</option>
             {processor.map((item, index) => {
               return (
-                <option value={item.boXuLyId} key={index}>
+                <option value={item.boXuLyId} key={item.boXuLyId}>
                   {item.congNgheCPU}
                 </option>
               );
@@ -225,10 +194,10 @@ const DetailProduct = () => {
             aria-label="Default select example"
             {...register("ram")}
           >
-            <option selected>{product.ramId}</option>
+            <option selected>Vui lòng chọn ram</option>
             {ram.map((item, index) => {
               return (
-                <option value={item.ramId} key={item.ramId}>
+                <option value={item.ramId} key={index}>
                   {item.loaiRam} {item.dungLuongRam}
                 </option>
               );
@@ -242,35 +211,15 @@ const DetailProduct = () => {
             aria-label="Default select example"
             {...register("connect")}
           >
-            <option selected>{product.congKetNoiId}</option>
+            <option selected>Vui lòng chọn cổng kết nối</option>
             {connect.map((item, index) => {
               return (
-                <option value={item.congKetNoiId} key={item.congKetNoiId}>
+                <option value={item.congKetNoiId} key={index}>
                   {item.congKetNoiId}
                 </option>
               );
             })}
           </select>
-        </div>
-      </div>
-      <div className="row">
-        <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="createDate">Ngày tạo</label>
-          <input
-            type="datetime-local"
-            id="createDate"
-            disabled={true}
-            {...register("createDate")}
-          />
-        </div>
-        <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="createDate">Ngày sửa lần cuối</label>
-          <input
-            type="datetime-local"
-            id="createDate"
-            disabled={true}
-            {...register("updateDate")}
-          />
         </div>
       </div>
       <div className="row">
@@ -285,23 +234,13 @@ const DetailProduct = () => {
         </div>
         <div className="col"></div>
       </div>
-      <div className="mb-2 flex-column d-flex">
-        <label>Hình ảnh</label>
-        <div className="d-flex justify-content-center">
-          <img
-            style={{ width: "400px" }}
-            src={`https://localhost:7123/wwwroot/${product.hinhAnh}`}
-            alt=""
-          />
-        </div>
-      </div>
       <div className="d-flex ">
         <button type="submit" className="p-2 ms-auto bg-primary text-light">
-          Thay đổi thông tin
+          Tạo sản phẩm
         </button>
       </div>
     </form>
   );
 };
 
-export default DetailProduct;
+export default CreateProduct;

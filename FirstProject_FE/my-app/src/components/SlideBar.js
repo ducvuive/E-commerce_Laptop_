@@ -15,22 +15,22 @@ const Sidebar = ({ children }) => {
   const menuItem = [
     {
       path: "/dashboard",
-      name: "Dashboard",
+      name: "Tổng quan",
       icon: <FaTh />,
     },
     {
       path: "/listProduct",
-      name: "List Product",
+      name: "Sản phẩm",
       icon: <FaClipboardList />,
     },
     {
       path: "/categories",
-      name: "Categories",
+      name: "Danh mục",
       icon: <FaAlignJustify />,
     },
     {
       path: "/users",
-      name: "Users",
+      name: "Người dùng",
       icon: <FaUserEdit />,
     },
   ];

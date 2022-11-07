@@ -165,14 +165,28 @@ namespace BackendAPI.Controllers
         // PUT: api/SanPhams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSanPham(int id, SanPhamDTO sanPhamDTO)
+        public async Task<IActionResult> PutSanPham(int id, SanPhamDTO_Admin sanPhamDTO)
         {
             if (id != sanPhamDTO.SanPhamId)
             {
                 return BadRequest();
             }
-
-            SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
+            var sanPham = new SanPham
+            {
+                SanPhamId = sanPhamDTO.SanPhamId,
+                BoXuLyId = sanPhamDTO.BoXuLyId,
+                CongKetNoiId = sanPhamDTO.CongKetNoiId,
+                DMSPId = sanPhamDTO.DMSPId,
+                RamId = sanPhamDTO.RamId,
+                ManHinhId = sanPhamDTO.ManHinhId,
+                TenSP = sanPhamDTO.TenSP,
+                DonGia = sanPhamDTO.DonGia,
+                NgayCapNhat = sanPhamDTO.NgayCapNhat,
+                NgayTao = sanPhamDTO.NgayTao,
+                SoLuong = sanPhamDTO.SoLuong,
+                DanhGia = 0,
+            };
+            //SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
             _context.Entry(sanPham).State = EntityState.Modified;
 
             try
@@ -197,17 +211,23 @@ namespace BackendAPI.Controllers
         // POST: api/SanPhams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<SanPham>> PostSanPham(SanPhamDTO sanPhamDTO)
+        public async Task<ActionResult<SanPham>> PostSanPham(SanPhamDTO_Admin sanPhamDTO)
         {
-            /*var sanPham = new SanPham
+            var sanPham = new SanPham
             {
-                KichThuoc = manHinhDTO.KichThuoc,
-                DoPhanGiai = manHinhDTO.DoPhanGiai,
-                TanSoQuet = manHinhDTO.TanSoQuet,
-                CongNgheMH = manHinhDTO.CongNgheMH,
-                CamUng = manHinhDTO.CamUng,
-            };*/
-            SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
+                BoXuLyId = sanPhamDTO.BoXuLyId,
+                CongKetNoiId = sanPhamDTO.CongKetNoiId,
+                DMSPId = sanPhamDTO.DMSPId,
+                RamId = sanPhamDTO.RamId,
+                TenSP = sanPhamDTO.TenSP,
+                ManHinhId = sanPhamDTO.ManHinhId,
+                DonGia = sanPhamDTO.DonGia,
+                NgayCapNhat = sanPhamDTO.NgayCapNhat,
+                NgayTao = sanPhamDTO.NgayTao,
+                SoLuong = sanPhamDTO.SoLuong,
+                DanhGia = 0,
+            };
+            //SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
             _context.SanPham.Add(sanPham);
             await _context.SaveChangesAsync();
 
