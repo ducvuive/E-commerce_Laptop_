@@ -33,13 +33,13 @@ namespace CustomerSite.Controllers
 
                 //var response = await clientFactory.PostAsync("login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
                 var response = await clientFactory.PostAsync("login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
-                //var contents = await response.Content.ReadAsStringAsync();
+                var contents = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
                     TempData["Error"] = "Tên đăng nhập hoặc mật khẩu không chính xác";
                     return View();
                 }
-                var contents = await response.Content.ReadAsStringAsync();
+                //var contents = await response.Content.ReadAsStringAsync();
                 var data = JsonConvert.DeserializeObject<LoginResponseModel>(contents);
 
                 if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
@@ -82,23 +82,15 @@ namespace CustomerSite.Controllers
             var response = await clientFactory.PostAsync("register", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                TempData["Error"] = "Tài khoản đã ";
+                TempData["ErrorRegister"] = "Email đã được đăng kí !!!";
                 return View();
             }
             var contents = await response.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<RegisterResponseModel>(contents);
-
-            if (data.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-            {
-                TempData["Error"] = data.Value;
-                return View();
-            }
             if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return RedirectToAction("Index", "Home");
             }
-            //var data.Value = data.Value;
-            TempData["Error"] = data;
             return View(model);
         }
 

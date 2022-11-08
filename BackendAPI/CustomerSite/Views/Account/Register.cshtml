@@ -1,17 +1,10 @@
 ﻿@using ShareView.DTO
 @model RegisterRequestModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_LayoutNoFooter.cshtml";
-    var error = TempData["Error"] as string;
+    var error = TempData["ErrorRegister"] as string;
 }
-@if (error != null)
-{
-    foreach(var item in error){
-        <h3 class="text-danger">@item</h3>
-    }
-}
-
 <section class="h-custom">
     <div class="container-fluid h-custom">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -20,36 +13,30 @@
                     <div class="divider d-flex align-items-center my-4">
                         <p class="text-center fs-4 fw-bold mx-3 mb-0">Đăng Kí</p>
                     </div>
+                    @if (error != null)
+                    {
+                        <p class="text-danger">@error</p>
+                    }
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <!-- Email input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3">Địa chỉ email</label>
                         <input type="email" id="form3Example3" class="form-control "
                                placeholder="Nhập địa chỉ email" asp-for="UserName" />
-                        @*<span asp-validation-for="UserName" class="text-danger"></span>*@
                     </div>
-
-                    <!-- Password input -->
                     <div class="form-outline mb-3">
                         <label class="form-label" for="form3Example4">Mật khẩu</label>
                         <input type="password" id="form3Example4" class="form-control "
                                placeholder="Nhập mật khẩu" asp-for="Password" />
-                        @*<span asp-validation-for="Password" class="text-danger"></span>*@
                     </div>
-                    <!-- Confirm input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" asp-for="ConfirmPassword">Nhập lại mật khẩu</label>
                         <input class="form-control "
                                placeholder="Nhập lại mật khẩu" asp-for="ConfirmPassword" />
-                        @*<span asp-validation-for="UserName" class="text-danger"></span>*@
                     </div>
-
-                    <!-- Phonenumber input -->
                     <div class="form-outline mb-3">
                         <label class="form-label" for="PhoneNumber" asp-for="PhoneNumber">Số điện thoại</label>
                         <input id="PhoneNumber" class="form-control "
                                placeholder="Nhập số điện thoại" asp-for="PhoneNumber" />
-                        @*<span asp-validation-for="PhoneNumber" class="text-danger"></span>*@
                     </div>
                     <div class="text-center text-lg-start mt-4 pt-2">
                         <button class="btn btn-primary btn-lg"
@@ -66,7 +53,7 @@
                 </form>
             </div>
             <div class="col-md-9 col-lg-6 col-xl-5">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                <img src="https://localhost:7123/wwwroot/images_bg/bg_login.jpg"
                      class="img-fluid" alt="Sample image">
             </div>
         </div>

@@ -1,68 +1,16 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
-import axios from "axios";
-
 function Dashboard() {
-  // const theme = useTheme();
-  // const colors = tokens(theme.palette.mode);
-  const [productData, setProductData] = useState([]);
-
-  const columns = [
-    { field: "dmspId", flex: 1, headerName: "ID", type: "number" },
-    { field: "tenDM", flex: 1, headerName: "Name Catogory" },
-  ];
-  useEffect(() => {
-    axios
-      .get(`https://localhost:7123/api/DanhMucSanPhams`)
-      .then((res) => {
-        setProductData(res.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
   return (
-    <div style={{ height: "85vh", width: "85vw" }}>
-      <DataGrid
-        rows={productData}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-        getRowId={(row) => row.dmspId}
-      />
+    <div className="admin d-flex align-items-center justify-content-center">
+      <div className="admin_layer"></div>
+      <div className="text-center z-index">
+        <h2 className="fs-1 text-light text-uppercase">
+          Xin chào bạn đến với trang admin
+        </h2>
+        <p className="fs-4 text-light text-uppercase">
+          Chúc bạn 1 ngày tốt lành
+        </p>
+      </div>
     </div>
-    //   <div>
-    //     <DataGrid rows={productData} columns={columns} />
-    //   </div>
-    //  <Box m="20px">
-    //      <Header title="Product" subTitle="Manage Product" />
-    //     <Box
-    //       m="40px 0 0 0"
-    //       height="75vh"
-    //       sx={{
-    //         "& .MuiDataGrid-root": {
-    //           border: "none",
-    //         },
-    //         "& .MuiDataGrid-cell": {
-    //           borderBottom: "none",
-    //         },
-    //         "& .MuiDataGrid-columnHeaders": {
-    //           backgroundColor: colors.blueAccent[700],
-    //           borderBottom: "none",
-    //         },
-    //         "& .MuiDataGrid-virtualScroller": {
-    //           backgroundColor: colors.primary[400],
-    //         },
-    //         "& .MuiDataGrid-footerContainer": {
-    //           borderTop: "none",
-    //           backgroundColor: colors.blueAccent[700],
-    //         },
-    //       }}
-    //     >
-    //     </Box>
-
-    //   </Box>
   );
 }
 

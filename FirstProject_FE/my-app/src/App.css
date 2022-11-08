@@ -3,6 +3,19 @@
   padding: 0;
   text-decoration: none;
 } */
+.admin {
+  background-image: url("https://localhost:7123/wwwroot/images_bg/intro1.png");
+  height: 85vh !important;
+  position: relative;
+}
+.admin_layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
 .container-fluid {
   display: flex;
   padding: 0;
@@ -82,4 +95,8 @@ button {
   border-radius: 7px;
   outline: none;
   border: none;
+}
+
+.z-index {
+  z-index: 20;
 }

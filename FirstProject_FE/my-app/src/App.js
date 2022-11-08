@@ -35,6 +35,7 @@ function App() {
       <SlideBar>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/" element={<Dashboard />}></Route>
           <Route path="/listProduct" element={<ListProduct />}></Route>
           <Route path="/users" element={<Users />}></Route>
           <Route path="/users/detail/:email" element={<DetailUser />}></Route>

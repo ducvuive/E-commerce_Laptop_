@@ -11,6 +11,7 @@ namespace ShareView.DTO
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
+        [StringLength(20, ErrorMessage = "Độ dài mật khẩu phải từ 3 đến 20 kí tự.", MinimumLength = 3)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required(ErrorMessage = "Mật khẩu xác nhận không được để trống")]

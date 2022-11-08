@@ -7,7 +7,7 @@
 @{
     decimal tongTien = 0;
 }
-@{
+@*@{
     //var token = Context.Request.Cookies["JwtToken"];
     var session = Context.Session.GetString(Variable.JWT);
     var userName = "";
@@ -17,10 +17,22 @@
         var userInfo = tokenHandler.ReadJwtToken(session);
         userName = (userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value);
     }
+}*@
+@{
+    var token = Context.Request.Cookies[Variable.JWT_Token];
+    var userName = "";
+    var role = "";
+    if (token != null)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var userInfo = tokenHandler.ReadJwtToken(token);
+        userName = userInfo.Claims.FirstOrDefault(o => o.Type == "sub")?.Value;
+        role = (userInfo.Claims.FirstOrDefault(o => o.Type == "role")?.Value);
+    }
 }
 <section class="cart container mt-5">
     <h3 class="">Chi tiết đơn hàng</h3>
-    <form class="row">
+    <form class="row" method="post" asp-controller="Cart" asp-action="CheckOut">
         <div class="col-6">
             <div class="form-group">
                 <label for="hoten">Họ tên</label>
@@ -52,18 +64,17 @@
             </div>
         </div>
         <div class="col-6">
-        <fieldset disabled class="mt-0">
+        <fieldset class="mt-0">
             <div class="form-group ">
                 <label for="email">Email</label>
                 <input type="text"
                        name="email"
                        id="email"
-                       class="form-control disabled"
-                       value="@userName" />
+                       class="form-control"
+                           value="@userName" readonly />
             </div>
         </fieldset>
         </div>
-    </form>
     <table class="table">
         <thead>
             <tr>
@@ -101,6 +112,7 @@
         <span>@tongTien.ToString("#,##0 VNĐ")</span>
     </div>
     <div class="d-flex justify-content-end">
-                <a href="" class="ms-3 text-black p-3 bg-info rounded btn ">Thanh toán ngay</a>
+                <button type="submit" class="ms-3 text-black p-3 bg-info rounded btn ">Thanh toán ngay</button>
     </div>
+    </form>
 </section>

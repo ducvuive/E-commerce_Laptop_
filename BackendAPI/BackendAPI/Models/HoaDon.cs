@@ -13,17 +13,17 @@ namespace BackendAPI.Models
         [Key]
         public int HoaDonId { get; set; }
         [Required]
-        public DateTime NgayHD { get; set; }
+        public DateTime? NgayHD { get; set; }
 
         [MaxLength(100)]
         public string? NguoiNhan { get; set; }
         public string? SDT { get; set; }
 
         [MaxLength(100)]
-        public string DiaChiGiaoHang { get; set; }
+        public string? DiaChiGiaoHang { get; set; }
 
         [Required]
-        public long TongTien { get; set; }
+        public long? TongTien { get; set; }
         public int? TrangThai { get; set; }
         [ForeignKey("KhachHangId")]
         public UserIdentity? MaKhacHangId { get; set; }

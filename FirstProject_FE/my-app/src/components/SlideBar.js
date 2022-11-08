@@ -13,11 +13,11 @@ import { NavLink } from "react-router-dom";
 
 const Sidebar = ({ children }) => {
   const menuItem = [
-    {
-      path: "/dashboard",
-      name: "Tổng quan",
-      icon: <FaTh />,
-    },
+    // {
+    //   path: "/dashboard",
+    //   name: "Tổng quan",
+    //   icon: <FaTh />,
+    // },
     {
       path: "/listProduct",
       name: "Sản phẩm",
@@ -43,7 +43,7 @@ const Sidebar = ({ children }) => {
             to={item.path}
             key={index}
             className="link"
-            // activeClassName="active"
+            //activeClassName="active"
           >
             <div className="icon">{item.icon}</div>
             <div style={{ display: "block" }} className="link_text">
