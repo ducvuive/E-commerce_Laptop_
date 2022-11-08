@@ -71,6 +71,7 @@ const DetailCategories = () => {
           type="text"
           id="tenDM"
           {...register("tenDM")}
+          className="form-control"
           //defaultValue={categories.tenDM}
           // {...register("tenDM")}
         />
@@ -83,6 +84,7 @@ const DetailCategories = () => {
         <input
           type="text"
           id="description"
+          className="form-control"
           {...register("description")}
           placeholder="Vui lòng nhập tên mô tả"
         />

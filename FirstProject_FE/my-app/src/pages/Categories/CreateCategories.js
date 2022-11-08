@@ -52,10 +52,10 @@ const CreateCategories = () => {
         <label htmlFor="">Tên danh mục</label>
         <input
           type="text"
+          className="form-control"
           {...register("tenDM")}
           //value={categories.tenDM}
           placeholder="Vui lòng nhập tên danh mục"
-          className=""
           // {...register("tenDM")}
         />
         {errors.tenDM && (
@@ -67,6 +67,7 @@ const CreateCategories = () => {
         <input
           type="text"
           id="description"
+          className="form-control"
           {...register("description")}
           defaultValue={categories.description}
           placeholder="Vui lòng nhập tên mô tả"

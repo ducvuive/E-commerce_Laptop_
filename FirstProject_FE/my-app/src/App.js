@@ -44,6 +44,10 @@ function App() {
             element={<DetailCategories />}
           ></Route>
           <Route
+            path="/dashboard/Detail/:id"
+            element={<DetailCategories />}
+          ></Route>
+          <Route
             path="/listProduct/Detail/:id"
             element={<DetailProduct />}
           ></Route>

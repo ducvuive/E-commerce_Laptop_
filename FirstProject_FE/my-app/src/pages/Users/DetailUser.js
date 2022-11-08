@@ -47,11 +47,21 @@ const DetailUser = () => {
       </div>
       <div className="mb-2 d-flex flex-column">
         <label htmlFor="">UserName</label>
-        <input type="text" value={user.userName} className="" disabled />
+        <input
+          type="text"
+          value={user.userName}
+          className="form-control"
+          disabled
+        />
       </div>
       <div className="mb-2 d-flex flex-column">
         <label htmlFor="">Email</label>
-        <input type="text" value={user.email} className="" disabled />
+        <input
+          type="text"
+          value={user.email}
+          className="form-control"
+          disabled
+        />
       </div>
       <div className="mb-2 d-flex flex-column">
         <label htmlFor="">Số điện thoại</label>
@@ -59,7 +69,7 @@ const DetailUser = () => {
           <input
             type="text"
             value={"0" + user.phoneNumber}
-            className=""
+            className="form-control"
             disabled
           />
         ) : (
