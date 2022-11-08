@@ -184,7 +184,7 @@ namespace BackendAPI.Controllers
                 NgayCapNhat = sanPhamDTO.NgayCapNhat,
                 NgayTao = sanPhamDTO.NgayTao,
                 SoLuong = sanPhamDTO.SoLuong,
-                DanhGia = 0,
+                DanhGia = sanPhamDTO.DanhGia,
             };
             //SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
             _context.Entry(sanPham).State = EntityState.Modified;

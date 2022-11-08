@@ -100,6 +100,7 @@ const DetailProduct = () => {
   setValue("ram", product.ramId);
   setValue("category", product.dmspId);
   setValue("connect", product.congKetNoiId);
+  setValue("rating", product.danhGia);
 
   const onSubmit = (data) => {
     //alert(JSON.stringify(data));
@@ -121,6 +122,7 @@ const DetailProduct = () => {
           soLuong: data.number,
           ngayCapNhat: yourDate,
           ngayTao: product.ngayTao,
+          danhGia: data.rating,
         })
         .then(navigate("/listProduct"))
         .catch(function (error) {
@@ -283,7 +285,16 @@ const DetailProduct = () => {
             {...register("number")}
           />
         </div>
-        <div className="col"></div>
+        <div className="mb-2 col d-flex flex-column">
+          <label htmlFor="rating">Đánh giá</label>
+          <input
+            type="number"
+            className="form-control"
+            id="rating"
+            disabled={true}
+            {...register("rating")}
+          />
+        </div>
       </div>
       <div className="mb-2 flex-column d-flex">
         <label>Hình ảnh</label>

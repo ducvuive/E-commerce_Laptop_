@@ -1,5 +1,4 @@
 import logo from "./logo.svg";
-import NavigationRow from "./components/NavigationRow";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Fragment } from "react";
 import Container from "react-bootstrap/Container";
@@ -14,7 +13,6 @@ import SlideBar from "./components/SlideBar";
 import NavBar from "./components/NavBar";
 import DetailCategories from "./pages/Categories/DetailCategories";
 import CreateCategories from "./pages/Categories/CreateCategories";
-import UpdateCategories from "./pages/Categories/UpdateCategories";
 import Users from "./pages/Users";
 import DetailUser from "./pages/Users/DetailUser";
 import DetailProduct from "./pages/Product/DetailProduct";
@@ -25,7 +23,6 @@ function App() {
     //   <Container fluid className="h-auto p-0">
     //     <Row className="">
     //       <Col xs={3} className="p-0">
-    //         <NavigationRow />
     //       </Col>
     //       <Col xs={9} className="">
     //         2 of 3 (wider)
