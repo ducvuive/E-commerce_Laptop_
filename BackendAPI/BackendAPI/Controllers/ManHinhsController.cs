@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
@@ -41,79 +40,6 @@ namespace BackendAPI.Controllers
             }
 
             return _mapper.Map<ManHinhDTO>(manHinh);
-        }
-
-        // PUT: api/ManHinhs/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutManHinh(int id, ManHinhDTO manHinhDTO)
-        {
-            if (id != manHinhDTO.ManHinhId)
-            {
-                return BadRequest();
-            }
-
-            ManHinh manHinh = _mapper.Map<ManHinh>(manHinhDTO);
-            _context.Entry(manHinh).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ManHinhExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/ManHinhs
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ManHinhDTO>> PostManHinh(ManHinhDTO manHinhDTO)
-        {
-            var manHinh = new ManHinh
-            {
-                KichThuoc = manHinhDTO.KichThuoc,
-                DoPhanGiai = manHinhDTO.DoPhanGiai,
-                TanSoQuet = manHinhDTO.TanSoQuet,
-                CongNgheMH = manHinhDTO.CongNgheMH,
-                CamUng = manHinhDTO.CamUng,
-            };
-
-            _context.ManHinh.Add(manHinh);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetManHinh", new { id = manHinh.ManHinhId }, manHinh);
-        }
-
-        // DELETE: api/ManHinhs/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteManHinh(int id)
-        {
-            var manHinh = await _context.ManHinh.FindAsync(id);
-            if (manHinh == null)
-            {
-                return NotFound();
-            }
-
-            _context.ManHinh.Remove(manHinh);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ManHinhExists(int id)
-        {
-            return _context.ManHinh.Any(e => e.ManHinhId == id);
         }
     }
 }
