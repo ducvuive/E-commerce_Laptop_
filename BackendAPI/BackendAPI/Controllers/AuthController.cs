@@ -77,7 +77,7 @@ namespace BackendAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti,
                 Guid.NewGuid().ToString())
              }),
-                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    Expires = DateTime.UtcNow.AddMinutes(15),
                     Issuer = issuer,
                     Audience = audience,
                     SigningCredentials = new SigningCredentials

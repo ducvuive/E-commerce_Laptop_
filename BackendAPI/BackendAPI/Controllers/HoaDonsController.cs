@@ -22,10 +22,10 @@ namespace BackendAPI.Controllers
 
         // GET: api/HoaDons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HoaDonDTO>>> GetHoaDon()
+        public async Task<ActionResult<HoaDonDTO>> GetHoaDon()
         {
-            var hd = await _context.HoaDon.ToListAsync();
-            return _mapper.Map<List<HoaDonDTO>>(hd);
+            var hd = _context.HoaDon.OrderByDescending(s => s.HoaDonId).FirstOrDefault();
+            return Ok(hd);
         }
 
         // GET: api/HoaDons/5
@@ -41,53 +41,14 @@ namespace BackendAPI.Controllers
 
             return _mapper.Map<HoaDonDTO>(hoaDon);
         }
-
-        // PUT: api/HoaDons/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*        [HttpPut("{id}")]
-                public async Task<IActionResult> PutHoaDon(int id, HoaDon hoaDon)
-                {
-                    if (id != hoaDon.HoaDonId)
-                    {
-                        return BadRequest();
-                    }
-
-                    _context.Entry(hoaDon).State = EntityState.Modified;
-
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!HoaDonExists(id))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-
-                    return NoContent();
-                }*/
-
         // POST: api/HoaDons
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<HoaDonDTO>> PostHoaDon(HoaDonDTO hoaDonDTO)
+        [HttpPost("{userName}")]
+        public async Task<ActionResult<HoaDonDTO>> PostHoaDon([FromBody] HoaDonDTO hoaDonDTO, string email)
         {
-            /*var hoaDon = new HoaDon
-            {
-                NgayHD = hoaDonDTO.NgayHD,
-                NguoiNhan = hoaDonDTO.NguoiNhan,
-                SDT = hoaDonDTO.SDT,
-                DiaChiGiaoHang = hoaDonDTO.DiaChiGiaoHang,
-                TongTien = hoaDonDTO.TongTien,
-                MaKhacHangId = hoaDonDTO.MaKhacHangId,
-            };*/
+            var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == email);
             HoaDon hoaDon = _mapper.Map<HoaDon>(hoaDonDTO);
+            hoaDon.MaKhacHangId = user;
             _context.HoaDon.Add(hoaDon);
             await _context.SaveChangesAsync();
 

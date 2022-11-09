@@ -10,19 +10,17 @@ namespace CustomerSite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductClient productClient;
+        private readonly IHoaDonClient hoaDonClient;
+        private readonly IUserClient userClient;
         /*public const string CARTKEY = "cart";*/
 
-        public CartController(ILogger<HomeController> logger, IProductClient productClient)
+        public CartController(ILogger<HomeController> logger, IProductClient productClient, IHoaDonClient hoaDonClient, IUserClient userClient)
         {
             _logger = logger;
             this.productClient = productClient;
+            this.hoaDonClient = hoaDonClient;
+            this.userClient = userClient;
         }
-
-        /*        public async Task<IActionResult> Index()
-                {
-                    var userId = User.FindFirstValue(ClaimTypes.Email);
-                    return Ok(userId);
-                }*/
         List<CartDTO> GetCartItems()
         {
             var session = HttpContext.Session;
@@ -126,17 +124,56 @@ namespace CustomerSite.Controllers
 
         public async Task<IActionResult> CheckOut(/*string userName*/)
         {
-            if (Request.HttpContext.Session.GetString(Variable.JWT) == null)
+            var token = Request.Cookies["JwtToken"];
+            if (token == null)
             {
                 return Redirect("/Account/Login");
             }
-            /*if (userName == null)
-            {
-                return Redirect("/Account/Login");
-            }*/
             var cart = GetCartItems();
 
             return View(cart);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckOut([FromForm] string hoten, [FromForm] string diachi, [FromForm] string sdt, [FromForm] string email)
+        {
+            var cart = GetCartItems();
+            if (!string.IsNullOrEmpty(email))
+            {
+                HoaDonDTO hd = new HoaDonDTO();
+                long? total = 0;
+                hd.NguoiNhan = hoten;
+                hd.DiaChiGiaoHang = diachi;
+                hd.SDT = sdt;
+                hd.NgayHD = DateTime.Now;
+                foreach (var item in cart)
+                {
+                    total += item.Sanpham.DonGia * item.SL;
+                }
+                hd.TongTien = total;
+                await hoaDonClient.AddHoaDon(hd, email);
+                var _hoaDon = await hoaDonClient.GetHoaDon();
+                int temp;
+                if (_hoaDon == null)
+                {
+                    temp = 1;
+                }
+                else
+                {
+                    temp = _hoaDon.HoaDonId;
+                }
+                foreach (var item in cart)
+                {
+                    CTHD_DTO ct = new CTHD_DTO();
+                    ct.HoaDonId = temp;
+                    ct.SanPhamId = item.Sanpham.SanPhamId;
+                    ct.SoLuong = item.SL;
+                    await hoaDonClient.AddCTHD(ct);
+                }
+                ClearCart();
+                RedirectToAction(nameof(Index));
+            }
+            return Redirect("/Home/Index");
         }
     }
 }

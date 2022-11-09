@@ -79,8 +79,12 @@ namespace BackendAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CTHD_DTO>> PostCTHD(CTHD_DTO cTHD_DTO)
         {
+            var sanPham = await _context.SanPham.FindAsync(cTHD_DTO.SanPhamId);
+            sanPham.SoLuong = sanPham.SoLuong - cTHD_DTO.SoLuong;
             var cTHD = new CTHD
             {
+                SanPhamId = cTHD_DTO.SanPhamId,
+                HoaDonId = cTHD_DTO.HoaDonId,
                 SoLuong = cTHD_DTO.SoLuong,
             };
             _context.CTHD.Add(cTHD);
