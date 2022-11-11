@@ -75,8 +75,8 @@ namespace CustomerSite.Controllers
         [HttpPost]
         public async Task<IActionResult> Rating([FromForm] string comment, [FromForm] int ratingsValue, [FromForm] int SanPhamId)
         {
-            var session = Request.HttpContext.Session.GetString(Variable.JWT);
-            var token = Request.Cookies["JwtToken"];
+            //var session = Request.HttpContext.Session.GetString(Variable.JWT);
+            var token = Request.Cookies[Variable.JWT_Token];
             var email = "";
             if (token == null)
             {

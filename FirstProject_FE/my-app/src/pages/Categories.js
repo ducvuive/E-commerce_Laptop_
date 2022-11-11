@@ -6,7 +6,7 @@ import { Grid, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 const Categories = () => {
   const [categories, setCategogies] = useState([]);
-  //console.log("Categories ~ categories", categories);
+  console.log("Categories ~ categories", categories);
   const loadCate = async () => {
     await axios
       .get("https://localhost:7123/api/DanhMucSanPhams")
@@ -56,51 +56,6 @@ const Categories = () => {
   ];
 
   return (
-    // <div>
-    //   <Link
-    //     to={`Create`}
-    //     className="px-5 py-4 mb-5 d-inline-block button_action bg-primary"
-    //     variant="info"
-    //   >
-    //     Tạo mới
-    //   </Link>
-    //   {/* <h1>Category</h1> */}
-    //   {/* <TableList link={link}></TableList> */}
-    //   <Table striped bordered className="text-center">
-    //     <thead>
-    //       <tr>
-    //         <th>STT</th>
-    //         <th>Tên danh mục</th>
-    //         <th>Tác vụ</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {categories.map((data, index) => (
-    //         //console.log(data)
-    //         <tr key={data.dmspId}>
-    //           <td>{index + 1}</td>
-    //           <td>{data.tenDM}</td>
-    //           <td className="d-flex align-items-center justify-content-center">
-    //             <Button
-    //               onClick={() => DeleteCate(data.dmspId)}
-    //               className="px-6 py-2 button_action bg-danger"
-    //               variant="info"
-    //             >
-    //               Xóa
-    //             </Button>{" "}
-    //             <Link
-    //               to={`Detail/${data.dmspId}`}
-    //               className="px-6 py-2 button_action bg-info"
-    //               variant="info"
-    //             >
-    //               Chi tiết
-    //             </Link>
-    //           </td>
-    //         </tr>
-    //       ))}
-    //     </tbody>
-    //   </Table>
-    // </div>
     <Fragment>
       <Link
         to={`Create`}

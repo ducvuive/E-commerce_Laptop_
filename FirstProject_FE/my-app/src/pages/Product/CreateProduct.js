@@ -7,14 +7,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "react-bootstrap/esm/Button";
 import Moment from "react-moment";
 const schemaValidation = yup.object({
-  tenSP: yup
+  nameProduct: yup
     .string()
-    //.required("Vui lòng nhập danh mục")
-    .max(50, "Danh mục có dưới 50 kí tự"),
-  // description: yup
-  //   .string()
-  //   //.required("Vui lòng nhập mô tả")
-  //   .max(50, "Danh mục có dưới 50 kí tự"),
+    .required("Vui lòng nhập tên sản phẩm")
+    .max(50, "Tên sản phẩm có dưới 50 kí tự"),
+  price: yup.string().label("Giá").required("Vui lòng nhập giá sản phấm"),
 });
 
 const CreateProduct = () => {
@@ -122,11 +119,14 @@ const CreateProduct = () => {
         <div className="mb-2 col d-flex flex-column">
           <label htmlFor="price">Đơn giá</label>
           <input
-            type="text"
+            type="number"
             className="form-control"
             id="price"
             {...register("price")}
           />
+          {errors.price && (
+            <div className="text-danger">{errors.price.message}</div>
+          )}
         </div>
         <div className="mb-2 col d-flex flex-column">
           <label htmlFor="nameCategory">Danh mục sản phẩm</label>

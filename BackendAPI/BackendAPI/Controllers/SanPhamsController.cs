@@ -54,9 +54,7 @@ namespace BackendAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SanPhamDTO>> GetSanPham(int id)
         {
-            var sanPham = await _context.SanPham
-                                                //Join dm in _context.DanhMucSanPham on 
-                                                .Where(p => p.SanPhamId == id)
+            var sanPham = await _context.SanPham.Where(p => p.SanPhamId == id)
                                                 .Include(p => p.Rating)
                                                 .ThenInclude(r => r.KhachHang)
                                                 .FirstOrDefaultAsync();
@@ -96,9 +94,7 @@ namespace BackendAPI.Controllers
         [HttpGet("GetSanPhamTheoTrang/{page}")]
         public async Task<ActionResult> GetSanPhamTheoTrang(int page = 1)
         {
-            //var sanPham = await _context.SanPham.FindAsync(id);
             var skip = 12 * (page - 1);
-            //var sanPham = await _context.SanPham.FindAsync(id);
             var results = _context.SanPham.OrderByDescending(x => x.DonGia).Skip(skip).Take(12);
             if (results == null)
             {

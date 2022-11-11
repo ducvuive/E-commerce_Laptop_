@@ -6,9 +6,9 @@ const NavBar = () => {
     <div className="">
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="px-5 container-fluid">
-          <a className="navbar-brand fw-bold fs-4 text-uppercase" href="/home">
+          <Link className="navbar-brand fw-bold fs-4 text-uppercase" to={"/"}>
             laptopstore
-          </a>
+          </Link>
           <button
             className="navbar-toggler"
             type="button"

@@ -13,11 +13,6 @@ import { NavLink } from "react-router-dom";
 
 const Sidebar = ({ children }) => {
   const menuItem = [
-    // {
-    //   path: "/dashboard",
-    //   name: "Tổng quan",
-    //   icon: <FaTh />,
-    // },
     {
       path: "/listProduct",
       name: "Sản phẩm",

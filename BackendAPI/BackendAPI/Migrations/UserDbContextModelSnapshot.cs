@@ -45,10 +45,6 @@ namespace BackendAPI.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("GioiTinh")
                         .HasColumnType("nvarchar(max)");
 
@@ -232,6 +228,10 @@ namespace BackendAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DMSPId"), 1L, 1);
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("TenDM")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -326,7 +326,8 @@ namespace BackendAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("KhachHang")
+                    b.Property<string>("KhachHangId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("PublishedDate")
@@ -340,7 +341,7 @@ namespace BackendAPI.Migrations
 
                     b.HasKey("RatingID");
 
-                    b.HasIndex("KhachHang");
+                    b.HasIndex("KhachHangId");
 
                     b.HasIndex("SanPhamId");
 
@@ -397,6 +398,12 @@ namespace BackendAPI.Migrations
                     b.Property<string>("MoTa")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NgayCapNhat")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("OCung")
                         .HasColumnType("nvarchar(max)");
@@ -605,9 +612,11 @@ namespace BackendAPI.Migrations
 
             modelBuilder.Entity("BackendAPI.Models.Rating", b =>
                 {
-                    b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "KhachHangId")
+                    b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "KhachHang")
                         .WithMany()
-                        .HasForeignKey("KhachHang");
+                        .HasForeignKey("KhachHangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BackendAPI.Models.SanPham", "sanPham")
                         .WithMany("Rating")
@@ -615,7 +624,7 @@ namespace BackendAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("KhachHangId");
+                    b.Navigation("KhachHang");
 
                     b.Navigation("sanPham");
                 });

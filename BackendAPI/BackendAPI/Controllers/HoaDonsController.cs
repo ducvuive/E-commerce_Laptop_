@@ -43,7 +43,7 @@ namespace BackendAPI.Controllers
         }
         // POST: api/HoaDons
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("{userName}")]
+        [HttpPost("{email}")]
         public async Task<ActionResult<HoaDonDTO>> PostHoaDon([FromBody] HoaDonDTO hoaDonDTO, string email)
         {
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == email);

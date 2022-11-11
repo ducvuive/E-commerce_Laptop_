@@ -12,7 +12,7 @@ const ListProduct = () => {
       .get("https://localhost:7123/api/SanPhams/all")
       .then((response) => {
         setProducts(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       });
   };
   useEffect(() => {

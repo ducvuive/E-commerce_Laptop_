@@ -28,7 +28,7 @@ namespace BackendAPI.Controllers
         [Route("register")]
         public async Task<IResult> Register([FromBody] RegisterRequestModel registerRequestModel)
         {
-            var a = 1;
+            //var a = 1;
             // khong bi loi require,...
             if (ModelState.IsValid)
             {
@@ -41,7 +41,7 @@ namespace BackendAPI.Controllers
 
                 // tao user trong database
                 var createUserResult = await userManager.CreateAsync(user, registerRequestModel.Password);
-                a = 1;
+                //a = 1;
 
                 if (createUserResult.Succeeded)
                 {
