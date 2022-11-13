@@ -8,12 +8,12 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BoXuLiesController : ControllerBase
+    public class ProcessorController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
 
-        public BoXuLiesController(UserDbContext context, IMapper mapper)
+        public ProcessorController(UserDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

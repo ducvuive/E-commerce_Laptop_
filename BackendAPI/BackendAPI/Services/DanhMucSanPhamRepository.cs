@@ -11,14 +11,14 @@ namespace BackendAPI.Services
         {
             _context = context;
         }
-        public async Task<List<DanhMucSanPham>> GetCategories()
+        public async Task<List<Category>> GetCategories()
         {
             var dmsp = await _context.DanhMucSanPham.Where(s => s.isValid == 1).ToListAsync();
             return dmsp;
         }
-        public async Task<DanhMucSanPham> GetCategory(int id)
+        public async Task<Category> GetCategory(int id)
         {
-            DanhMucSanPham dmsp = await _context.DanhMucSanPham.FindAsync(id);
+            Category dmsp = await _context.DanhMucSanPham.FindAsync(id);
 
             if (dmsp == null)
             {
@@ -27,7 +27,7 @@ namespace BackendAPI.Services
             return dmsp;
         }
 
-        public async Task CreateCategory(DanhMucSanPham danhMucSanPham)
+        public async Task CreateCategory(Category danhMucSanPham)
         {
             _context.DanhMucSanPham.Add(danhMucSanPham);
             await _context.SaveChangesAsync();
@@ -38,7 +38,7 @@ namespace BackendAPI.Services
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> DeleteCategory(DanhMucSanPham danhMucSanPham)
+        public async Task<bool> DeleteCategory(Category danhMucSanPham)
         {
             danhMucSanPham.isValid = 0;
             //_context.DanhMucSanPham.Remove(danhMucSanPham);

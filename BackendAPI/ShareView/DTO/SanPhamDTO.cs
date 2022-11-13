@@ -25,13 +25,5 @@
         public string? HinhAnh { get; set; }
         public float? DanhGia { get; set; }
         public List<RatingDTO> Rating { get; set; }
-
-        /*        public virtual ManHinhDTO MH { get; set; }
-                public virtual BoXuLyDTO BXL { get; set; }
-                public virtual BoNhoRamDTO Ram { get; set; }
-                public virtual CongKetNoiDTO CongKN { get; set; }
-                public virtual DanhMucSanPhamDTO DMSP { get; set; }*/
-
-        //public virtual List<CTHD_DTO> CTHD { get; set; } = new List<CTHD_DTO>();
     }
 }

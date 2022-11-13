@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class HoaDonConfig : IEntityTypeConfiguration<HoaDon>
+    public class InvoiceConfig : IEntityTypeConfiguration<Invoice>
     {
-        public void Configure(EntityTypeBuilder<HoaDon> builder)
+        public void Configure(EntityTypeBuilder<Invoice> builder)
         {
-            builder.ToTable("HoaDon");
+            builder.ToTable("Invoice");
 
             builder.HasKey(o => o.HoaDonId);
 

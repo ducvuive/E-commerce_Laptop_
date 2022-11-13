@@ -17,7 +17,7 @@ namespace CustomerSite.Clients
         public async Task<List<DanhMucSanPhamDTO>> GetDMSP()
         {
 
-            var response = await httpClient.GetAsync("api/DanhMucSanPhams/GetCate");
+            var response = await httpClient.GetAsync("api/Categories/GetCate");
             var contents = await response.Content.ReadAsStringAsync();
             var dmsp = JsonConvert.DeserializeObject<List<DanhMucSanPhamDTO>>(contents);
             return dmsp ?? new List<DanhMucSanPhamDTO>();

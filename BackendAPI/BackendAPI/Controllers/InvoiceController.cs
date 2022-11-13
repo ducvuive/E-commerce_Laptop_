@@ -9,12 +9,12 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HoaDonsController : ControllerBase
+    public class InvoiceController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
 
-        public HoaDonsController(UserDbContext context, IMapper mapper)
+        public InvoiceController(UserDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -24,22 +24,22 @@ namespace BackendAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<HoaDonDTO>> GetHoaDon()
         {
-            var hd = _context.HoaDon.OrderByDescending(s => s.HoaDonId).FirstOrDefault();
-            return Ok(hd);
+            //List<Invoice> hd = new List<Invoice>();
+            var invoice = _context.HoaDon.OrderByDescending(s => s.HoaDonId).FirstOrDefault();
+            return Ok(invoice);
         }
 
         // GET: api/HoaDons/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<HoaDonDTO>> GetHoaDon(int Id)
+        public async Task<ActionResult<HoaDonDTO>> GetHoaDon(int id)
         {
-            var hoaDon = await _context.HoaDon.FindAsync(Id);
+            var invoice = await _context.HoaDon.FindAsync(id);
 
-            if (hoaDon == null)
+            if (invoice == null)
             {
                 return NotFound();
             }
-
-            return _mapper.Map<HoaDonDTO>(hoaDon);
+            return _mapper.Map<HoaDonDTO>(invoice);
         }
         // POST: api/HoaDons
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -47,25 +47,27 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult<HoaDonDTO>> PostHoaDon([FromBody] HoaDonDTO hoaDonDTO, string email)
         {
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == email);
-            HoaDon hoaDon = _mapper.Map<HoaDon>(hoaDonDTO);
-            hoaDon.MaKhacHangId = user;
-            _context.HoaDon.Add(hoaDon);
+            Invoice invoice = _mapper.Map<Invoice>(hoaDonDTO);
+            invoice.KhachHang = user;
+            invoice.TrangThai = 1;
+            _context.HoaDon.Add(invoice);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetHoaDon", new { id = hoaDon.HoaDonId }, hoaDon);
+            //return CreatedAtAction("GetHoaDon", new { id = hoaDon.HoaDonId }, hoaDon);
+            return Ok("Toa hoa don thanh cong");
         }
 
         // DELETE: api/HoaDons/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHoaDon(int id)
         {
-            var hoaDon = await _context.HoaDon.FindAsync(id);
-            if (hoaDon == null)
+            var invoice = await _context.HoaDon.FindAsync(id);
+            if (invoice == null)
             {
                 return NotFound();
             }
 
-            _context.HoaDon.Remove(hoaDon);
+            _context.HoaDon.Remove(invoice);
             await _context.SaveChangesAsync();
 
             return NoContent();

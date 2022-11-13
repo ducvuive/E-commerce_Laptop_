@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackendAPI.Models
 {
-    public class SanPham
+    public class Product
     {
         [Key]
         public int SanPhamId { get; set; }
+
         public int ManHinhId { get; set; }
+
         public int BoXuLyId { get; set; }
         public int RamId { get; set; }
         public int CongKetNoiId { get; set; }
@@ -29,13 +32,17 @@ namespace BackendAPI.Models
         public float? DanhGia { get; set; }
         public DateTime? NgayTao { get; set; }
         public DateTime? NgayCapNhat { get; set; }
-
-        public virtual ManHinh MH { get; set; }
-        public virtual BoXuLy BXL { get; set; }
-        public virtual BoNhoRam Ram { get; set; }
-        public virtual CongKetNoi CongKN { get; set; }
-        public virtual DanhMucSanPham DMSP { get; set; }
-        public virtual List<CTHD> CTHD { get; set; } = new List<CTHD>();
+        [ForeignKey("ManHinhId")]
+        public virtual Screen Screen { get; set; }
+        [ForeignKey("BoXuLyId")]
+        public virtual Processor Processor { get; set; }
+        [ForeignKey("RamId")]
+        public virtual Ram Ram { get; set; }
+        [ForeignKey("CongKetNoiId")]
+        public virtual Connect Connect { get; set; }
+        [ForeignKey("DMSPId")]
+        public virtual Category Category { get; set; }
+        public virtual List<InvoiceDetail> CTHD { get; set; } = new List<InvoiceDetail>();
         public virtual List<Rating> Rating { get; set; } = new List<Rating>();
     }
 }

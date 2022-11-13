@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class BoXuLyConfig : IEntityTypeConfiguration<BoXuLy>
+    public class ProcessorConfig : IEntityTypeConfiguration<Processor>
     {
-        public void Configure(EntityTypeBuilder<BoXuLy> builder)
+        public void Configure(EntityTypeBuilder<Processor> builder)
         {
-            builder.ToTable("BoXuLy");
+            builder.ToTable("Processor");
 
             builder.HasKey(o => o.BoXuLyId);
 

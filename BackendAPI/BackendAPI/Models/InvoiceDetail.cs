@@ -6,7 +6,7 @@
 
 namespace BackendAPI.Models
 {
-    public partial class CTHD
+    public partial class InvoiceDetail
     {
         public int HoaDonId { get; set; }
         public int SanPhamId { get; set; }
@@ -14,7 +14,7 @@ namespace BackendAPI.Models
         [Required]
         public int? SoLuong { get; set; }
 
-        public virtual HoaDon HoaDon { get; set; }
-        public virtual SanPham SanPham { get; set; }
+        public virtual Invoice HoaDon { get; set; }
+        public virtual Product SanPham { get; set; }
     }
 }

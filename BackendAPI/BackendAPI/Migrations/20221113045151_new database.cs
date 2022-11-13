@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace BackendAPI.Migrations
 {
-    public partial class createdatabase : Migration
+    public partial class newdatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,10 +28,9 @@ namespace BackendAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    DiaChi = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    DiaChi = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     NgaySinh = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GioiTinh = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GioiTinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -52,41 +52,22 @@ namespace BackendAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BoNhoRam",
+                name: "Category",
                 columns: table => new
                 {
-                    RamId = table.Column<int>(type: "int", nullable: false)
+                    DMSPId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DungLuongRam = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    LoaiRam = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    BusRam = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    HoTroToiDa = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    TenDM = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    isValid = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BoNhoRam", x => x.RamId);
+                    table.PrimaryKey("PK_Category", x => x.DMSPId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BoXuLy",
-                columns: table => new
-                {
-                    BoXuLyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CongNgheCPU = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    SoNhan = table.Column<int>(type: "int", maxLength: 20, nullable: true),
-                    SOLUONG = table.Column<int>(type: "int", maxLength: 10, nullable: true),
-                    TocDoCPU = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    ToCDoToiDa = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    BoNhoDem = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BoXuLy", x => x.BoXuLyId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CongKetNoi",
+                name: "Connect",
                 columns: table => new
                 {
                     CongKetNoiId = table.Column<int>(type: "int", nullable: false)
@@ -100,24 +81,45 @@ namespace BackendAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CongKetNoi", x => x.CongKetNoiId);
+                    table.PrimaryKey("PK_Connect", x => x.CongKetNoiId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DanhMucSanPham",
+                name: "Processor",
                 columns: table => new
                 {
-                    DMSPId = table.Column<int>(type: "int", nullable: false)
+                    BoXuLyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenDM = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    CongNgheCPU = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    SoNhan = table.Column<int>(type: "int", maxLength: 20, nullable: true),
+                    SOLUONG = table.Column<int>(type: "int", maxLength: 10, nullable: true),
+                    TocDoCPU = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    ToCDoToiDa = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    BoNhoDem = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DanhMucSanPham", x => x.DMSPId);
+                    table.PrimaryKey("PK_Processor", x => x.BoXuLyId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ManHinh",
+                name: "Ram",
+                columns: table => new
+                {
+                    RamId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DungLuongRam = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    LoaiRam = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    BusRam = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    HoTroToiDa = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ram", x => x.RamId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Screen",
                 columns: table => new
                 {
                     ManHinhId = table.Column<int>(type: "int", nullable: false)
@@ -130,7 +132,7 @@ namespace BackendAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ManHinh", x => x.ManHinhId);
+                    table.PrimaryKey("PK_Screen", x => x.ManHinhId);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,7 +242,7 @@ namespace BackendAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HoaDon",
+                name: "Invoice",
                 columns: table => new
                 {
                     HoaDonId = table.Column<int>(type: "int", nullable: false)
@@ -251,20 +253,20 @@ namespace BackendAPI.Migrations
                     DiaChiGiaoHang = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     TongTien = table.Column<long>(type: "bigint", nullable: false),
                     TrangThai = table.Column<int>(type: "int", nullable: true),
-                    MaKhacHangIdId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    KhachHangId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HoaDon", x => x.HoaDonId);
+                    table.PrimaryKey("PK_Invoice", x => x.HoaDonId);
                     table.ForeignKey(
-                        name: "FK_HoaDon_AspNetUsers_MaKhacHangIdId",
-                        column: x => x.MaKhacHangIdId,
+                        name: "FK_Invoice_AspNetUsers_KhachHangId",
+                        column: x => x.KhachHangId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "SanPham",
+                name: "Product",
                 columns: table => new
                 {
                     SanPhamId = table.Column<int>(type: "int", nullable: false)
@@ -286,48 +288,50 @@ namespace BackendAPI.Migrations
                     Webcam = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Pin = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
                     RaMat = table.Column<int>(type: "int", nullable: true),
-                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DonGia = table.Column<long>(type: "bigint", nullable: false),
+                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonGia = table.Column<long>(type: "bigint", nullable: true),
                     HinhAnh = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DanhGia = table.Column<float>(type: "real", nullable: true)
+                    DanhGia = table.Column<float>(type: "real", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NgayCapNhat = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SanPham", x => x.SanPhamId);
+                    table.PrimaryKey("PK_Product", x => x.SanPhamId);
                     table.ForeignKey(
-                        name: "FK_SanPham_BoNhoRam_RamId",
-                        column: x => x.RamId,
-                        principalTable: "BoNhoRam",
-                        principalColumn: "RamId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SanPham_BoXuLy_BoXuLyId",
-                        column: x => x.BoXuLyId,
-                        principalTable: "BoXuLy",
-                        principalColumn: "BoXuLyId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SanPham_CongKetNoi_CongKetNoiId",
-                        column: x => x.CongKetNoiId,
-                        principalTable: "CongKetNoi",
-                        principalColumn: "CongKetNoiId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SanPham_DanhMucSanPham_DMSPId",
+                        name: "FK_Product_Category_DMSPId",
                         column: x => x.DMSPId,
-                        principalTable: "DanhMucSanPham",
+                        principalTable: "Category",
                         principalColumn: "DMSPId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SanPham_ManHinh_ManHinhId",
+                        name: "FK_Product_Connect_CongKetNoiId",
+                        column: x => x.CongKetNoiId,
+                        principalTable: "Connect",
+                        principalColumn: "CongKetNoiId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Product_Processor_BoXuLyId",
+                        column: x => x.BoXuLyId,
+                        principalTable: "Processor",
+                        principalColumn: "BoXuLyId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Product_Ram_RamId",
+                        column: x => x.RamId,
+                        principalTable: "Ram",
+                        principalColumn: "RamId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Product_Screen_ManHinhId",
                         column: x => x.ManHinhId,
-                        principalTable: "ManHinh",
+                        principalTable: "Screen",
                         principalColumn: "ManHinhId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CTHD",
+                name: "InvoiceDetail",
                 columns: table => new
                 {
                     HoaDonId = table.Column<int>(type: "int", nullable: false),
@@ -336,17 +340,46 @@ namespace BackendAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CTHD", x => new { x.SanPhamId, x.HoaDonId });
+                    table.PrimaryKey("PK_InvoiceDetail", x => new { x.SanPhamId, x.HoaDonId });
                     table.ForeignKey(
-                        name: "FK_CTHD_HoaDon_HoaDonId",
+                        name: "FK_InvoiceDetail_Invoice_HoaDonId",
                         column: x => x.HoaDonId,
-                        principalTable: "HoaDon",
+                        principalTable: "Invoice",
                         principalColumn: "HoaDonId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CTHD_SanPham_SanPhamId",
+                        name: "FK_InvoiceDetail_Product_SanPhamId",
                         column: x => x.SanPhamId,
-                        principalTable: "SanPham",
+                        principalTable: "Product",
+                        principalColumn: "SanPhamId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rating",
+                columns: table => new
+                {
+                    RatingID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Rate = table.Column<int>(type: "int", nullable: true),
+                    PublishedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SanPhamId = table.Column<int>(type: "int", nullable: false),
+                    KhachHangId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rating", x => x.RatingID);
+                    table.ForeignKey(
+                        name: "FK_Rating_AspNetUsers_KhachHangId",
+                        column: x => x.KhachHangId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rating_Product_SanPhamId",
+                        column: x => x.SanPhamId,
+                        principalTable: "Product",
                         principalColumn: "SanPhamId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -391,39 +424,49 @@ namespace BackendAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CTHD_HoaDonId",
-                table: "CTHD",
+                name: "IX_Invoice_KhachHangId",
+                table: "Invoice",
+                column: "KhachHangId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InvoiceDetail_HoaDonId",
+                table: "InvoiceDetail",
                 column: "HoaDonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HoaDon_MaKhacHangIdId",
-                table: "HoaDon",
-                column: "MaKhacHangIdId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SanPham_BoXuLyId",
-                table: "SanPham",
+                name: "IX_Product_BoXuLyId",
+                table: "Product",
                 column: "BoXuLyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SanPham_CongKetNoiId",
-                table: "SanPham",
+                name: "IX_Product_CongKetNoiId",
+                table: "Product",
                 column: "CongKetNoiId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SanPham_DMSPId",
-                table: "SanPham",
+                name: "IX_Product_DMSPId",
+                table: "Product",
                 column: "DMSPId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SanPham_ManHinhId",
-                table: "SanPham",
+                name: "IX_Product_ManHinhId",
+                table: "Product",
                 column: "ManHinhId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SanPham_RamId",
-                table: "SanPham",
+                name: "IX_Product_RamId",
+                table: "Product",
                 column: "RamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rating_KhachHangId",
+                table: "Rating",
+                column: "KhachHangId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rating_SanPhamId",
+                table: "Rating",
+                column: "SanPhamId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -444,34 +487,37 @@ namespace BackendAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CTHD");
+                name: "InvoiceDetail");
+
+            migrationBuilder.DropTable(
+                name: "Rating");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "HoaDon");
+                name: "Invoice");
 
             migrationBuilder.DropTable(
-                name: "SanPham");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "BoNhoRam");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "BoXuLy");
+                name: "Connect");
 
             migrationBuilder.DropTable(
-                name: "CongKetNoi");
+                name: "Processor");
 
             migrationBuilder.DropTable(
-                name: "DanhMucSanPham");
+                name: "Ram");
 
             migrationBuilder.DropTable(
-                name: "ManHinh");
+                name: "Screen");
         }
     }
 }

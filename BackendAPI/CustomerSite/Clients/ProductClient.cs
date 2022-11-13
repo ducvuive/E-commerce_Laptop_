@@ -28,7 +28,7 @@ namespace CustomerSite.Clients
 
         public async Task<int> GetPage()
         {
-            var response = await httpClient.GetAsync("api/SanPhams/all");
+            var response = await httpClient.GetAsync("api/Product/all");
             var contents = await response.Content.ReadAsStringAsync();
             //float temp = contents.Count() / (float)12;
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
@@ -38,7 +38,7 @@ namespace CustomerSite.Clients
         }
         public async Task<List<SanPhamDTO>> GetTatCaSanPham()
         {
-            var response = await httpClient.GetAsync("api/SanPhams/all");
+            var response = await httpClient.GetAsync("api/Product/all");
             var contents = await response.Content.ReadAsStringAsync();
             //float temp = contents.Count() / (float)12;
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
@@ -46,14 +46,14 @@ namespace CustomerSite.Clients
         }
         public async Task<List<SanPhamDTO>> GetSanPhamTopRaMat()
         {
-            var response = await httpClient.GetAsync("api/SanPhams/month");
+            var response = await httpClient.GetAsync("api/Product/month");
             var contents = await response.Content.ReadAsStringAsync();
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
             return products ?? new List<SanPhamDTO>();
         }
         public async Task<List<SanPhamDTO>> GetSanPhamTheoTrang(int page)
         {
-            var response = await httpClient.GetAsync("api/SanPhams/GetSanPhamTheoTrang/" + page);
+            var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoTrang/" + page);
             var contents = await response.Content.ReadAsStringAsync();
 
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
@@ -62,7 +62,7 @@ namespace CustomerSite.Clients
 
         public async Task<List<SanPhamDTO>> GetSanPhamTheoDmTheoTrang(int dm, int page)
         {
-            var response = await httpClient.GetAsync("api/SanPhams/GetSanPhamTheoDmTheoTrang/" + dm + "/" + page);
+            var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoDmTheoTrang/" + dm + "/" + page);
             var contents = await response.Content.ReadAsStringAsync();
 
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
@@ -71,7 +71,7 @@ namespace CustomerSite.Clients
 
         public async Task<List<SanPhamDTO>> GetSanPhamTheoDM(int dm)
         {
-            var response = await httpClient.GetAsync("api/SanPhams/GetSanPhamTheoDM/" + dm);
+            var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoDM/" + dm);
             var contents = await response.Content.ReadAsStringAsync();
 
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
@@ -80,7 +80,7 @@ namespace CustomerSite.Clients
 
         public async Task<List<SanPhamDTO>> GetSanPhamTheoTenTheoTrang(string ten, int page)
         {
-            var response = await httpClient.GetAsync("api/SanPhams/GetSanPhamTheoTenTheoTrang/" + ten + "/" + page);
+            var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoTenTheoTrang/" + ten + "/" + page);
             var contents = await response.Content.ReadAsStringAsync();
 
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
@@ -89,7 +89,7 @@ namespace CustomerSite.Clients
 
         public async Task<List<SanPhamDTO>> GetSanPhamTheoTen(string ten)
         {
-            var response = await httpClient.GetAsync("api/SanPhams/GetSanPhamTheoTen/" + ten);
+            var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoTen/" + ten);
             var contents = await response.Content.ReadAsStringAsync();
 
             var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
@@ -97,7 +97,7 @@ namespace CustomerSite.Clients
         }
         public async Task<SanPhamDTO> GetSanPham(int Id)
         {
-            var response = await httpClient.GetAsync("api/SanPhams/" + Id);
+            var response = await httpClient.GetAsync("api/Product/" + Id);
             var contents = await response.Content.ReadAsStringAsync();
 
             var sanpham = JsonConvert.DeserializeObject<SanPhamDTO>(contents);

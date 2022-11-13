@@ -25,17 +25,17 @@ namespace LaptopStore_Test.MockData
                 }
             };
         }
-        public static List<DanhMucSanPham> GetCategories()
+        public static List<Category> GetCategories()
         {
-            return new List<DanhMucSanPham>
+            return new List<Category>
             {
-                new DanhMucSanPham
+                new Category
                 {
                     DMSPId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
-                new DanhMucSanPham
+                new Category
                 {
                     DMSPId = 2,
                     TenDM = "Danh muc 2",

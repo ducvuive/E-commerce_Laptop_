@@ -8,12 +8,12 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BoNhoRamsController : ControllerBase
+    public class RamController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
 
-        public BoNhoRamsController(UserDbContext context, IMapper mapper)
+        public RamController(UserDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -21,24 +21,24 @@ namespace BackendAPI.Controllers
 
         // GET: api/BoNhoRams
         [HttpGet]
-        public async Task<ActionResult<List<BoNhoRamDTO>>> GetBoNhoRam()
+        public async Task<ActionResult<List<RamDTO>>> GetBoNhoRam()
         {
-            var boNhoRam = await _context.BoNhoRam.ToListAsync();
-            return _mapper.Map<List<BoNhoRamDTO>>(boNhoRam);
+            var boNhoRam = await _context.Ram.ToListAsync();
+            return _mapper.Map<List<RamDTO>>(boNhoRam);
         }
 
         // GET: api/BoNhoRams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BoNhoRamDTO>> GetBoNhoRam(int id)
+        public async Task<ActionResult<RamDTO>> GetBoNhoRam(int id)
         {
-            var boNhoRam = await _context.BoNhoRam.FindAsync(id);
+            var boNhoRam = await _context.Ram.FindAsync(id);
 
             if (boNhoRam == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<BoNhoRamDTO>(boNhoRam);
+            return _mapper.Map<RamDTO>(boNhoRam);
         }
     }
 }

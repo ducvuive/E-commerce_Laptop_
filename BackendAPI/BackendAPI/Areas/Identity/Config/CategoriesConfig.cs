@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class DanhMucSanPhamConfig : IEntityTypeConfiguration<DanhMucSanPham>
+    public class CategoriesConfig : IEntityTypeConfiguration<Category>
     {
-        public void Configure(EntityTypeBuilder<DanhMucSanPham> builder)
+        public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("DanhMucSanPham");
+            builder.ToTable("Category");
 
             builder.HasKey(o => o.DMSPId);
 

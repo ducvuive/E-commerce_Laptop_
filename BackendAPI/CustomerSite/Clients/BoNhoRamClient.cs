@@ -5,7 +5,7 @@ namespace CustomerSite.Clients
 {
     public interface IBoNhoRamClient
     {
-        Task<BoNhoRamDTO> GetBoNhoRam(int Id);
+        Task<RamDTO> GetBoNhoRam(int Id);
     }
     public class BoNhoRamClient : BaseClient, IBoNhoRamClient
     {
@@ -14,12 +14,12 @@ namespace CustomerSite.Clients
         {
         }
 
-        public async Task<BoNhoRamDTO> GetBoNhoRam(int Id)
+        public async Task<RamDTO> GetBoNhoRam(int Id)
         {
-            var response = await httpClient.GetAsync("api/BoNhoRams/" + Id);
+            var response = await httpClient.GetAsync("api/Ram/" + Id);
             var contents = await response.Content.ReadAsStringAsync();
-            var manhinh = JsonConvert.DeserializeObject<BoNhoRamDTO>(contents);
-            return manhinh ?? new BoNhoRamDTO();
+            var manhinh = JsonConvert.DeserializeObject<RamDTO>(contents);
+            return manhinh ?? new RamDTO();
         }
     }
 }

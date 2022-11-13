@@ -10,7 +10,7 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DanhMucSanPhamsController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace BackendAPI.Controllers
                     _context = context;
                     _mapper = mapper;
                 }*/
-        public DanhMucSanPhamsController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper)
+        public CategoriesController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper)
         {
             _danhMucSanPhamRepository = danhMucSanPhamRepository;
             //_context = context;
@@ -33,7 +33,7 @@ namespace BackendAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<DanhMucSanPhamDTO_Admin>>> GetCategories()
         {
-            List<DanhMucSanPham> categories = await _danhMucSanPhamRepository.GetCategories();
+            List<Category> categories = await _danhMucSanPhamRepository.GetCategories();
             return Ok(_mapper.Map<List<DanhMucSanPhamDTO_Admin>>(categories));
         }
 
@@ -41,7 +41,7 @@ namespace BackendAPI.Controllers
         [Route("GetCate")]
         public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetCategories_User()
         {
-            List<DanhMucSanPham> categories = await _danhMucSanPhamRepository.GetCategories();
+            List<Category> categories = await _danhMucSanPhamRepository.GetCategories();
             return Ok(_mapper.Map<List<DanhMucSanPhamDTO>>(categories));
         }
 
@@ -49,7 +49,7 @@ namespace BackendAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DanhMucSanPhamDTO>> GetCategory(int id)
         {
-            DanhMucSanPham category = await _danhMucSanPhamRepository.GetCategory(id);
+            Category category = await _danhMucSanPhamRepository.GetCategory(id);
             var mapper = _mapper.Map<DanhMucSanPhamDTO>(category);
             if (mapper is null)
             {
@@ -64,10 +64,11 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult> CreateCategory(DanhMucSanPhamDTO_Admin danhMucSanPham)
         {
             //DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
-            DanhMucSanPham category = new DanhMucSanPham()
+            Category category = new Category()
             {
                 TenDM = danhMucSanPham.TenDM,
                 Description = danhMucSanPham.Description,
+                isValid = 1,
             };
             //_context.DanhMucSanPham.Add(_danhMucSanPham);
             //await _context.SaveChangesAsync();
@@ -86,6 +87,7 @@ namespace BackendAPI.Controllers
             category.TenDM = danhMucSanPhamDTO.TenDM;
             category.Description = danhMucSanPhamDTO.Description;
             category.DMSPId = danhMucSanPhamDTO.DMSPId;
+            category.isValid = 1;
             if (category == null)
             {
                 return NotFound();

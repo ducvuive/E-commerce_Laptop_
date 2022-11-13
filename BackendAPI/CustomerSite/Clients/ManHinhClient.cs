@@ -16,7 +16,7 @@ namespace CustomerSite.Clients
 
         public async Task<ManHinhDTO> GetManHinh(int Id)
         {
-            var response = await httpClient.GetAsync("api/ManHinhs/" + Id);
+            var response = await httpClient.GetAsync("api/Screen/" + Id);
             var contents = await response.Content.ReadAsStringAsync();
             var manhinh = JsonConvert.DeserializeObject<ManHinhDTO>(contents);
             return manhinh ?? new ManHinhDTO();

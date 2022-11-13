@@ -9,12 +9,12 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CTHDsController : ControllerBase
+    public class InvoiceDetailController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
 
-        public CTHDsController(UserDbContext context, IMapper mapper)
+        public InvoiceDetailController(UserDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -52,7 +52,7 @@ namespace BackendAPI.Controllers
                 return BadRequest();
             }
 
-            CTHD congKetNoi = _mapper.Map<CTHD>(cTHD_DTO);
+            InvoiceDetail congKetNoi = _mapper.Map<InvoiceDetail>(cTHD_DTO);
             _context.Entry(cTHD_DTO).State = EntityState.Modified;
 
             try
@@ -79,9 +79,9 @@ namespace BackendAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CTHD_DTO>> PostCTHD(CTHD_DTO cTHD_DTO)
         {
-            var sanPham = await _context.SanPham.FindAsync(cTHD_DTO.SanPhamId);
-            sanPham.SoLuong = sanPham.SoLuong - cTHD_DTO.SoLuong;
-            var cTHD = new CTHD
+            var product = await _context.SanPham.FindAsync(cTHD_DTO.SanPhamId);
+            product.SoLuong = product.SoLuong - cTHD_DTO.SoLuong;
+            var cTHD = new InvoiceDetail
             {
                 SanPhamId = cTHD_DTO.SanPhamId,
                 HoaDonId = cTHD_DTO.HoaDonId,
@@ -103,8 +103,8 @@ namespace BackendAPI.Controllers
                     throw;
                 }
             }
-
-            return CreatedAtAction("GetCTHD", new { id = cTHD.SanPhamId }, cTHD);
+            return Ok("Toa chi tiet hoa don thanh cong");
+            //return CreatedAtAction("GetCTHD", new { id = cTHD.SanPhamId }, cTHD);
         }
 
         // DELETE: api/CTHDs/5

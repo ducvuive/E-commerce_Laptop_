@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class ManHinhConfig : IEntityTypeConfiguration<ManHinh>
+    public class ScreenConfig : IEntityTypeConfiguration<Screen>
     {
-        public void Configure(EntityTypeBuilder<ManHinh> builder)
+        public void Configure(EntityTypeBuilder<Screen> builder)
         {
-            builder.ToTable("ManHinh");
+            builder.ToTable("Screen");
 
             builder.HasKey(o => o.ManHinhId);
 

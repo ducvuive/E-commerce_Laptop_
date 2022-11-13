@@ -16,7 +16,7 @@ namespace CustomerSite.Clients
 
         public async Task<BoXuLyDTO> GetBoXuLy(int Id)
         {
-            var response = await httpClient.GetAsync("api/BoXuLies/" + Id);
+            var response = await httpClient.GetAsync("api/Processor/" + Id);
             var contents = await response.Content.ReadAsStringAsync();
             var manhinh = JsonConvert.DeserializeObject<BoXuLyDTO>(contents);
             return manhinh ?? new BoXuLyDTO();

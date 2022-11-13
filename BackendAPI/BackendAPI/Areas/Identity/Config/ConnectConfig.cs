@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class CongKetNoiConfig : IEntityTypeConfiguration<CongKetNoi>
+    public class ConnectConfig : IEntityTypeConfiguration<Connect>
     {
-        public void Configure(EntityTypeBuilder<CongKetNoi> builder)
+        public void Configure(EntityTypeBuilder<Connect> builder)
         {
+            builder.ToTable("Connect");
 
             builder.HasKey(o => o.CongKetNoiId);
 

@@ -1,6 +1,6 @@
 ﻿namespace ShareView.DTO
 {
-    public class BoNhoRamDTO
+    public class RamDTO
     {
         public int RamId { get; set; }
         public string? DungLuongRam { get; set; }

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackendAPI.Models
 {
-    public partial class HoaDon
+    public partial class Invoice
     {
         [Key]
         public int HoaDonId { get; set; }
@@ -26,8 +26,8 @@ namespace BackendAPI.Models
         public long? TongTien { get; set; }
         public int? TrangThai { get; set; }
         [ForeignKey("KhachHangId")]
-        public UserIdentity? MaKhacHangId { get; set; }
+        public UserIdentity? KhachHang { get; set; }
         //public virtual UserIdentity? MaKhacHangId_ { get; set; }
-        public virtual List<CTHD> CTHD { get; set; } = new List<CTHD>();
+        public virtual List<InvoiceDetail> CTHD { get; set; } = new List<InvoiceDetail>();
     }
 }

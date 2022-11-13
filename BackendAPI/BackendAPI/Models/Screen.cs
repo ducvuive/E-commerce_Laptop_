@@ -6,7 +6,7 @@
 
 namespace BackendAPI.Models
 {
-    public partial class ManHinh
+    public partial class Screen
     {
         [Key]
         public int ManHinhId { get; set; }
@@ -16,6 +16,6 @@ namespace BackendAPI.Models
         public string? CongNgheMH { get; set; }
         public string? CamUng { get; set; }
 
-        public virtual List<SanPham> Sanpham { get; set; } = new List<SanPham>();
+        public virtual List<Product> Sanpham { get; set; } = new List<Product>();
     }
 }

@@ -8,12 +8,12 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ManHinhsController : ControllerBase
+    public class ScreenController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
 
-        public ManHinhsController(UserDbContext context, IMapper mapper)
+        public ScreenController(UserDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

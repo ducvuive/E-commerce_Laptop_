@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class SanPhamConfig : IEntityTypeConfiguration<SanPham>
+    public class ProductConfig : IEntityTypeConfiguration<Product>
     {
-        public void Configure(EntityTypeBuilder<SanPham> builder)
+        public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.ToTable("SanPham");
+            builder.ToTable("Product");
 
             builder.HasKey(o => o.SanPhamId);
 

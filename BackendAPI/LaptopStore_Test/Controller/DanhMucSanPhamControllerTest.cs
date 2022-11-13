@@ -18,7 +18,7 @@ namespace LaptopStore_Test.Controller
         private readonly DbContextOptions<UserDbContext> _options;
         private readonly Mock<IDanhMucSanPhamRepository> _danhMucRepository;
         private readonly UserDbContext _context;
-        private readonly DanhMucSanPhamsController _danhMucSanPhamController;
+        private readonly CategoriesController _danhMucSanPhamController;
         //public readonly List<DanhMucSanPham> _danhMucSanPhams;
         private readonly IMapper _mapper;
         //private readonly IDanhMucSanPhamRepository _danhMucSanPhamRepository;
@@ -36,7 +36,7 @@ namespace LaptopStore_Test.Controller
             _mapper = mockMapper.CreateMapper();
             _danhMucRepository = new Mock<IDanhMucSanPhamRepository>();
             //_categoryRepository = new Mock<ICategoryRepository>();
-            _danhMucSanPhamController = new DanhMucSanPhamsController(_danhMucRepository.Object, _mapper);
+            _danhMucSanPhamController = new CategoriesController(_danhMucRepository.Object, _mapper);
         }
         [Fact]
         public async void GetAllCategories_WithoutParams_Ok_ListCategoriesDTO()
@@ -58,7 +58,7 @@ namespace LaptopStore_Test.Controller
             // Arrange
             DanhMucSanPhamDTO danhMucSanPhamDTO = MockData_Categories.GetCategoriesDTO().ElementAt(0);
             //DanhMucSanPhamDTO _danhMucSanPham = new DanhMucSanPhamDTO();
-            DanhMucSanPham danhMucSanPham = MockData_Categories.GetCategories().ElementAt(0);
+            Category danhMucSanPham = MockData_Categories.GetCategories().ElementAt(0);
             _danhMucRepository.Setup(_ => _.GetCategory(1)).ReturnsAsync(danhMucSanPham);
             // Act
             var actionResult = await _danhMucSanPhamController.GetCategory(1);

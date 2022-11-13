@@ -8,12 +8,12 @@ namespace BackendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CongKetNoisController : ControllerBase
+    public class ConnectController : ControllerBase
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
 
-        public CongKetNoisController(UserDbContext context, IMapper mapper)
+        public ConnectController(UserDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -23,22 +23,22 @@ namespace BackendAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CongKetNoiDTO>>> GetCongKetNoi()
         {
-            var congketNoi = await _context.CongKetNoi.ToListAsync();
-            return _mapper.Map<List<CongKetNoiDTO>>(congketNoi);
+            var connect = await _context.CongKetNoi.ToListAsync();
+            return _mapper.Map<List<CongKetNoiDTO>>(connect);
         }
 
         // GET: api/CongKetNois/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CongKetNoiDTO>> GetCongKetNoi(int id)
         {
-            var congKetNoi = await _context.CongKetNoi.FindAsync(id);
+            var connect = await _context.CongKetNoi.FindAsync(id);
 
-            if (congKetNoi == null)
+            if (connect == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<CongKetNoiDTO>(congKetNoi);
+            return _mapper.Map<CongKetNoiDTO>(connect);
         }
     }
 }

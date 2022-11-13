@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class BoNhoRamConfig : IEntityTypeConfiguration<BoNhoRam>
+    public class RamConfig : IEntityTypeConfiguration<Ram>
     {
-        public void Configure(EntityTypeBuilder<BoNhoRam> builder)
+        public void Configure(EntityTypeBuilder<Ram> builder)
         {
-            builder.ToTable("BoNhoRam");
+            builder.ToTable("Ram");
 
             builder.HasKey(o => o.RamId);
 

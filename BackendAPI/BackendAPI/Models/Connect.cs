@@ -2,7 +2,7 @@
 
 namespace BackendAPI.Models
 {
-    public class CongKetNoi
+    public class Connect
     {
         [Key]
         public int CongKetNoiId { get; set; }
@@ -24,7 +24,7 @@ namespace BackendAPI.Models
         [MaxLength(50)]
         public string? DenBanPhim { set; get; }
 
-        public virtual List<SanPham> Sanphams { get; set; } = new List<SanPham>();
+        public virtual List<Product> Sanpham { get; set; } = new List<Product>();
 
 
     }

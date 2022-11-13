@@ -6,7 +6,7 @@
 
 namespace BackendAPI.Models
 {
-    public class DanhMucSanPham
+    public class Category
     {
         [Key]
         public int DMSPId { get; set; }
@@ -15,8 +15,8 @@ namespace BackendAPI.Models
         [MaxLength(100)]
         public string? Description { get; set; }
 
-        public int isValid { get; set; }
+        public int? isValid { get; set; }
 
-        public virtual List<SanPham> SanPhams { get; set; } = new List<SanPham>();
+        public virtual List<Product> SanPhams { get; set; } = new List<Product>();
     }
 }

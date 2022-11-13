@@ -6,7 +6,7 @@
 
 namespace BackendAPI.Models
 {
-    public partial class BoXuLy
+    public partial class Processor
     {
         [Key]
         public int BoXuLyId { get; set; }
@@ -25,6 +25,6 @@ namespace BackendAPI.Models
         [MaxLength(100)]
         public string? BoNhoDem { get; set; }
 
-        public virtual List<SanPham> SanPham { get; set; } = new List<SanPham>();
+        public virtual List<Product> SanPhams { get; set; } = new List<Product>();
     }
 }

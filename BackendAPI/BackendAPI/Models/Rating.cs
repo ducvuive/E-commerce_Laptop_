@@ -16,7 +16,7 @@ namespace BackendAPI.Models
         public DateTime PublishedDate { get; set; }
         public string Comments { get; set; }
         [ForeignKey("SanPhamId")]
-        public virtual SanPham sanPham { get; set; }
+        public virtual Product sanPham { get; set; }
 
         [ForeignKey("KhachHangId")]
         public virtual UserIdentity KhachHang { get; set; }

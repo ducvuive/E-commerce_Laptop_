@@ -7,7 +7,7 @@ namespace BackendAPI.Models
 {
     public partial class Cart
     {
-        public SanPham Sanpham { get; set; }
+        public Product Sanpham { get; set; }
         public int SL { get; set; }
     }
 }

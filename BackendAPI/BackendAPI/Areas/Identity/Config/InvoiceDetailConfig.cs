@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BackendAPI.Areas.Identity.Config
 {
-    public class CTHDConfig : IEntityTypeConfiguration<CTHD>
+    public class InvoiceDetailConfig : IEntityTypeConfiguration<InvoiceDetail>
     {
-        public void Configure(EntityTypeBuilder<CTHD> builder)
+        public void Configure(EntityTypeBuilder<InvoiceDetail> builder)
         {
-            builder.ToTable("CTHD");
+            builder.ToTable("InvoiceDetail");
 
             builder.HasKey(o => new { o.SanPhamId, o.HoaDonId });
 
