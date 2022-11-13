@@ -2,6 +2,7 @@
 using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
 using BackendAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareView.DTO;
 
@@ -27,10 +28,18 @@ namespace BackendAPI.Controllers
         }
 
         // GET: api/DanhMucSanPhams
-        //[Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
+        [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         //[Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetCategories()
+        public async Task<ActionResult<List<DanhMucSanPhamDTO_Admin>>> GetCategories()
+        {
+            List<DanhMucSanPham> categories = await _danhMucSanPhamRepository.GetCategories();
+            return Ok(_mapper.Map<List<DanhMucSanPhamDTO_Admin>>(categories));
+        }
+
+        [HttpGet]
+        [Route("GetCate")]
+        public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetCategories_User()
         {
             List<DanhMucSanPham> categories = await _danhMucSanPhamRepository.GetCategories();
             return Ok(_mapper.Map<List<DanhMucSanPhamDTO>>(categories));
@@ -90,7 +99,7 @@ namespace BackendAPI.Controllers
         }
 
         // DELETE: api/DanhMucSanPhams/5
-        [HttpDelete("{id}")]
+        [HttpPut("delete/{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _danhMucSanPhamRepository.GetCategory(id);
@@ -98,6 +107,8 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
+            //category.isValid = 0;
+            //await _context.SaveChangesAsync();
             await _danhMucSanPhamRepository.DeleteCategory(category);
             return Ok("Xoa thanh cong");
         }

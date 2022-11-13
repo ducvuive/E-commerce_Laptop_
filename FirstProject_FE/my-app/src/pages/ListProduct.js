@@ -4,26 +4,39 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import { Button, Grid } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import ConfirmAction from "../components/modal/Modal";
 const ListProduct = () => {
   const [products, setProducts] = useState([]);
-  console.log("ListProduct ~ products", products);
+  const [modalShow, setModalShow] = React.useState(false);
+  const [idProduct, setIdProduct] = useState("");
+  //console.log("ListProduct ~ products", products);
   const loadCate = async () => {
     await axios
       .get("https://localhost:7123/api/SanPhams/all")
       .then((response) => {
         setProducts(response.data);
-        //console.log(response.data);
       });
   };
   useEffect(() => {
     loadCate();
   }, []);
 
-  function DeleteProduct(id) {
-    console.log("DeleteCate ~ id", id);
+  function ConfirmForm(id) {
+    console.log("ConfirmForm ~ id", id);
+    setModalShow(true);
+    setIdProduct(id);
+  }
+  function HideModal() {
+    setIdProduct();
+    setModalShow(false);
+  }
+  function DeleteProduct() {
+    console.log("DeleteCate ~ id", idProduct);
+    setModalShow(false);
     axios
-      .delete(`https://localhost:7123/api/SanPhams/${id}`)
-      .then(setProducts(products.filter((o, i) => o.sanPhamId !== id)));
+      .delete(`https://localhost:7123/api/SanPhams/${idProduct}`)
+      .then(setProducts(products.filter((o, i) => o.sanPhamId !== idProduct)));
+    setIdProduct();
   }
 
   const columns = [
@@ -45,7 +58,7 @@ const ListProduct = () => {
               variant="outlined"
               color="error"
               className="ms-3"
-              onClick={() => DeleteProduct(sanPhamId)}
+              onClick={() => ConfirmForm(sanPhamId)}
             >
               Xóa
             </Button>
@@ -58,6 +71,13 @@ const ListProduct = () => {
 
   return (
     <Fragment>
+      <ConfirmAction
+        title="Xác nhận xóa sản phẩm"
+        content="Bạn có chắc chắn muốn xóa sản phẩm không ?"
+        show={modalShow}
+        onHide={() => HideModal()}
+        onConfirm={() => DeleteProduct()}
+      ></ConfirmAction>
       <Link
         to={`Create`}
         className="px-3 py-2 mb-2 d-inline-block button_action bg-primary"

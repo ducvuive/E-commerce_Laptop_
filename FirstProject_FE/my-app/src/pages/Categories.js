@@ -4,12 +4,25 @@ import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import { Grid, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import ConfirmAction from "../components/modal/Modal";
+import { instanceOf } from "prop-types";
+import { withCookies, Cookies } from "react-cookie";
 const Categories = () => {
   const [categories, setCategogies] = useState([]);
+  const [idCategories, setIdCategories] = useState("");
+  console.log("Categories ~ idCategories", idCategories);
+  const [modalShow, setModalShow] = React.useState(false);
   console.log("Categories ~ categories", categories);
   const loadCate = async () => {
+    const cookies = new Cookies();
+    console.log("cookie123", cookies.get("token"));
+    const token = cookies.get("token");
     await axios
-      .get("https://localhost:7123/api/DanhMucSanPhams")
+      .get("https://localhost:7123/api/DanhMucSanPhams", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         setCategogies(response.data);
       });
@@ -18,14 +31,24 @@ const Categories = () => {
     console.log("use effect");
     loadCate();
   }, []);
-
-  function DeleteCate(id) {
-    console.log("DeleteCate ~ id", id);
-    axios
-      .delete(`https://localhost:7123/api/DanhMucSanPhams/${id}`)
-      .then(setCategogies(categories.filter((o, i) => o.dmspId !== id)));
+  function ConfirmForm(id) {
+    setModalShow(true);
+    setIdCategories(id);
   }
-
+  function DeleteCate() {
+    console.log("DeleteCate ~ id", idCategories);
+    setModalShow(false);
+    axios
+      .put(`https://localhost:7123/api/DanhMucSanPhams/delete/${idCategories}`)
+      .then(
+        setCategogies(categories.filter((o, i) => o.dmspId !== idCategories))
+      );
+    setIdCategories();
+  }
+  function HideModal() {
+    setIdCategories();
+    setModalShow(false);
+  }
   const columns = [
     { field: "dmspId", flex: 1, headerName: "ID", type: "number" },
     { field: "tenDM", flex: 1, headerName: "Danh mục sản phẩm" },
@@ -40,11 +63,19 @@ const Categories = () => {
               <Button variant="outlined">Chi tiết</Button>
             </Link>
             {/* <Link to={`/category/update/${dmspId}`} className="ms-3"> */}
-            <Button
+            {/* <Button
               variant="outlined"
               color="error"
               className="ms-3"
               onClick={() => DeleteCate(dmspId)}
+            >
+              Xóa
+            </Button> */}
+            <Button
+              variant="outlined"
+              color="error"
+              className="ms-3"
+              onClick={() => ConfirmForm(dmspId)}
             >
               Xóa
             </Button>
@@ -57,6 +88,13 @@ const Categories = () => {
 
   return (
     <Fragment>
+      <ConfirmAction
+        title="Xác nhận xóa danh mục"
+        content="Bạn có chắc chắn muốn xóa danh mục không ?"
+        show={modalShow}
+        onHide={() => HideModal()}
+        onConfirm={() => DeleteCate()}
+      ></ConfirmAction>
       <Link
         to={`Create`}
         className="px-3 py-2 mb-2 d-inline-block button_action bg-primary"

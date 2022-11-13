@@ -70,6 +70,7 @@ namespace CustomerSite.Controllers
                 cart.Add(new CartDTO() { SL = 1, Sanpham = products });
             }
 
+
             // Lưu cart vào Session
             SaveCartSession(cart);
 

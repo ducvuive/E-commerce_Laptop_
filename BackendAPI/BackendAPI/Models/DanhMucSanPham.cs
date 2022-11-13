@@ -15,6 +15,8 @@ namespace BackendAPI.Models
         [MaxLength(100)]
         public string? Description { get; set; }
 
+        public int isValid { get; set; }
+
         public virtual List<SanPham> SanPhams { get; set; } = new List<SanPham>();
     }
 }

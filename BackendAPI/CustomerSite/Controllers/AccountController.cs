@@ -24,7 +24,6 @@ namespace CustomerSite.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestModel model)
         {
-            var a = 1;
             if (ModelState.IsValid)
             {
                 //var client = clientFactory.CreateClient();
@@ -44,7 +43,6 @@ namespace CustomerSite.Controllers
 
                 if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    //Request.HttpContext.Session.SetString(Variable.JWT, data.Value);
                     var cookieOption = new CookieOptions()
                     {
                         HttpOnly = true,

@@ -17,6 +17,7 @@ import Users from "./pages/Users";
 import DetailUser from "./pages/Users/DetailUser";
 import DetailProduct from "./pages/Product/DetailProduct";
 import CreateProduct from "./pages/Product/CreateProduct";
+import Login from "./components/login/Login";
 function App() {
   return (
     // <Fragment className="vh-100">
@@ -40,6 +41,7 @@ function App() {
           <Route path="/users" element={<Users />}></Route>
           <Route path="/users/detail/:email" element={<DetailUser />}></Route>
           <Route path="/categories" element={<Categories />}></Route>
+          <Route path="/login" element={<Login />}></Route>
           <Route
             path="/categories/Detail/:id"
             element={<DetailCategories />}
