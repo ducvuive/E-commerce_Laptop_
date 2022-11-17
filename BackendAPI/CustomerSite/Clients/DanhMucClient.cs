@@ -5,7 +5,7 @@ namespace CustomerSite.Clients
 {
     public interface IDMClient
     {
-        Task<List<DanhMucSanPhamDTO>> GetDMSP();
+        Task<List<CategoryDTO>> GetDMSP();
     }
     public class DanhMucClient : BaseClient, IDMClient
     {
@@ -14,13 +14,13 @@ namespace CustomerSite.Clients
         {
         }
 
-        public async Task<List<DanhMucSanPhamDTO>> GetDMSP()
+        public async Task<List<CategoryDTO>> GetDMSP()
         {
 
             var response = await httpClient.GetAsync("api/Categories/GetCate");
             var contents = await response.Content.ReadAsStringAsync();
-            var dmsp = JsonConvert.DeserializeObject<List<DanhMucSanPhamDTO>>(contents);
-            return dmsp ?? new List<DanhMucSanPhamDTO>();
+            var dmsp = JsonConvert.DeserializeObject<List<CategoryDTO>>(contents);
+            return dmsp ?? new List<CategoryDTO>();
         }
     }
 }

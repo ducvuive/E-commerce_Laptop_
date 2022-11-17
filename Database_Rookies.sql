@@ -84,6 +84,7 @@ GO
 CREATE TABLE [DanhMucSanPham] (
     [DMSPId] int NOT NULL IDENTITY,
     [TenDM] nvarchar(50) NOT NULL,
+	[isValid] int NULL,
     CONSTRAINT [PK_DanhMucSanPham] PRIMARY KEY ([DMSPId])
 );
 GO
@@ -194,6 +195,12 @@ CREATE TABLE [SanPham] (
 );
 GO
 
+ALTER TABLE [SanPham] ADD [NgayCapNhat] datetime2 NOT NULL DEFAULT '2022-01-01T00:00:00.0000000';
+GO
+
+ALTER TABLE [SanPham] ADD [NgayTao] datetime2 NOT NULL DEFAULT '2022-01-01T00:00:00.0000000';
+GO
+
 CREATE TABLE [CTHD] (
     [HoaDonId] int NOT NULL,
     [SanPhamId] int NOT NULL,
@@ -265,7 +272,6 @@ GO
 
 COMMIT;
 GO
-
 ------------ Insert Database ---------------
 INSERT INTO [DanhMucSanPham] (TenDM) VALUES ('MacBook');
 INSERT INTO [DanhMucSanPham] (TenDM) VALUES ('Asus');

@@ -6,15 +6,15 @@ namespace CustomerSite.Clients
 {
     public interface IProductClient
     {
-        Task<List<SanPhamDTO>> GetTatCaSanPham();
+        Task<List<ProductDTO>> GetTatCaSanPham();
         Task<int> GetPage();
-        Task<List<SanPhamDTO>> GetSanPhamTheoTrang(int page);
-        Task<List<SanPhamDTO>> GetSanPhamTopRaMat();
-        Task<SanPhamDTO> GetSanPham(int Id);
-        Task<List<SanPhamDTO>> GetSanPhamTheoDM(int dm);
-        Task<List<SanPhamDTO>> GetSanPhamTheoDmTheoTrang(int dm, int page);
-        Task<List<SanPhamDTO>> GetSanPhamTheoTenTheoTrang(string ten, int page);
-        Task<List<SanPhamDTO>> GetSanPhamTheoTen(string ten);
+        Task<List<ProductDTO>> GetSanPhamTheoTrang(int page);
+        Task<List<ProductDTO>> GetSanPhamTopRaMat();
+        Task<ProductDTO> GetSanPham(int Id);
+        Task<List<ProductDTO>> GetSanPhamTheoDM(int dm);
+        Task<List<ProductDTO>> GetSanPhamTheoDmTheoTrang(int dm, int page);
+        Task<List<ProductDTO>> GetSanPhamTheoTenTheoTrang(string ten, int page);
+        Task<List<ProductDTO>> GetSanPhamTheoTen(string ten);
         Task CreateRating(RatingDTO rating, string userName);
     }
     public class ProductClient : BaseClient, IProductClient
@@ -31,77 +31,77 @@ namespace CustomerSite.Clients
             var response = await httpClient.GetAsync("api/Product/all");
             var contents = await response.Content.ReadAsStringAsync();
             //float temp = contents.Count() / (float)12;
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
             var sp_length = products.Count();
             int totalPage = (int)(sp_length / (float)12) + 1;
             return totalPage;
         }
-        public async Task<List<SanPhamDTO>> GetTatCaSanPham()
+        public async Task<List<ProductDTO>> GetTatCaSanPham()
         {
             var response = await httpClient.GetAsync("api/Product/all");
             var contents = await response.Content.ReadAsStringAsync();
             //float temp = contents.Count() / (float)12;
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
-            return products ?? new List<SanPhamDTO>(); ;
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
+            return products ?? new List<ProductDTO>(); ;
         }
-        public async Task<List<SanPhamDTO>> GetSanPhamTopRaMat()
+        public async Task<List<ProductDTO>> GetSanPhamTopRaMat()
         {
             var response = await httpClient.GetAsync("api/Product/month");
             var contents = await response.Content.ReadAsStringAsync();
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
-            return products ?? new List<SanPhamDTO>();
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
+            return products ?? new List<ProductDTO>();
         }
-        public async Task<List<SanPhamDTO>> GetSanPhamTheoTrang(int page)
+        public async Task<List<ProductDTO>> GetSanPhamTheoTrang(int page)
         {
             var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoTrang/" + page);
             var contents = await response.Content.ReadAsStringAsync();
 
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
-            return products ?? new List<SanPhamDTO>();
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
+            return products ?? new List<ProductDTO>();
         }
 
-        public async Task<List<SanPhamDTO>> GetSanPhamTheoDmTheoTrang(int dm, int page)
+        public async Task<List<ProductDTO>> GetSanPhamTheoDmTheoTrang(int dm, int page)
         {
             var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoDmTheoTrang/" + dm + "/" + page);
             var contents = await response.Content.ReadAsStringAsync();
 
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
-            return products ?? new List<SanPhamDTO>();
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
+            return products ?? new List<ProductDTO>();
         }
 
-        public async Task<List<SanPhamDTO>> GetSanPhamTheoDM(int dm)
+        public async Task<List<ProductDTO>> GetSanPhamTheoDM(int dm)
         {
             var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoDM/" + dm);
             var contents = await response.Content.ReadAsStringAsync();
 
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
-            return products ?? new List<SanPhamDTO>();
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
+            return products ?? new List<ProductDTO>();
         }
 
-        public async Task<List<SanPhamDTO>> GetSanPhamTheoTenTheoTrang(string ten, int page)
+        public async Task<List<ProductDTO>> GetSanPhamTheoTenTheoTrang(string ten, int page)
         {
             var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoTenTheoTrang/" + ten + "/" + page);
             var contents = await response.Content.ReadAsStringAsync();
 
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
-            return products ?? new List<SanPhamDTO>();
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
+            return products ?? new List<ProductDTO>();
         }
 
-        public async Task<List<SanPhamDTO>> GetSanPhamTheoTen(string ten)
+        public async Task<List<ProductDTO>> GetSanPhamTheoTen(string ten)
         {
             var response = await httpClient.GetAsync("api/Product/GetSanPhamTheoTen/" + ten);
             var contents = await response.Content.ReadAsStringAsync();
 
-            var products = JsonConvert.DeserializeObject<List<SanPhamDTO>>(contents);
-            return products ?? new List<SanPhamDTO>();
+            var products = JsonConvert.DeserializeObject<List<ProductDTO>>(contents);
+            return products ?? new List<ProductDTO>();
         }
-        public async Task<SanPhamDTO> GetSanPham(int Id)
+        public async Task<ProductDTO> GetSanPham(int Id)
         {
             var response = await httpClient.GetAsync("api/Product/" + Id);
             var contents = await response.Content.ReadAsStringAsync();
 
-            var sanpham = JsonConvert.DeserializeObject<SanPhamDTO>(contents);
-            return sanpham ?? new SanPhamDTO();
+            var sanpham = JsonConvert.DeserializeObject<ProductDTO>(contents);
+            return sanpham ?? new ProductDTO();
         }
         public async Task CreateRating(RatingDTO rating, string userName)
         {

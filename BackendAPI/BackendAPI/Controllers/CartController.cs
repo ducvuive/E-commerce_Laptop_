@@ -30,14 +30,5 @@ namespace BackendAPI.Controllers
             }
             return new List<Cart>();
         }
-
-        // GET: api/BoXuLies
-        /*        [HttpGet]
-                public ActionResult<> GetBoXuLy()
-                {
-                    return GetCartItems();
-                }*/
-
-
     }
 }

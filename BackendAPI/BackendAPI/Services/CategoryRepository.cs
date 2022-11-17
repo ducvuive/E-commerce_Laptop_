@@ -4,21 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackendAPI.Services
 {
-    public class DanhMucSanPhamRepository : IDanhMucSanPhamRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly UserDbContext _context;
-        public DanhMucSanPhamRepository(UserDbContext context)
+        public CategoryRepository(UserDbContext context)
         {
             _context = context;
         }
         public async Task<List<Category>> GetCategories()
         {
-            var dmsp = await _context.DanhMucSanPham.Where(s => s.isValid == 1).ToListAsync();
+            var dmsp = await _context.Category.Where(s => s.isValid == 1).ToListAsync();
             return dmsp;
         }
         public async Task<Category> GetCategory(int id)
         {
-            Category dmsp = await _context.DanhMucSanPham.FindAsync(id);
+            Category dmsp = await _context.Category.FindAsync(id);
 
             if (dmsp == null)
             {
@@ -29,7 +29,14 @@ namespace BackendAPI.Services
 
         public async Task CreateCategory(Category danhMucSanPham)
         {
-            _context.DanhMucSanPham.Add(danhMucSanPham);
+            var category = new Category
+            {
+                DMSPId = danhMucSanPham.DMSPId,
+                TenDM = danhMucSanPham.TenDM,
+                Description = danhMucSanPham.Description,
+                isValid = 1
+            };
+            _context.Category.Add(category);
             await _context.SaveChangesAsync();
         }
 

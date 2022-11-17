@@ -4,11 +4,11 @@ namespace LaptopStore_Test.MockData
 {
     public static class MockData_Product
     {
-        public static List<SanPhamDTO> GetCategoriesDTO()
+        public static List<ProductDTO> GetCategoriesDTO()
         {
-            return new List<SanPhamDTO>
+            return new List<ProductDTO>
             {
-                new SanPhamDTO
+                new ProductDTO
                 {
                      SanPhamId =  1,
                      ManHinhId = 10,

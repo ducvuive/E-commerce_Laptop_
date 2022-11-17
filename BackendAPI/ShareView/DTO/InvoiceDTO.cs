@@ -2,7 +2,7 @@
 
 namespace ShareView.DTO
 {
-    public class HoaDonDTO
+    public class InvoiceDTO
     {
         [Key]
         public int HoaDonId { get; set; }

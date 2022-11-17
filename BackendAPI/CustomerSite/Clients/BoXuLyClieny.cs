@@ -5,7 +5,7 @@ namespace CustomerSite.Clients
 {
     public interface IBoXuLyClient
     {
-        Task<BoXuLyDTO> GetBoXuLy(int Id);
+        Task<ProcessorDTO> GetBoXuLy(int Id);
     }
     public class BoXuLyClieny : BaseClient, IBoXuLyClient
     {
@@ -14,12 +14,12 @@ namespace CustomerSite.Clients
         {
         }
 
-        public async Task<BoXuLyDTO> GetBoXuLy(int Id)
+        public async Task<ProcessorDTO> GetBoXuLy(int Id)
         {
             var response = await httpClient.GetAsync("api/Processor/" + Id);
             var contents = await response.Content.ReadAsStringAsync();
-            var manhinh = JsonConvert.DeserializeObject<BoXuLyDTO>(contents);
-            return manhinh ?? new BoXuLyDTO();
+            var manhinh = JsonConvert.DeserializeObject<ProcessorDTO>(contents);
+            return manhinh ?? new ProcessorDTO();
         }
     }
 }

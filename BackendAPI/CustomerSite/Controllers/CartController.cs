@@ -141,7 +141,7 @@ namespace CustomerSite.Controllers
             var cart = GetCartItems();
             if (!string.IsNullOrEmpty(email))
             {
-                HoaDonDTO hd = new HoaDonDTO();
+                InvoiceDTO hd = new InvoiceDTO();
                 long? total = 0;
                 hd.NguoiNhan = hoten;
                 hd.DiaChiGiaoHang = diachi;
@@ -165,7 +165,7 @@ namespace CustomerSite.Controllers
                 }
                 foreach (var item in cart)
                 {
-                    CTHD_DTO ct = new CTHD_DTO();
+                    InvoiceDetailDTO ct = new InvoiceDetailDTO();
                     ct.HoaDonId = temp;
                     ct.SanPhamId = item.Sanpham.SanPhamId;
                     ct.SoLuong = item.SL;

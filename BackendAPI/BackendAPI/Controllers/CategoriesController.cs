@@ -14,15 +14,15 @@ namespace BackendAPI.Controllers
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IDanhMucSanPhamRepository _danhMucSanPhamRepository;
+        private readonly ICategoryRepository _categoryRepository;
         /*        public DanhMucSanPhamsController(UserDbContext context, IMapper mapper)
                 {
                     _context = context;
                     _mapper = mapper;
                 }*/
-        public CategoriesController(IDanhMucSanPhamRepository danhMucSanPhamRepository, IMapper mapper)
+        public CategoriesController(ICategoryRepository danhMucSanPhamRepository, IMapper mapper)
         {
-            _danhMucSanPhamRepository = danhMucSanPhamRepository;
+            _categoryRepository = danhMucSanPhamRepository;
             //_context = context;
             _mapper = mapper;
         }
@@ -31,26 +31,26 @@ namespace BackendAPI.Controllers
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         //[Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<List<DanhMucSanPhamDTO_Admin>>> GetCategories()
+        public async Task<ActionResult<List<CategoryAdminDTO>>> GetCategories()
         {
-            List<Category> categories = await _danhMucSanPhamRepository.GetCategories();
-            return Ok(_mapper.Map<List<DanhMucSanPhamDTO_Admin>>(categories));
+            List<Category> categories = await _categoryRepository.GetCategories();
+            return Ok(_mapper.Map<List<CategoryAdminDTO>>(categories));
         }
 
         [HttpGet]
         [Route("GetCate")]
-        public async Task<ActionResult<List<DanhMucSanPhamDTO>>> GetCategories_User()
+        public async Task<ActionResult<List<CategoryDTO>>> GetCategories_User()
         {
-            List<Category> categories = await _danhMucSanPhamRepository.GetCategories();
-            return Ok(_mapper.Map<List<DanhMucSanPhamDTO>>(categories));
+            List<Category> categories = await _categoryRepository.GetCategories();
+            return Ok(_mapper.Map<List<CategoryDTO>>(categories));
         }
 
         // GET: api/DanhMucSanPhams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DanhMucSanPhamDTO>> GetCategory(int id)
+        public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
         {
-            Category category = await _danhMucSanPhamRepository.GetCategory(id);
-            var mapper = _mapper.Map<DanhMucSanPhamDTO>(category);
+            Category category = await _categoryRepository.GetCategory(id);
+            var mapper = _mapper.Map<CategoryDTO>(category);
             if (mapper is null)
             {
                 return BadRequest("Khong tim thay danh muc");
@@ -61,7 +61,7 @@ namespace BackendAPI.Controllers
         // POST: api/DanhMucSanPhams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> CreateCategory(DanhMucSanPhamDTO_Admin danhMucSanPham)
+        public async Task<ActionResult> CreateCategory(CategoryAdminDTO danhMucSanPham)
         {
             //DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
             Category category = new Category()
@@ -72,7 +72,7 @@ namespace BackendAPI.Controllers
             };
             //_context.DanhMucSanPham.Add(_danhMucSanPham);
             //await _context.SaveChangesAsync();
-            await _danhMucSanPhamRepository.CreateCategory(category);
+            await _categoryRepository.CreateCategory(category);
             //return _danhMucSanPham;
             //return dmsp;
             return Ok("Cap nhat thanh cong");
@@ -81,9 +81,9 @@ namespace BackendAPI.Controllers
         // PUT: api/DanhMucSanPhams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, DanhMucSanPhamDTO_Admin danhMucSanPhamDTO)
+        public async Task<IActionResult> UpdateCategory(int id, CategoryAdminDTO danhMucSanPhamDTO)
         {
-            var category = await _danhMucSanPhamRepository.GetCategory(id);
+            var category = await _categoryRepository.GetCategory(id);
             category.TenDM = danhMucSanPhamDTO.TenDM;
             category.Description = danhMucSanPhamDTO.Description;
             category.DMSPId = danhMucSanPhamDTO.DMSPId;
@@ -94,7 +94,7 @@ namespace BackendAPI.Controllers
             }
             else
             {
-                await _danhMucSanPhamRepository.UpdateCategory();
+                await _categoryRepository.UpdateCategory();
                 return Ok("Cap nhat thanh cong");
             }
             return NoContent();
@@ -104,14 +104,14 @@ namespace BackendAPI.Controllers
         [HttpPut("delete/{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _danhMucSanPhamRepository.GetCategory(id);
+            var category = await _categoryRepository.GetCategory(id);
             if (category == null)
             {
                 return NotFound();
             }
             //category.isValid = 0;
             //await _context.SaveChangesAsync();
-            await _danhMucSanPhamRepository.DeleteCategory(category);
+            await _categoryRepository.DeleteCategory(category);
             return Ok("Xoa thanh cong");
         }
     }

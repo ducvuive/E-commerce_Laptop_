@@ -6,7 +6,7 @@
 
 namespace BackendAPI.Models
 {
-    public partial class BoNhoRam
+    public partial class Ram
     {
         [Key]
         public int RamId { get; set; }
@@ -19,6 +19,6 @@ namespace BackendAPI.Models
         [MaxLength(100)]
         public string? HoTroToiDa { get; set; }
 
-        public virtual List<SanPham> SanPham { get; set; } = new List<SanPham>();
+        public virtual List<Product> SanPham { get; set; } = new List<Product>();
     }
 }

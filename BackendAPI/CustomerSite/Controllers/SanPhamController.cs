@@ -38,7 +38,7 @@ namespace CustomerSite.Controllers
         public async Task<IActionResult> Index(int category, string searchString, int page = 1)
         {
             int totalPage;
-            List<SanPhamDTO> products = new List<SanPhamDTO>();
+            List<ProductDTO> products = new List<ProductDTO>();
             var categoryList = await dMClient.GetDMSP();
             ViewBag.CategoryList = categoryList;
             ViewBag.category = category;

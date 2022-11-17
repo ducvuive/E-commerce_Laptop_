@@ -22,24 +22,24 @@ namespace BackendAPI.Controllers
         // GET: api/ManHinhs
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<List<ManHinhDTO>>> GetManHinh()
+        public async Task<ActionResult<List<ScreenDTO>>> GetManHinh()
         {
-            var mh = await _context.ManHinh.ToListAsync();
-            return _mapper.Map<List<ManHinhDTO>>(mh);
+            var mh = await _context.Screen.ToListAsync();
+            return _mapper.Map<List<ScreenDTO>>(mh);
         }
 
         // GET: api/ManHinhs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ManHinhDTO>> GetManHinh(int id)
+        public async Task<ActionResult<ScreenDTO>> GetManHinh(int id)
         {
-            var manHinh = await _context.ManHinh.FindAsync(id);
+            var manHinh = await _context.Screen.FindAsync(id);
 
             if (manHinh == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<ManHinhDTO>(manHinh);
+            return _mapper.Map<ScreenDTO>(manHinh);
         }
     }
 }

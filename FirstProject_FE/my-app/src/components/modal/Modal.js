@@ -15,7 +15,9 @@ function ConfirmAction(props) {
         <p>{props.content}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Đóng</Button>
+        <Button variant="secondary" onClick={props.onHide}>
+          Đóng
+        </Button>
         <Button variant="primary" onClick={props.onConfirm}>
           Xác nhận
         </Button>

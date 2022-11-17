@@ -1,6 +1,6 @@
 ﻿namespace ShareView.DTO
 {
-    public class SanPhamDTO
+    public class ProductDTO
     {
         public int SanPhamId { get; set; }
         public int ManHinhId { get; set; }

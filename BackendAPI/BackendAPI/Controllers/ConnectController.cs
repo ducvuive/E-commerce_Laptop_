@@ -21,24 +21,24 @@ namespace BackendAPI.Controllers
 
         // GET: api/CongKetNois
         [HttpGet]
-        public async Task<ActionResult<List<CongKetNoiDTO>>> GetCongKetNoi()
+        public async Task<ActionResult<List<ConnectDTO>>> GetCongKetNoi()
         {
-            var connect = await _context.CongKetNoi.ToListAsync();
-            return _mapper.Map<List<CongKetNoiDTO>>(connect);
+            var connect = await _context.Connect.ToListAsync();
+            return _mapper.Map<List<ConnectDTO>>(connect);
         }
 
         // GET: api/CongKetNois/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CongKetNoiDTO>> GetCongKetNoi(int id)
+        public async Task<ActionResult<ConnectDTO>> GetCongKetNoi(int id)
         {
-            var connect = await _context.CongKetNoi.FindAsync(id);
+            var connect = await _context.Connect.FindAsync(id);
 
             if (connect == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<CongKetNoiDTO>(connect);
+            return _mapper.Map<ConnectDTO>(connect);
         }
     }
 }

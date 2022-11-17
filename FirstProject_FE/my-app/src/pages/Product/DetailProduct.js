@@ -36,38 +36,36 @@ const DetailProduct = () => {
   });
   const loadCate = async () => {
     await axios
-      .get("https://localhost:7123/api/DanhMucSanPhams")
+      .get("https://localhost:7123/api/Categories/GetCate")
       .then((response) => {
         setListCategory(response.data);
       });
   };
   const loadScreen = async () => {
     await axios
-      .get("https://localhost:7123/api/ManHinhs/all")
+      .get("https://localhost:7123/api/Screen/all")
       .then((response) => {
         setScreen(response.data);
       });
   };
   const loadRam = async () => {
-    await axios.get("https://localhost:7123/api/BoNhoRams").then((response) => {
+    await axios.get("https://localhost:7123/api/Ram").then((response) => {
       setRam(response.data);
     });
   };
   const loadProcessor = async () => {
-    await axios.get("https://localhost:7123/api/BoXuLies").then((response) => {
+    await axios.get("https://localhost:7123/api/Processor").then((response) => {
       setProcessor(response.data);
     });
   };
   const loadConnect = async () => {
-    await axios
-      .get("https://localhost:7123/api/CongKetNois")
-      .then((response) => {
-        setConnect(response.data);
-      });
+    await axios.get("https://localhost:7123/api/Connect").then((response) => {
+      setConnect(response.data);
+    });
   };
   useEffect(() => {
     axios
-      .get(`https://localhost:7123/api/SanPhams/admin_product/${id}`)
+      .get(`https://localhost:7123/api/Product/admin_product/${id}`)
       .then((response) => {
         setProduct(response.data);
       });
@@ -82,7 +80,7 @@ const DetailProduct = () => {
   useEffect(() => {
     if (product) {
       axios
-        .get(`https://localhost:7123/api/DanhMucSanPhams/${product.dmspId}`)
+        .get(`https://localhost:7123/api/Categories/${product.dmspId}`)
         .then((response) => {
           setnameCategory(response.data);
         });
@@ -110,7 +108,7 @@ const DetailProduct = () => {
     if (isValid) {
       alert("Cập nhật thông tin thành công");
       axios
-        .put(`https://localhost:7123/api/SanPhams/${id}`, {
+        .put(`https://localhost:7123/api/Product/${id}`, {
           sanPhamId: id,
           manHinhId: data.screen,
           dmspId: data.category,

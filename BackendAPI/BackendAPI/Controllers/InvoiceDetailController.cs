@@ -22,30 +22,30 @@ namespace BackendAPI.Controllers
 
         // GET: api/CTHDs
         [HttpGet]
-        public async Task<ActionResult<List<CTHD_DTO>>> GetCTHD()
+        public async Task<ActionResult<List<InvoiceDetailDTO>>> GetCTHD()
         {
-            var cthd = await _context.CTHD.ToListAsync();
-            return _mapper.Map<List<CTHD_DTO>>(cthd);
+            var cthd = await _context.InvoiceDetail.ToListAsync();
+            return _mapper.Map<List<InvoiceDetailDTO>>(cthd);
         }
 
         // GET: api/CTHDs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CTHD_DTO>> GetCTHD(int id)
+        public async Task<ActionResult<InvoiceDetailDTO>> GetCTHD(int id)
         {
-            var cTHD = await _context.CTHD.FindAsync(id);
+            var cTHD = await _context.InvoiceDetail.FindAsync(id);
 
             if (cTHD == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<CTHD_DTO>(cTHD);
+            return _mapper.Map<InvoiceDetailDTO>(cTHD);
         }
 
         // PUT: api/CTHDs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCTHD(int id, CTHD_DTO cTHD_DTO)
+        public async Task<IActionResult> PutCTHD(int id, InvoiceDetailDTO cTHD_DTO)
         {
             if (id != cTHD_DTO.SanPhamId)
             {
@@ -77,9 +77,9 @@ namespace BackendAPI.Controllers
         // POST: api/CTHDs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<CTHD_DTO>> PostCTHD(CTHD_DTO cTHD_DTO)
+        public async Task<ActionResult<InvoiceDetailDTO>> PostCTHD(InvoiceDetailDTO cTHD_DTO)
         {
-            var product = await _context.SanPham.FindAsync(cTHD_DTO.SanPhamId);
+            var product = await _context.InvoiceDetail.FindAsync(cTHD_DTO.SanPhamId);
             product.SoLuong = product.SoLuong - cTHD_DTO.SoLuong;
             var cTHD = new InvoiceDetail
             {
@@ -87,7 +87,7 @@ namespace BackendAPI.Controllers
                 HoaDonId = cTHD_DTO.HoaDonId,
                 SoLuong = cTHD_DTO.SoLuong,
             };
-            _context.CTHD.Add(cTHD);
+            _context.InvoiceDetail.Add(cTHD);
             try
             {
                 await _context.SaveChangesAsync();
@@ -111,13 +111,13 @@ namespace BackendAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCTHD(int id)
         {
-            var cTHD = await _context.CTHD.FindAsync(id);
+            var cTHD = await _context.InvoiceDetail.FindAsync(id);
             if (cTHD == null)
             {
                 return NotFound();
             }
 
-            _context.CTHD.Remove(cTHD);
+            _context.InvoiceDetail.Remove(cTHD);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -125,7 +125,7 @@ namespace BackendAPI.Controllers
 
         private bool CTHDExists(int id)
         {
-            return _context.CTHD.Any(e => e.SanPhamId == id);
+            return _context.InvoiceDetail.Any(e => e.SanPhamId == id);
         }
     }
 }

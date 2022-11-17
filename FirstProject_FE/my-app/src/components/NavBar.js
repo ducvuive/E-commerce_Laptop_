@@ -4,16 +4,18 @@ import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 const NavBar = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  console.log("NavBar ~ cookies", cookies);
   //const [removeCookie] = useCookies(["token"]);
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   console.log("NavBar ~ token", token);
   console.log("NavBar ~ user", user);
   const loadCate = async () => {
-    const cookies = new Cookies();
-    const token = cookies.get("token");
-    if (token != null) {
+    //const cookies = new Cookies();
+    const token = cookies["token"];
+    if (cookies != null) {
       const decoded = jwt_decode(token);
+      console.log("loadCate ~ decoded", decoded);
       setUser(decoded.email);
       setToken(token);
     }
@@ -21,7 +23,7 @@ const NavBar = () => {
   };
   useEffect(() => {
     loadCate();
-  }, [token]);
+  }, [cookies]);
 
   function Logout() {
     if (token == "") {

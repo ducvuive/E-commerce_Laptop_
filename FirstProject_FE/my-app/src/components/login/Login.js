@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -38,6 +39,7 @@ const theme = createTheme();
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const [error, setError] = React.useState("");
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -58,7 +60,9 @@ export default function Login() {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.data.value}`;
+        navigate("/");
       })
+      //.then(console.log("dang nhap thanh cong"))
       .catch(function (error) {
         setError("Tên đăng nhập hoặc mật khẩu không đúng");
       });

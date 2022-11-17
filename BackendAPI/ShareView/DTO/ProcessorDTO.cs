@@ -6,7 +6,7 @@
 
 namespace ShareView.DTO
 {
-    public partial class BoXuLyDTO
+    public partial class ProcessorDTO
     {
         [Key]
         public int BoXuLyId { get; set; }

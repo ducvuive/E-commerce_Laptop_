@@ -10,18 +10,18 @@ namespace BackendAPI.Mapping
     {
         public MappingConfiguration()
         {
-            CreateMap<SanPhamDTO, SanPham>().ReverseMap();
-            CreateMap<ManHinhDTO, ManHinh>().ReverseMap();
-            CreateMap<BoNhoRamDTO, BoNhoRam>().ReverseMap();
-            CreateMap<BoXuLy, BoXuLyDTO>().ReverseMap();
-            CreateMap<DanhMucSanPham, DanhMucSanPhamDTO>().ReverseMap();
-            CreateMap<DanhMucSanPham, DanhMucSanPhamDTO_Admin>().ReverseMap();
-            CreateMap<HoaDonDTO, HoaDon>().ReverseMap();
-            CreateMap<SanPham, SanPhamDTO>().ReverseMap();
-            CreateMap<SanPham, SanPhamDTO_Admin>().ReverseMap();
-            CreateMap<CTHD_DTO, CTHD>().ReverseMap();
+            CreateMap<ProductDTO, Product>().ReverseMap();
+            CreateMap<ScreenDTO, Screen>().ReverseMap();
+            CreateMap<RamDTO, Ram>().ReverseMap();
+            CreateMap<Processor, ProcessorDTO>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Category, CategoryAdminDTO>().ReverseMap();
+            CreateMap<InvoiceDTO, Invoice>().ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
+            CreateMap<Product, ProductAdminDTO>().ReverseMap();
+            CreateMap<InvoiceDetailDTO, InvoiceDetail>().ReverseMap();
             CreateMap<UserIdentity, UserIdentityDTO>().ReverseMap();
-            CreateMap<CongKetNoiDTO, CongKetNoi>().ReverseMap();
+            CreateMap<ConnectDTO, Connect>().ReverseMap();
             CreateMap<RatingDTO, Rating>().ReverseMap();
             CreateMap<Rating, RatingDTO>();
         }

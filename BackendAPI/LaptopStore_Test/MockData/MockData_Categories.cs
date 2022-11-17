@@ -7,17 +7,17 @@ namespace LaptopStore_Test.MockData
 {
     public static class MockData_Categories
     {
-        public static List<DanhMucSanPhamDTO> GetCategoriesDTO()
+        public static List<CategoryDTO> GetCategoriesDTO()
         {
-            return new List<DanhMucSanPhamDTO>
+            return new List<CategoryDTO>
             {
-                new DanhMucSanPhamDTO
+                new CategoryDTO
                 {
                     DMSPId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
-                new DanhMucSanPhamDTO
+                new CategoryDTO
                 {
                     DMSPId = 2,
                     TenDM = "Danh muc 2",
@@ -44,17 +44,17 @@ namespace LaptopStore_Test.MockData
             };
         }
 
-        public static List<DanhMucSanPhamDTO_Admin> CreateProductDTO()
+        public static List<CategoryAdminDTO> CreateProductDTO()
         {
-            return new List<DanhMucSanPhamDTO_Admin>
+            return new List<CategoryAdminDTO>
             {
-                new DanhMucSanPhamDTO_Admin
+                new CategoryAdminDTO
                 {
                     DMSPId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
-                new DanhMucSanPhamDTO_Admin
+                new CategoryAdminDTO
                 {
                     DMSPId = 2,
                     TenDM = "Danh muc 2",
@@ -62,17 +62,17 @@ namespace LaptopStore_Test.MockData
                 },
             };
         }
-        public static List<DanhMucSanPhamDTO_Admin> ListProductDTO()
+        public static List<CategoryAdminDTO> ListProductDTO()
         {
-            return new List<DanhMucSanPhamDTO_Admin>
+            return new List<CategoryAdminDTO>
             {
-                new DanhMucSanPhamDTO_Admin
+                new CategoryAdminDTO
                 {
                     DMSPId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
-                new DanhMucSanPhamDTO_Admin
+                new CategoryAdminDTO
                 {
                     DMSPId = 2,
                     TenDM = "Danh muc 2",

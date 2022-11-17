@@ -2,7 +2,7 @@
 
 namespace BackendAPI.Services
 {
-    public interface IDanhMucSanPhamRepository
+    public interface ICategoryRepository
     {
         Task<List<Category>> GetCategories();
         Task<Category> GetCategory(int id);

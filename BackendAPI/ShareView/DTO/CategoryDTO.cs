@@ -2,7 +2,7 @@
 
 namespace ShareView.DTO
 {
-    public class DanhMucSanPhamDTO
+    public class CategoryDTO
     {
         [Key]
         public int DMSPId { get; set; }

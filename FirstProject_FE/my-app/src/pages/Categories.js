@@ -18,7 +18,7 @@ const Categories = () => {
     console.log("cookie123", cookies.get("token"));
     const token = cookies.get("token");
     await axios
-      .get("https://localhost:7123/api/DanhMucSanPhams", {
+      .get("https://localhost:7123/api/Categories", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -39,7 +39,7 @@ const Categories = () => {
     console.log("DeleteCate ~ id", idCategories);
     setModalShow(false);
     axios
-      .put(`https://localhost:7123/api/DanhMucSanPhams/delete/${idCategories}`)
+      .put(`https://localhost:7123/api/Categories/delete/${idCategories}`)
       .then(
         setCategogies(categories.filter((o, i) => o.dmspId !== idCategories))
       );

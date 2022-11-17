@@ -2,7 +2,7 @@
 
 namespace ShareView.DTO
 {
-    public class CongKetNoiDTO
+    public class ConnectDTO
     {
         [Key]
         public int CongKetNoiId { get; set; }
@@ -12,8 +12,6 @@ namespace ShareView.DTO
         public string? Webcam { get; set; }
         public string? TinhNangKhac { set; get; }
         public string? DenBanPhim { set; get; }
-
-        //public virtual List<SanPhamDTO> Sanphams { get; set; } = new List<SanPhamDTO>();
 
 
     }

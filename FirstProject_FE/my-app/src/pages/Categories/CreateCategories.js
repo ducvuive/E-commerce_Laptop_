@@ -32,7 +32,7 @@ const CreateCategories = () => {
     if (isValid) {
       console.log(data.tenDM);
       axios
-        .post(`https://localhost:7123/api/DanhMucSanPhams/`, {
+        .post(`https://localhost:7123/api/Categories/`, {
           tenDM: data.tenDM,
           description: data.description,
         })

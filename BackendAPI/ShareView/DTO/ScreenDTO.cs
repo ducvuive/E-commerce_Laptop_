@@ -2,7 +2,7 @@
 
 namespace ShareView.DTO
 {
-    public class ManHinhDTO
+    public class ScreenDTO
     {
         [Key]
         public int ManHinhId { get; set; }

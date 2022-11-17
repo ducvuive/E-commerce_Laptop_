@@ -16,7 +16,7 @@ namespace LaptopStore_Test.Controller
     public class DanhMucSanPhamControllerTest
     {
         private readonly DbContextOptions<UserDbContext> _options;
-        private readonly Mock<IDanhMucSanPhamRepository> _danhMucRepository;
+        private readonly Mock<ICategoryRepository> _danhMucRepository;
         private readonly UserDbContext _context;
         private readonly CategoriesController _danhMucSanPhamController;
         //public readonly List<DanhMucSanPham> _danhMucSanPhams;
@@ -34,7 +34,7 @@ namespace LaptopStore_Test.Controller
                 cfg.AddProfile(new MappingConfiguration());
             });
             _mapper = mockMapper.CreateMapper();
-            _danhMucRepository = new Mock<IDanhMucSanPhamRepository>();
+            _danhMucRepository = new Mock<ICategoryRepository>();
             //_categoryRepository = new Mock<ICategoryRepository>();
             _danhMucSanPhamController = new CategoriesController(_danhMucRepository.Object, _mapper);
         }
@@ -46,7 +46,7 @@ namespace LaptopStore_Test.Controller
             // Act
             var actionResult = await _danhMucSanPhamController.GetCategories();
             var okActionResult = actionResult.Result as OkObjectResult;
-            List<DanhMucSanPhamDTO> data = (List<DanhMucSanPhamDTO>)okActionResult.Value;
+            List<CategoryDTO> data = (List<CategoryDTO>)okActionResult.Value;
 
             // Assert
             Assert.NotNull(data);
@@ -56,14 +56,14 @@ namespace LaptopStore_Test.Controller
         public async void GetCategoriesById_WithParams_Ok_CategoriesDTO()
         {
             // Arrange
-            DanhMucSanPhamDTO danhMucSanPhamDTO = MockData_Categories.GetCategoriesDTO().ElementAt(0);
+            CategoryDTO danhMucSanPhamDTO = MockData_Categories.GetCategoriesDTO().ElementAt(0);
             //DanhMucSanPhamDTO _danhMucSanPham = new DanhMucSanPhamDTO();
             Category danhMucSanPham = MockData_Categories.GetCategories().ElementAt(0);
             _danhMucRepository.Setup(_ => _.GetCategory(1)).ReturnsAsync(danhMucSanPham);
             // Act
             var actionResult = await _danhMucSanPhamController.GetCategory(1);
             var okActionResult = actionResult.Result as OkObjectResult;
-            DanhMucSanPhamDTO data = okActionResult.Value as DanhMucSanPhamDTO;
+            CategoryDTO data = okActionResult.Value as CategoryDTO;
 
             // Assert
             var expectedObject = JsonConvert.SerializeObject(danhMucSanPhamDTO);
@@ -76,7 +76,7 @@ namespace LaptopStore_Test.Controller
         public async void CreateCategories_WithParams_Ok_String()
         {
             // Arrange
-            DanhMucSanPhamDTO_Admin danhMucSanPhamDTO_Admin = MockData_Categories.CreateProductDTO().ElementAt(0);
+            CategoryAdminDTO danhMucSanPhamDTO_Admin = MockData_Categories.CreateProductDTO().ElementAt(0);
 
             // Act
             var actionResult = await _danhMucSanPhamController.CreateCategory(danhMucSanPhamDTO_Admin);

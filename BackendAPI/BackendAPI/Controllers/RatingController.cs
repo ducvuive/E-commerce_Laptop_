@@ -47,7 +47,7 @@ namespace BackendAPI.Controllers
         {
             float rateAvg = 0;
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == userName);
-            var sanPham = await _context.SanPham.FirstOrDefaultAsync(i => i.SanPhamId == ratingDTO.sanPhamId);
+            var sanPham = await _context.Product.FirstOrDefaultAsync(i => i.SanPhamId == ratingDTO.sanPhamId);
             var ratings = await _context.Rating.Where(s => s.sanPham.SanPhamId == ratingDTO.sanPhamId).ToListAsync();
             Rating rating = _mapper.Map<Rating>(ratingDTO);
             rating.KhachHang = user;
@@ -70,13 +70,13 @@ namespace BackendAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHoaDon(int id)
         {
-            var hoaDon = await _context.HoaDon.FindAsync(id);
+            var hoaDon = await _context.Invoice.FindAsync(id);
             if (hoaDon == null)
             {
                 return NotFound();
             }
 
-            _context.HoaDon.Remove(hoaDon);
+            _context.Invoice.Remove(hoaDon);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -84,7 +84,7 @@ namespace BackendAPI.Controllers
 
         private bool HoaDonExists(int id)
         {
-            return _context.HoaDon.Any(e => e.HoaDonId == id);
+            return _context.Invoice.Any(e => e.HoaDonId == id);
         }
     }
 }

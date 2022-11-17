@@ -12,7 +12,7 @@ const ListProduct = () => {
   //console.log("ListProduct ~ products", products);
   const loadCate = async () => {
     await axios
-      .get("https://localhost:7123/api/SanPhams/all")
+      .get("https://localhost:7123/api/Product/all")
       .then((response) => {
         setProducts(response.data);
       });
@@ -34,7 +34,7 @@ const ListProduct = () => {
     console.log("DeleteCate ~ id", idProduct);
     setModalShow(false);
     axios
-      .delete(`https://localhost:7123/api/SanPhams/${idProduct}`)
+      .delete(`https://localhost:7123/api/Product/${idProduct}`)
       .then(setProducts(products.filter((o, i) => o.sanPhamId !== idProduct)));
     setIdProduct();
   }

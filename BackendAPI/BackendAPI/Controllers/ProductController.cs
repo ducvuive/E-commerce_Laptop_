@@ -23,38 +23,38 @@ namespace BackendAPI.Controllers
         // GET: api/SanPhams
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<List<SanPhamDTO>>> GetProduct()
+        public async Task<ActionResult<List<ProductDTO>>> GetProduct()
         {
-            var product = await _context.SanPham.ToListAsync();
-            return Ok(_mapper.Map<List<SanPhamDTO>>(product));
+            var product = await _context.Product.ToListAsync();
+            return Ok(_mapper.Map<List<ProductDTO>>(product));
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetSanPhamAdmin()
         {
-            var product = await _context.SanPham.ToListAsync();
+            var product = await _context.Product.ToListAsync();
             return product;
         }
 
         [HttpGet]
         [Route("month")]
         /*[Authorize(Roles = "Admin")]*/
-        public async Task<ActionResult<List<SanPhamDTO>>> GetSanPhamTopRaMat()
+        public async Task<ActionResult<List<ProductDTO>>> GetSanPhamTopRaMat()
         {
-            var results = _context.SanPham.OrderByDescending(x => x.RaMat).Take(6);
+            var results = _context.Product.OrderByDescending(x => x.RaMat).Take(6);
             if (results == null)
             {
                 return NotFound();
             }
-            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            var mapper = _mapper.Map<List<ProductDTO>>(results);
             return Ok(mapper);
         }
 
         // GET: api/SanPhams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SanPhamDTO>> GetSanPham(int id)
+        public async Task<ActionResult<ProductDTO>> GetSanPham(int id)
         {
-            var product = await _context.SanPham.Where(p => p.SanPhamId == id)
+            var product = await _context.Product.Where(p => p.SanPhamId == id)
                                                 .Include(p => p.Rating)
                                                 .ThenInclude(r => r.KhachHang)
                                                 .FirstOrDefaultAsync();
@@ -62,20 +62,20 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-            var mapper = _mapper.Map<SanPhamDTO>(product);
+            var mapper = _mapper.Map<ProductDTO>(product);
             return mapper;
         }
         // GET: api/SanPhams/5
         //[Route("api/SanPhams/admin_product")]
         [HttpGet("admin_product/{id}")]
-        public async Task<ActionResult<SanPhamDTO_Admin>> GetSanPhamAdmin(int id)
+        public async Task<ActionResult<ProductAdminDTO>> GetSanPhamAdmin(int id)
         {
             /*var sanPham = await _context.SanPham
                                                 .Where(p => p.SanPhamId == id)
                                                 .Include(p => p.Rating)
                                                 .ThenInclude(r => r.KhachHang)
                                                 .FirstOrDefaultAsync();*/
-            var product = await _context.SanPham.FindAsync(id);
+            var product = await _context.Product.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -86,7 +86,7 @@ namespace BackendAPI.Controllers
                 TenDM = sanPham.DMSPId.tenDM,
 
             }*/
-            var mapper = _mapper.Map<SanPhamDTO_Admin>(product);
+            var mapper = _mapper.Map<ProductAdminDTO>(product);
             //var mapper = new 
             return Ok(product);
         }
@@ -95,12 +95,12 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult> GetSanPhamTheoTrang(int page = 1)
         {
             var skip = 12 * (page - 1);
-            var results = _context.SanPham.OrderByDescending(x => x.DonGia).Skip(skip).Take(12);
+            var results = _context.Product.OrderByDescending(x => x.DonGia).Skip(skip).Take(12);
             if (results == null)
             {
                 return NotFound();
             }
-            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            var mapper = _mapper.Map<List<ProductDTO>>(results);
             return Ok(mapper);
         }
 
@@ -108,39 +108,39 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult> GetSanPhamTheoDmTheoTrang(int dm, int page)
         {
             var skip = 12 * (page - 1);
-            var results = _context.SanPham.Where(s => s.DMSPId == dm).Skip(skip).Take(12);
+            var results = _context.Product.Where(s => s.DMSPId == dm).Skip(skip).Take(12);
             ;
             if (results == null)
             {
                 return NotFound();
             }
-            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            var mapper = _mapper.Map<List<ProductDTO>>(results);
             return Ok(mapper);
         }
 
         [HttpGet("GetSanPhamTheoDm/{dm}/")]
-        public async Task<ActionResult<SanPhamDTO>> GetSanPhamTheoDm(int dm)
+        public async Task<ActionResult<ProductDTO>> GetSanPhamTheoDm(int dm)
         {
-            var results = _context.SanPham.Where(s => s.DMSPId == dm);
+            var results = _context.Product.Where(s => s.DMSPId == dm);
             ;
             if (results == null)
             {
                 return NotFound();
             }
-            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            var mapper = _mapper.Map<List<ProductDTO>>(results);
             return Ok(mapper);
         }
 
         [HttpGet("GetSanPhamTheoTen/{ten}/")]
         public async Task<ActionResult> GetSanPhamTheoTen(string ten)
         {
-            var results = _context.SanPham.Where(s => s.TenSP.Contains(ten));
+            var results = _context.Product.Where(s => s.TenSP.Contains(ten));
             ;
             if (results == null)
             {
                 return NotFound();
             }
-            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            var mapper = _mapper.Map<List<ProductDTO>>(results);
             return Ok(mapper);
         }
 
@@ -148,20 +148,20 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult> GetSanPhamTheoTenTheoTrang(string ten, int page)
         {
             var skip = 12 * (page - 1);
-            var results = _context.SanPham.Where(s => s.TenSP.Contains(ten)).Skip(skip).Take(12);
+            var results = _context.Product.Where(s => s.TenSP.Contains(ten)).Skip(skip).Take(12);
             ;
             if (results == null)
             {
                 return NotFound();
             }
-            var mapper = _mapper.Map<List<SanPhamDTO>>(results);
+            var mapper = _mapper.Map<List<ProductDTO>>(results);
             return Ok(mapper);
         }
 
         // PUT: api/SanPhams/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSanPham(int id, SanPhamDTO_Admin sanPhamDTO)
+        public async Task<IActionResult> PutSanPham(int id, ProductAdminDTO sanPhamDTO)
         {
             if (id != sanPhamDTO.SanPhamId)
             {
@@ -207,7 +207,7 @@ namespace BackendAPI.Controllers
         // POST: api/SanPhams
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Product>> PostSanPham(SanPhamDTO_Admin sanPhamDTO)
+        public async Task<ActionResult<Product>> PostSanPham(ProductAdminDTO sanPhamDTO)
         {
             var product = new Product
             {
@@ -224,7 +224,7 @@ namespace BackendAPI.Controllers
                 DanhGia = 0,
             };
             //SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
-            _context.SanPham.Add(product);
+            _context.Product.Add(product);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSanPham", new { id = product.SanPhamId }, product);
@@ -234,13 +234,13 @@ namespace BackendAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSanPham(int id)
         {
-            var product = await _context.SanPham.FindAsync(id);
+            var product = await _context.Product.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.SanPham.Remove(product);
+            _context.Product.Remove(product);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -248,7 +248,7 @@ namespace BackendAPI.Controllers
 
         private bool SanPhamExists(int id)
         {
-            return _context.SanPham.Any(e => e.SanPhamId == id);
+            return _context.Product.Any(e => e.SanPhamId == id);
         }
     }
 }

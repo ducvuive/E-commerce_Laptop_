@@ -32,7 +32,7 @@ const DetailCategories = () => {
   useEffect(() => {
     console.log("render");
     axios
-      .get(`https://localhost:7123/api/DanhMucSanPhams/${id}`)
+      .get(`https://localhost:7123/api/Categories/${id}`)
       .then((response) => {
         setCategogies(response.data);
       });
@@ -49,7 +49,7 @@ const DetailCategories = () => {
       console.log("onSubmit ~ data", data);
       console.log("onSubmit ~ data1", id, typeof parseInt(id));
       axios
-        .put(`https://localhost:7123/api/DanhMucSanPhams/${id}`, {
+        .put(`https://localhost:7123/api/Categories/${id}`, {
           dmspId: parseInt(id),
           tenDM: data.tenDM,
           description: data.description,
