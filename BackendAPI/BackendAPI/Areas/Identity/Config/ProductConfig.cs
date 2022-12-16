@@ -10,19 +10,19 @@ namespace BackendAPI.Areas.Identity.Config
         {
             builder.ToTable("Product");
 
-            builder.HasKey(o => o.SanPhamId);
+            builder.HasKey(o => o.ProductId);
 
-            builder.Property(o => o.CardManHinh)
-            .HasMaxLength(100);
+            //builder.Property(o => o.CardManHinh)
+            //.HasMaxLength(100);
 
-            builder.Property(o => o.DacBiet)
-            .HasMaxLength(100);
+            //builder.Property(o => o.DacBiet)
+            //.HasMaxLength(100);
 
-            builder.Property(o => o.Pin)
-            .HasMaxLength(40);
+            //builder.Property(o => o.Pin)
+            //.HasMaxLength(40);
 
-            builder.Property(o => o.KichThuocTrongLuong)
-            .HasMaxLength(100);
+            //builder.Property(o => o.KichThuocTrongLuong)
+            //.HasMaxLength(100);
 
         }
     }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿/*using AutoMapper;
 using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Controllers;
 using BackendAPI.Mapping;
@@ -22,11 +22,11 @@ namespace LaptopStore_Test.Controller
         //public readonly List<DanhMucSanPham> _danhMucSanPhams;
         private readonly IMapper _mapper;
         //private readonly IDanhMucSanPhamRepository _danhMucSanPhamRepository;
-        /*        public DanhMucSanPhamControllerTest()
+        *//*        public DanhMucSanPhamControllerTest()
                 {
                     _danhMucSanPhamRepository = A.Fake<IDanhMucSanPhamRepository>();
                     _mapper = A.Fake<IMapper>();
-                }*/
+                }*//*
         public DanhMucSanPhamControllerTest()
         {
             var mockMapper = new MapperConfiguration(cfg =>
@@ -88,3 +88,4 @@ namespace LaptopStore_Test.Controller
         }
     }
 }
+*/

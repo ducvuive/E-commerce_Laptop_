@@ -31,7 +31,7 @@ namespace CustomerSite.Controllers
                 var jsonInString = JsonConvert.SerializeObject(model);
 
                 //var response = await clientFactory.PostAsync("login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
-                var response = await clientFactory.PostAsync("login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+                var response = await clientFactory.PostAsync("/Auth/login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
                 var contents = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
@@ -77,7 +77,7 @@ namespace CustomerSite.Controllers
         {
             var jsonInString = JsonConvert.SerializeObject(model);
 
-            var response = await clientFactory.PostAsync("register", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+            var response = await clientFactory.PostAsync("/Auth/register", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
                 TempData["ErrorRegister"] = "Email đã được đăng kí !!!";

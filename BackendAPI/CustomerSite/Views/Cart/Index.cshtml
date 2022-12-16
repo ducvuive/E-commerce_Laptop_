@@ -39,17 +39,17 @@
             else
             {
                 @foreach (var item in Model){
-                    decimal thanhTien = item.SL * (decimal)item.Sanpham.DonGia;
+                    decimal thanhTien = item.Quantity * (decimal)item.Product.Price;
                     tongTien += thanhTien;
                     <tr>
                     <th scope="row" >
-                        <a asp-action="RemoveCart" asp-route-id="@item.Sanpham.SanPhamId">x</a>
+                        <a asp-action="RemoveCart" asp-route-id="@item.Product.ProductId">x</a>
                     </th>
                         <td>
-                            @item.Sanpham.TenSP
+                            @item.Product.NameProduct
                         </td>
-                        <td>@item.Sanpham.DonGia.ToString("#,##0 VNĐ")</td>
-                        <td class="text-center">@item.SL</td>
+                        <td>@item.Product.Price.ToString("#,##0 VNĐ")</td>
+                        <td class="text-center">@item.Quantity</td>
                         <td>@thanhTien.ToString("#,##0 VNĐ")</td>
                     </tr>
                 }

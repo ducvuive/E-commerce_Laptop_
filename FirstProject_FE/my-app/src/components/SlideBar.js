@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FaTh,
   FaBars,
@@ -10,8 +10,10 @@ import {
   FaAlignJustify,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { UserRoleContext } from "../context/UserRoleContext";
 
 const Sidebar = ({ children }) => {
+  const userRole = useContext(UserRoleContext);
   const menuItem = [
     {
       path: "/listProduct",
@@ -33,19 +35,16 @@ const Sidebar = ({ children }) => {
     <div className="container-fluid">
       <div style={{ width: "200px" }} className="sidebar bg-secondary">
         <div className="top_section"></div>
-        {menuItem.map((item, index) => (
-          <NavLink
-            to={item.path}
-            key={index}
-            className="link"
-            //activeClassName="active"
-          >
-            <div className="icon">{item.icon}</div>
-            <div style={{ display: "block" }} className="link_text">
-              {item.name}
-            </div>
-          </NavLink>
-        ))}
+        {
+          (userRole === "Admin" ? menuItem.map((item, index) => (
+              <NavLink to={item.path} key={index} className="link">
+                <div className="icon">{item.icon}</div>
+                <div style={{ display: "block" }} className="link_text">
+                  {item.name}
+                </div>
+              </NavLink>
+            )): (""))
+          }
       </div>
       <main>{children}</main>
     </div>

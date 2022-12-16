@@ -2,7 +2,7 @@
 {
     public class CartDTO
     {
-        public ProductDTO Sanpham { get; set; }
-        public int SL { get; set; }
+        public ProductDTO Product { get; set; }
+        public int Quantity { get; set; }
     }
 }

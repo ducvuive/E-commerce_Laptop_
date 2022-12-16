@@ -1,19 +1,19 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Button from "react-bootstrap/esm/Button";
 const schemaValidation = yup.object({
   nameProduct: yup
     .string()
     .required("Vui lòng nhập danh mục")
-    .max(100, "Danh mục có dưới 100 kí tự"),
+    .max(200, "Danh mục có dưới 200 kí tự"),
   price: yup.number().required("Vui lòng nhập số tiền"),
 });
 
 const DetailProduct = () => {
+  const location = useLocation();
   const [product, setProduct] = useState("");
   const [nameCategory, setnameCategory] = useState("");
   const [screen, setScreen] = useState([]);
@@ -21,11 +21,9 @@ const DetailProduct = () => {
   const [processor, setProcessor] = useState([]);
   const [connect, setConnect] = useState([]);
   const [listCategory, setListCategory] = useState([]);
-  console.log("DetailProduct ~ nameCategory", nameCategory);
-  console.log("DetailProduct ~ product", product);
+  const productId = location.state.productId;
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log("DetailProduct ~ id", id);
   const {
     register,
     handleSubmit,
@@ -58,21 +56,21 @@ const DetailProduct = () => {
       setProcessor(response.data);
     });
   };
-  const loadConnect = async () => {
-    await axios.get("https://localhost:7123/api/Connect").then((response) => {
-      setConnect(response.data);
-    });
-  };
+  // const loadConnect = async () => {
+  //   await axios.get("https://localhost:7123/api/Connect").then((response) => {
+  //     setConnect(response.data);
+  //   });
+  // };
   useEffect(() => {
     axios
-      .get(`https://localhost:7123/api/Product/admin_product/${id}`)
+      .get(`https://localhost:7123/api/Product/admin_product/${productId}`)
       .then((response) => {
         setProduct(response.data);
       });
   }, []);
   useEffect(() => {
     loadCate();
-    loadConnect();
+    // loadConnect();
     loadProcessor();
     loadScreen();
     loadRam();
@@ -80,47 +78,42 @@ const DetailProduct = () => {
   useEffect(() => {
     if (product) {
       axios
-        .get(`https://localhost:7123/api/Categories/${product.dmspId}`)
+        .get(`https://localhost:7123/api/Categories/${product.categoryId}`)
         .then((response) => {
           setnameCategory(response.data);
         });
     }
   }, [product]);
 
-  setValue("nameProduct", product.tenSP);
-  setValue("price", product.donGia);
-  setValue("nameCategory", nameCategory.tenDM);
-  setValue("createDate", product.ngayTao);
-  setValue("updateDate", product.ngayCapNhat);
-  setValue("number", product.soLuong);
-  setValue("screen", product.manHinhId);
-  setValue("processor", product.boXuLyId);
+  setValue("nameProduct", product.nameProduct);
+  setValue("price", product.price);
+  setValue("nameCategory", nameCategory);
+  setValue("createDate", product.publishedDate);
+  setValue("updateDate", product.updatedDate);
+  setValue("number", product.quantity);
+  setValue("screen", product.screenId);
+  setValue("processor", product.processorId);
   setValue("ram", product.ramId);
-  setValue("category", product.dmspId);
-  setValue("connect", product.congKetNoiId);
-  setValue("rating", product.danhGia);
+  setValue("category", product.categoryId);
+  setValue("rating", product.rating);
 
   const onSubmit = (data) => {
-    //alert(JSON.stringify(data));
     let yourDate = new Date().toISOString();
-    console.log("onSubmit ~ yourDate", yourDate);
-    console.log("onSubmit ~ data", data);
     if (isValid) {
       alert("Cập nhật thông tin thành công");
       axios
-        .put(`https://localhost:7123/api/Product/${id}`, {
-          sanPhamId: id,
-          manHinhId: data.screen,
-          dmspId: data.category,
-          congKetNoiId: data.connect,
+        .put(`https://localhost:7123/api/Product/${productId}`, {
+          productId: productId,
+          screenId: data.screen,
+          categoryId: data.category,
+          processorId: data.processor,
           ramId: data.ram,
-          boXuLyId: data.processor,
-          tenSP: data.nameProduct,
-          donGia: data.price,
-          soLuong: data.number,
-          ngayCapNhat: yourDate,
-          ngayTao: product.ngayTao,
-          danhGia: data.rating,
+          nameProduct: data.nameProduct,
+          price: data.price,
+          quantity: data.number,
+          updatedDate: yourDate,
+          publishedDate: product.ngayTao,
+          rating: data.rating,
         })
         .then(navigate("/listProduct"))
         .catch(function (error) {
@@ -128,6 +121,7 @@ const DetailProduct = () => {
         });
     }
   };
+
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
@@ -166,14 +160,14 @@ const DetailProduct = () => {
             aria-label="Default select example"
             {...register("category")}
           >
-            <option selected value={product.dmspId}>
-              {nameCategory.tenDM}
+            <option selected value={product.categoryId}>
+              {nameCategory.name}
             </option>
             {listCategory.map((item, index) => {
-              if (item.tenDM != nameCategory.tenDM) {
+              if (item.name != nameCategory) {
                 return (
-                  <option value={item.dmspId} key={index}>
-                    {item.tenDM}
+                  <option value={item.categoryId} key={index}>
+                    {item.name}
                   </option>
                 );
               }
@@ -189,11 +183,11 @@ const DetailProduct = () => {
             aria-label="Default select example"
             {...register("screen")}
           >
-            <option selected>{product.manHinhId}</option>
+            <option selected>{product.screenId}</option>
             {screen.map((item, index) => {
               return (
-                <option value={item.manHinhId} key={index}>
-                  {item.kichThuoc} {item.doPhanGiai}
+                <option value={item.screenId} key={index}>
+                  {item.size}
                 </option>
               );
             })}
@@ -209,8 +203,8 @@ const DetailProduct = () => {
             <option selected>{product.boXuLyId}</option>
             {processor.map((item, index) => {
               return (
-                <option value={item.boXuLyId} key={index}>
-                  {item.congNgheCPU}
+                <option value={item.processorId} key={index}>
+                  {item.cpuTechnology}
                 </option>
               );
             })}
@@ -229,28 +223,20 @@ const DetailProduct = () => {
             {ram.map((item, index) => {
               return (
                 <option value={item.ramId} key={item.ramId}>
-                  {item.loaiRam} {item.dungLuongRam}
+                  {item.typee} {item.capacity}
                 </option>
               );
             })}
           </select>
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Cổng kết nối</label>
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            {...register("connect")}
-          >
-            <option selected>{product.congKetNoiId}</option>
-            {connect.map((item, index) => {
-              return (
-                <option value={item.congKetNoiId} key={item.congKetNoiId}>
-                  {item.congKetNoiId}
-                </option>
-              );
-            })}
-          </select>
+          <label htmlFor="number">Số lượng</label>
+          <input
+            type="number"
+            className="form-control"
+            id="number"
+            {...register("number")}
+          />
         </div>
       </div>
       <div className="row">
@@ -275,15 +261,6 @@ const DetailProduct = () => {
       </div>
       <div className="row">
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="number">Số lượng</label>
-          <input
-            type="number"
-            className="form-control"
-            id="number"
-            {...register("number")}
-          />
-        </div>
-        <div className="mb-2 col d-flex flex-column">
           <label htmlFor="rating">Đánh giá</label>
           <input
             type="number"
@@ -299,7 +276,7 @@ const DetailProduct = () => {
         <div className="d-flex justify-content-center">
           <img
             style={{ width: "400px" }}
-            src={`https://localhost:7123/wwwroot/${product.hinhAnh}`}
+            src={`https://localhost:7123/wwwroot/${product.image}`}
             alt=""
           />
         </div>

@@ -60,14 +60,14 @@ namespace CustomerSite.Controllers
 
             // Xử lý đưa vào Cart ...
             var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.Sanpham.SanPhamId == Id);
+            var cartitem = cart.Find(p => p.Product.ProductId == Id);
             if (cartitem != null)
             {
-                cartitem.SL++;
+                cartitem.Quantity++;
             }
             else
             {
-                cart.Add(new CartDTO() { SL = 1, Sanpham = products });
+                cart.Add(new CartDTO() { Quantity = 1, Product = products });
             }
 
 
@@ -88,14 +88,14 @@ namespace CustomerSite.Controllers
 
             // Xử lý đưa vào Cart ...
             var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.Sanpham.SanPhamId == Id);
+            var cartitem = cart.Find(p => p.Product.ProductId == Id);
             if (cartitem != null)
             {
-                cartitem.SL += quantity;
+                cartitem.Quantity += quantity;
             }
             else
             {
-                cart.Add(new CartDTO() { SL = quantity, Sanpham = products });
+                cart.Add(new CartDTO() { Quantity = quantity, Product = products });
             }
 
             // Lưu cart vào Session
@@ -108,7 +108,7 @@ namespace CustomerSite.Controllers
         public IActionResult RemoveCart([FromRoute] int id)
         {
             var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.Sanpham.SanPhamId == id);
+            var cartitem = cart.Find(p => p.Product.ProductId == id);
             if (cartitem != null)
             {
 
@@ -143,15 +143,15 @@ namespace CustomerSite.Controllers
             {
                 InvoiceDTO hd = new InvoiceDTO();
                 long? total = 0;
-                hd.NguoiNhan = hoten;
-                hd.DiaChiGiaoHang = diachi;
-                hd.SDT = sdt;
-                hd.NgayHD = DateTime.Now;
+                hd.Receiver = hoten;
+                hd.Address = diachi;
+                hd.Phone = sdt;
+                hd.DateReceived = DateTime.Now;
                 foreach (var item in cart)
                 {
-                    total += item.Sanpham.DonGia * item.SL;
+                    total += item.Product.Price * item.Quantity;
                 }
-                hd.TongTien = total;
+                hd.Total = total;
                 await hoaDonClient.AddHoaDon(hd, email);
                 var _hoaDon = await hoaDonClient.GetHoaDon();
                 int temp;
@@ -161,14 +161,14 @@ namespace CustomerSite.Controllers
                 }
                 else
                 {
-                    temp = _hoaDon.HoaDonId;
+                    temp = _hoaDon.InvoiceId;
                 }
                 foreach (var item in cart)
                 {
                     InvoiceDetailDTO ct = new InvoiceDetailDTO();
-                    ct.HoaDonId = temp;
-                    ct.SanPhamId = item.Sanpham.SanPhamId;
-                    ct.SoLuong = item.SL;
+                    ct.InvoiceId = temp;
+                    ct.ProductId = item.Product.ProductId;
+                    ct.Quantity = item.Quantity;
                     await hoaDonClient.AddCTHD(ct);
                 }
                 ClearCart();

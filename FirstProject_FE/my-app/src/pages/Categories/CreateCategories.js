@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 const schemaValidation = yup.object({
-  tenDM: yup
+  nameCategory: yup
     .string()
     .required("Vui lòng nhập danh mục")
     .max(50, "Danh mục có dưới 50 kí tự"),
@@ -26,14 +26,14 @@ const CreateCategories = () => {
     resolver: yupResolver(schemaValidation),
   });
   const value = {
-    tenDM: categories,
+    nameCategory: categories,
   };
   const onSubmit = (data) => {
     if (isValid) {
-      console.log(data.tenDM);
+      console.log(data.nameCategory);
       axios
         .post(`https://localhost:7123/api/Categories/`, {
-          tenDM: data.tenDM,
+          name: data.nameCategory,
           description: data.description,
         })
         .then(navigate("/categories"))
@@ -44,7 +44,6 @@ const CreateCategories = () => {
   };
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
-      {/* register: parameter dau la name cua input */}
       <div className="d-flex justify-content-center">
         <h3>Tạo danh mục</h3>
       </div>
@@ -53,13 +52,11 @@ const CreateCategories = () => {
         <input
           type="text"
           className="form-control"
-          {...register("tenDM")}
-          //value={categories.tenDM}
+          {...register("nameCategory")}
           placeholder="Vui lòng nhập tên danh mục"
-          // {...register("tenDM")}
         />
-        {errors.tenDM && (
-          <div className="text-danger">{errors.tenDM.message}</div>
+        {errors.nameCategory && (
+          <div className="text-danger">{errors.nameCategory.message}</div>
         )}
       </div>
       <div className="mb-2 d-flex flex-column">

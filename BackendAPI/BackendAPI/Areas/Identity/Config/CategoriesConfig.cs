@@ -10,9 +10,9 @@ namespace BackendAPI.Areas.Identity.Config
         {
             builder.ToTable("Category");
 
-            builder.HasKey(o => o.DMSPId);
+            builder.HasKey(o => o.CategoryId);
 
-            builder.Property(o => o.TenDM)
+            builder.Property(o => o.Name)
            .IsRequired()
            .HasMaxLength(50);
 

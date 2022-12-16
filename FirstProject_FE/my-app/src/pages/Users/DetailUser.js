@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,10 +13,8 @@ const schemaValidation = yup.object({
 
 const DetailUser = () => {
   const [user, setUser] = useState("");
-  console.log("DetailUser ~ user", user);
-  const navigate = useNavigate();
-  const { email } = useParams();
-  console.log("DetailUser ~ email", email);
+  const location = useLocation();
+  const emailUser = location.state.email;
   const {
     register,
     handleSubmit,
@@ -26,7 +24,7 @@ const DetailUser = () => {
   });
   async function getData() {
     let reponse = await axios
-      .get(`https://localhost:7123/api/User/${email}`)
+      .get(`https://localhost:7123/api/User/${emailUser}`)
       .then((response) => {
         setUser(response.data);
       });
@@ -39,7 +37,6 @@ const DetailUser = () => {
       console.log(123);
     }
   };
-  //console.log("phone", user.phoneNumber);
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
@@ -76,11 +73,6 @@ const DetailUser = () => {
           <input type="text" value={user.phoneNumber} className="" disabled />
         )}
       </div>
-      {/* <div className="d-flex ">
-        <button className="p-2 ms-auto bg-primary text-light" type="">
-          Thay đổi thông tin
-        </button>
-      </div> */}
     </form>
   );
 };

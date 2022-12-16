@@ -90,7 +90,7 @@ namespace CustomerSite.Controllers
             rating.Comments = comment;
             rating.Rate = ratingsValue;
             rating.PublishedDate = DateTime.Now;
-            rating.sanPhamId = SanPhamId;
+            rating.ProductId = SanPhamId;
 
             await productClient.CreateRating(rating, email);
 
@@ -101,9 +101,9 @@ namespace CustomerSite.Controllers
         public async Task<IActionResult> ProductSingle(int Id)
         {
             var products = await productClient.GetSanPham(Id);
-            var manhinh = await manHinhlient.GetManHinh(products.ManHinhId);
+            var manhinh = await manHinhlient.GetManHinh(products.ScreenId);
             var boNhoRam = await boNhoRamClient.GetBoNhoRam(products.RamId);
-            var boXuLy = await boXuLyClient.GetBoXuLy(products.ManHinhId);
+            var boXuLy = await boXuLyClient.GetBoXuLy(products.ProcessorId);
             ViewBag.manHinh = manhinh;
             ViewBag.boNhoRam = boNhoRam;
             ViewBag.boXuLy = boXuLy;
@@ -115,9 +115,9 @@ namespace CustomerSite.Controllers
                 List<CartDTO> cart = JsonConvert.DeserializeObject<List<CartDTO>>(jsoncart);
                 foreach (var item in cart)
                 {
-                    if (item.Sanpham.SanPhamId == Id)
+                    if (item.Product.ProcessorId == Id)
                     {
-                        products.SoLuong = products.SoLuong - item.SL;
+                        products.Quantity = products.Quantity - item.Quantity;
                     }
                 }
             }

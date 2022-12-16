@@ -3,7 +3,6 @@ using BackendAPI.Areas.Identity.Data;
 using BackendAPI.Models;
 using ShareView.DTO;
 
-
 namespace BackendAPI.Mapping
 {
     public class MappingConfiguration : Profile
@@ -21,7 +20,7 @@ namespace BackendAPI.Mapping
             CreateMap<Product, ProductAdminDTO>().ReverseMap();
             CreateMap<InvoiceDetailDTO, InvoiceDetail>().ReverseMap();
             CreateMap<UserIdentity, UserIdentityDTO>().ReverseMap();
-            CreateMap<ConnectDTO, Connect>().ReverseMap();
+            //CreateMap<ConnectDTO, Connect>().ReverseMap();
             CreateMap<RatingDTO, Rating>().ReverseMap();
             CreateMap<Rating, RatingDTO>();
         }

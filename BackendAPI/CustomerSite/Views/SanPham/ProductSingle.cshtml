@@ -12,13 +12,13 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="">
-                    <img src="https://localhost:7123/wwwroot/@Model.HinhAnh" class="card-img-top" alt="..." />
+                    <img src="https://localhost:7123/wwwroot/@Model.Image" class="card-img-top" alt="..." />
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="col">
                     <h5 class="fs-2 fw-semibold">
-                        @Model.TenSP
+                        @Model.NameProduct
                     </h5>
                     <div class="mt-5">
                         <div class="d-flex align-items-center">
@@ -26,7 +26,7 @@
                             <div class="">
                                 @for (int i = 1; i <= 5; i++)
                                 {
-                                    if (i <= @Model.DanhGia)
+                                    if (i <= @Model.Rating)
                                     {
                                         <i class="fa-regular fa-star checked"></i>
                                     }
@@ -42,14 +42,14 @@
                         <div class="d-flex align-items-center">
                             <div class="fs-5 fw-bold me-5">Còn lại</div>
                             <div class="">
-                                <span>@Model.SoLuong</span>
+                                <span>@Model.Quantity</span>
                             </div>
                         </div>
                     </div>
-                    <p class="mt-3 fs-3 fw-semibold">@Model.DonGia.ToString("#,##0 VNĐ")</p>
+                    <p class="mt-3 fs-3 fw-semibold">@Model.Price.ToString("#,##0 VNĐ")</p>
                     <form class="col-md-6 d-flex mb-3" asp-controller="Cart" asp-action="AddToCartQuantity" method="post">
                         <div style="display:none">
-                            <input id="id" name="id" value="@Model.SanPhamId" />
+                            <input id="id" name="id" value="@Model.ProductId" />
                         </div>
                         <span class="me-2">
                             <button type="button"
@@ -65,7 +65,7 @@
                                class="form-control w-25 text-center"
                                value="1"
                                min="1"
-                               max="@Model.SoLuong" />
+                               max="@Model.Quantity" />
                         <span class="ms-2">
                             <button type="button"
                                     class="button-quantity btn-plus"
@@ -75,7 +75,7 @@
                             </button>
                         </span>
                         @{
-                            if (@Model.SoLuong == 0)
+                            if (@Model.Quantity == 0)
                             {
                                     <button type="submit" class="btn btn-primary ms-5 w-100 disabled">
                                         Mua ngay
@@ -105,27 +105,27 @@
                 <tbody>
                     <tr class="p-3">
                         <th scope="row">Công nghệ CPU</th>
-                        <td>@bxl.CongNgheCPU</td>
+                        <td>@bxl.CPUTechnology</td>
                     </tr>
                     <tr class="p-3">
                         <th scope="row">Số nhân</th>
-                        <td>@bxl.SoNhan</td>
+                        <td>@bxl.Thread</td>
                     </tr>
                     <tr>
                         <th scope="row">Số luồng</th>
-                        <td>@bxl.SoLuong</td>
+                        <td>@bxl.Multiplier</td>
                     </tr>
                     <tr class="p-3">
                         <th scope="row">Tốc độ CPU</th>
-                        <td>@bxl.TocDoCPU</td>
+                        <td>@bxl.Speed</td>
                     </tr>
                     <tr class="p-3">
                         <th scope="row">Tốc độ tối đa</th>
-                        <td>@bxl.ToCDoToiDa</td>
+                        <td>@bxl.MaxSpeed</td>
                     </tr>
                     <tr class="p-3">
                         <th scope="row">Bộ nhớ đệm</th>
-                        <td>@bxl.BoNhoDem</td>
+                        <td>@bxl.Cache</td>
                     </tr>
                 </tbody>
             </table>
@@ -138,23 +138,7 @@
                 <tbody>
                     <tr class="p-3">
                         <th scope="row">Kích Thước</th>
-                        <td scope="row">@mh.KichThuoc</td>
-                    </tr>
-                    <tr class="p-3">
-                        <th scope="row">Độ phân giải</th>
-                        <td scope="row">@mh.DoPhanGiai</td>
-                    </tr>
-                    <tr class="p-3">
-                        <th scope="row">Tần số quét</th>
-                        <td>@mh.TanSoQuet</td>
-                    </tr>
-                    <tr class="p-3">
-                        <th scope="row">Cộng nghệ màn hình</th>
-                        <td scope="row">@mh.CongNgheMH</td>
-                    </tr>
-                    <tr class="p-3">
-                        <th scope="row">Cảm ứng</th>
-                        <td scope="row">@mh.CamUng</td>
+                        <td scope="row">@mh.Size</td>
                     </tr>
                 </tbody>
             </table>
@@ -167,11 +151,11 @@
                 <tbody>
                     <tr class="p-3">
                         <th scope="row">RAM</th>
-                        <td>@ram.DungLuongRam</td>
+                        <td>@ram.Capacity</td>
                     </tr>
                     <tr class="p-3">
                         <th scope="row">Loại RAM</th>
-                        <td>@ram.LoaiRam</td>
+                        <td>@ram.Typee</td>
                     </tr>
                     <tr class="p-3">
                         <th scope="row">Tốc độ Bus RAM</th>
@@ -179,7 +163,7 @@
                     </tr>
                     <tr class="p-3">
                         <th scope="row">Hỗ trợ RAM tối đa</th>
-                        <td>@ram.HoTroToiDa</td>
+                        <td>@ram.MaxSupport</td>
                     </tr>
                 </tbody>
             </table>
@@ -196,10 +180,10 @@
                     <th>Bình luận</th>
                     <th>Đánh giá</th>
                 </tr>
-                @foreach (var item in Model.Rating)
+                @foreach (var item in Model.Ratings)
                 {
                     <tr class="p-3">
-                        <th scope="row">@item.KhachHang.Email</th>
+                        <th scope="row">@item.Customer.Email</th>
                         <td>@item.Comments</td>
                         <td>
                             <div class="">
@@ -246,7 +230,7 @@
                     </div>
                     <div>
                         <input type="hidden" name="ratingsValue" id="ratingsValue" />
-                        <input type="hidden" name="SanPhamId" id="SanPhamId" value="@Model.SanPhamId" />
+                        <input type="hidden" name="SanPhamId" id="SanPhamId" value="@Model.ProductId" />
                         <input type="text"
                                id="comment"
                                name="comment"

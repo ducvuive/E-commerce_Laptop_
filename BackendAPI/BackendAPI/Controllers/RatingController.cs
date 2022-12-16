@@ -47,11 +47,11 @@ namespace BackendAPI.Controllers
         {
             float rateAvg = 0;
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == userName);
-            var sanPham = await _context.Product.FirstOrDefaultAsync(i => i.SanPhamId == ratingDTO.sanPhamId);
-            var ratings = await _context.Rating.Where(s => s.sanPham.SanPhamId == ratingDTO.sanPhamId).ToListAsync();
+            var sanPham = await _context.Product.FirstOrDefaultAsync(i => i.ProductId == ratingDTO.ProductId);
+            var ratings = await _context.Rating.Where(s => s.Product.ProductId == ratingDTO.ProductId).ToListAsync();
             Rating rating = _mapper.Map<Rating>(ratingDTO);
-            rating.KhachHang = user;
-            rating.sanPham = sanPham;
+            rating.Customer = user;
+            rating.Product = sanPham;
             _context.Rating.Add(rating);
             foreach (var item in ratings)
             {
@@ -59,7 +59,7 @@ namespace BackendAPI.Controllers
             }
             rateAvg = (rateAvg + (float)ratingDTO.Rate) / (ratings.Count() + 1);
             int rateAvg_ = (int)Math.Ceiling(rateAvg);
-            sanPham.DanhGia = rateAvg_;
+            sanPham.Rating = rateAvg_;
             await _context.SaveChangesAsync();
 
             return Ok("Danh gia thanh cong");
@@ -84,7 +84,7 @@ namespace BackendAPI.Controllers
 
         private bool HoaDonExists(int id)
         {
-            return _context.Invoice.Any(e => e.HoaDonId == id);
+            return _context.Invoice.Any(e => e.InvoiceId == id);
         }
     }
 }

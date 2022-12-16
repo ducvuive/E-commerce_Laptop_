@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendAPI.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20221113045151_new database")]
-    partial class newdatabase
+    [Migration("20221121141430_create database")]
+    partial class createdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,13 +32,16 @@ namespace BackendAPI.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Adress")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DiaChi")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -47,7 +50,7 @@ namespace BackendAPI.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("GioiTinh")
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -55,9 +58,6 @@ namespace BackendAPI.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<DateTime?>("NgaySinh")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -101,256 +101,176 @@ namespace BackendAPI.Migrations
 
             modelBuilder.Entity("BackendAPI.Models.Category", b =>
                 {
-                    b.Property<int>("DMSPId")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DMSPId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("TenDM")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("isValid")
+                    b.Property<int?>("isDisabled")
                         .HasColumnType("int");
 
-                    b.HasKey("DMSPId");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Category", (string)null);
                 });
 
-            modelBuilder.Entity("BackendAPI.Models.Connect", b =>
-                {
-                    b.Property<int>("CongKetNoiId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CongKetNoiId"), 1L, 1);
-
-                    b.Property<string>("CongGiaoTiep")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("DenBanPhim")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("KetNoiKhongDay")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("KheDocTheNho")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("TinhNangKhac")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Webcam")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("CongKetNoiId");
-
-                    b.ToTable("Connect", (string)null);
-                });
-
             modelBuilder.Entity("BackendAPI.Models.Invoice", b =>
                 {
-                    b.Property<int>("HoaDonId")
+                    b.Property<int>("InvoiceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HoaDonId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"), 1L, 1);
 
-                    b.Property<string>("DiaChiGiaoHang")
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("KhachHangId")
+                    b.Property<string>("CustomerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("NgayHD")
+                    b.Property<DateTime?>("DateReceived")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("NguoiNhan")
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Receiver")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("SDT")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<long?>("TongTien")
+                    b.Property<long?>("Total")
                         .IsRequired()
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("TrangThai")
-                        .HasColumnType("int");
+                    b.HasKey("InvoiceId");
 
-                    b.HasKey("HoaDonId");
-
-                    b.HasIndex("KhachHangId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Invoice", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.InvoiceDetail", b =>
                 {
-                    b.Property<int>("SanPhamId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("HoaDonId")
+                    b.Property<int>("InvoiceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SoLuong")
+                    b.Property<int?>("Quantity")
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.HasKey("SanPhamId", "HoaDonId");
+                    b.HasKey("ProductId", "InvoiceId");
 
-                    b.HasIndex("HoaDonId");
+                    b.HasIndex("InvoiceId");
 
                     b.ToTable("InvoiceDetail", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Processor", b =>
                 {
-                    b.Property<int>("BoXuLyId")
+                    b.Property<int>("ProcessorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BoXuLyId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProcessorId"), 1L, 1);
 
-                    b.Property<string>("BoNhoDem")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("CongNgheCPU")
+                    b.Property<string>("CPUTechnology")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("SoLuong")
-                        .HasMaxLength(10)
-                        .HasColumnType("int")
-                        .HasColumnName("SOLUONG");
+                    b.Property<string>("Cache")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.Property<int?>("SoNhan")
+                    b.Property<string>("MaxSpeed")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("Multiplier")
+                        .HasMaxLength(10)
+                        .HasColumnType("int");
+
+                    b.Property<string>("Speed")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int?>("Thread")
                         .HasMaxLength(20)
                         .HasColumnType("int");
 
-                    b.Property<string>("ToCDoToiDa")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("TocDoCPU")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("BoXuLyId");
+                    b.HasKey("ProcessorId");
 
                     b.ToTable("Processor", (string)null);
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Product", b =>
                 {
-                    b.Property<int>("SanPhamId")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SanPhamId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
-                    b.Property<int>("BoXuLyId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CardManHinh")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CongKetNoiId")
-                        .HasColumnType("int");
+                    b.Property<string>("NameProduct")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DMSPId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DacBiet")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<float?>("DanhGia")
-                        .HasColumnType("real");
-
-                    b.Property<long?>("DonGia")
+                    b.Property<long?>("Price")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("HDH")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HinhAnh")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("KichThuocTrongLuong")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("ManHinhId")
+                    b.Property<int>("ProcessorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MauSac")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MoTa")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("NgayCapNhat")
+                    b.Property<DateTime?>("PublishedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("NgayTao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OCung")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pin")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<int?>("RaMat")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<int>("RamId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SoLuong")
+                    b.Property<float?>("Rating")
+                        .HasColumnType("real");
+
+                    b.Property<int>("ScreenId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TenSP")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("ThietKe")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ProductId");
 
-                    b.Property<string>("Webcam")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("CategoryId");
 
-                    b.HasKey("SanPhamId");
-
-                    b.HasIndex("BoXuLyId");
-
-                    b.HasIndex("CongKetNoiId");
-
-                    b.HasIndex("DMSPId");
-
-                    b.HasIndex("ManHinhId");
+                    b.HasIndex("ProcessorId");
 
                     b.HasIndex("RamId");
+
+                    b.HasIndex("ScreenId");
 
                     b.ToTable("Product", (string)null);
                 });
@@ -367,15 +287,15 @@ namespace BackendAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("DungLuongRam")
+                    b.Property<string>("Capacity")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("HoTroToiDa")
+                    b.Property<string>("MaxSupport")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("LoaiRam")
+                    b.Property<string>("Typee")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -396,9 +316,12 @@ namespace BackendAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("KhachHangId")
+                    b.Property<string>("CustomerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("PublishedDate")
                         .HasColumnType("datetime2");
@@ -406,47 +329,28 @@ namespace BackendAPI.Migrations
                     b.Property<int?>("Rate")
                         .HasColumnType("int");
 
-                    b.Property<int>("SanPhamId")
-                        .HasColumnType("int");
-
                     b.HasKey("RatingID");
 
-                    b.HasIndex("KhachHangId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("SanPhamId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Screen", b =>
                 {
-                    b.Property<int>("ManHinhId")
+                    b.Property<int>("ScreenId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ManHinhId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScreenId"), 1L, 1);
 
-                    b.Property<string>("CamUng")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("CongNgheMH")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("DoPhanGiai")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<string>("KichThuoc")
+                    b.Property<string>("Size")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("TanSoQuet")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.HasKey("ManHinhId");
+                    b.HasKey("ScreenId");
 
                     b.ToTable("Screen", (string)null);
                 });
@@ -590,67 +494,59 @@ namespace BackendAPI.Migrations
 
             modelBuilder.Entity("BackendAPI.Models.Invoice", b =>
                 {
-                    b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "MaKhacHangId")
+                    b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "Customer")
                         .WithMany()
-                        .HasForeignKey("KhachHangId");
+                        .HasForeignKey("CustomerId");
 
-                    b.Navigation("MaKhacHangId");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.InvoiceDetail", b =>
                 {
-                    b.HasOne("BackendAPI.Models.Invoice", "HoaDon")
-                        .WithMany("CTHD")
-                        .HasForeignKey("HoaDonId")
+                    b.HasOne("BackendAPI.Models.Invoice", "Invoice")
+                        .WithMany("InvoiceDetail")
+                        .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendAPI.Models.Product", "SanPham")
+                    b.HasOne("BackendAPI.Models.Product", "Product")
                         .WithMany("CTHD")
-                        .HasForeignKey("SanPhamId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("HoaDon");
+                    b.Navigation("Invoice");
 
-                    b.Navigation("SanPham");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Product", b =>
                 {
-                    b.HasOne("BackendAPI.Models.Processor", "Processor")
-                        .WithMany("SanPhams")
-                        .HasForeignKey("BoXuLyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackendAPI.Models.Connect", "Connect")
-                        .WithMany("Sanpham")
-                        .HasForeignKey("CongKetNoiId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BackendAPI.Models.Category", "Category")
-                        .WithMany("SanPhams")
-                        .HasForeignKey("DMSPId")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendAPI.Models.Screen", "Screen")
-                        .WithMany("Sanpham")
-                        .HasForeignKey("ManHinhId")
+                    b.HasOne("BackendAPI.Models.Processor", "Processor")
+                        .WithMany("Products")
+                        .HasForeignKey("ProcessorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BackendAPI.Models.Ram", "Ram")
-                        .WithMany("SanPham")
+                        .WithMany("Product")
                         .HasForeignKey("RamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.HasOne("BackendAPI.Models.Screen", "Screen")
+                        .WithMany("Product")
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Connect");
+                    b.Navigation("Category");
 
                     b.Navigation("Processor");
 
@@ -661,21 +557,21 @@ namespace BackendAPI.Migrations
 
             modelBuilder.Entity("BackendAPI.Models.Rating", b =>
                 {
-                    b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "KhachHang")
+                    b.HasOne("BackendAPI.Areas.Identity.Data.UserIdentity", "Customer")
                         .WithMany()
-                        .HasForeignKey("KhachHangId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendAPI.Models.Product", "sanPham")
-                        .WithMany("Rating")
-                        .HasForeignKey("SanPhamId")
+                    b.HasOne("BackendAPI.Models.Product", "Product")
+                        .WithMany("Ratings")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("KhachHang");
+                    b.Navigation("Customer");
 
-                    b.Navigation("sanPham");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -731,39 +627,34 @@ namespace BackendAPI.Migrations
 
             modelBuilder.Entity("BackendAPI.Models.Category", b =>
                 {
-                    b.Navigation("SanPhams");
-                });
-
-            modelBuilder.Entity("BackendAPI.Models.Connect", b =>
-                {
-                    b.Navigation("Sanpham");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Invoice", b =>
                 {
-                    b.Navigation("CTHD");
+                    b.Navigation("InvoiceDetail");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Processor", b =>
                 {
-                    b.Navigation("SanPhams");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Product", b =>
                 {
                     b.Navigation("CTHD");
 
-                    b.Navigation("Rating");
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Ram", b =>
                 {
-                    b.Navigation("SanPham");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("BackendAPI.Models.Screen", b =>
                 {
-                    b.Navigation("Sanpham");
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

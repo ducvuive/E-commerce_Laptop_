@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BackendAPI.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
@@ -21,6 +22,7 @@ namespace BackendAPI.Controllers
         }
 
         // GET: api/<UserController>
+        [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<UserIdentityDTO>>> GetUser()
         {
@@ -40,24 +42,6 @@ namespace BackendAPI.Controllers
             }
 
             return _mapper.Map<UserIdentityDTO>(user);
-        }
-
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

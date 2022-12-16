@@ -9,14 +9,14 @@ namespace BackendAPI.Models
     public class Category
     {
         [Key]
-        public int DMSPId { get; set; }
+        public int CategoryId { get; set; }
         [Required]
-        public string TenDM { get; set; }
+        public string Name { get; set; }
         [MaxLength(100)]
         public string? Description { get; set; }
 
-        public int? isValid { get; set; }
+        public int? isDisabled { get; set; }
 
-        public virtual List<Product> SanPhams { get; set; } = new List<Product>();
+        public virtual List<Product> Products { get; set; } = new List<Product>();
     }
 }

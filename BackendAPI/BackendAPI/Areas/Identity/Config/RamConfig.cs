@@ -15,7 +15,7 @@ namespace BackendAPI.Areas.Identity.Config
             builder.Property(o => o.BusRam)
             .HasMaxLength(100);
 
-            builder.Property(o => o.DungLuongRam)
+            builder.Property(o => o.Capacity)
             .HasMaxLength(100);
         }
     }

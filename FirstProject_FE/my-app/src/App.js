@@ -18,47 +18,59 @@ import DetailUser from "./pages/Users/DetailUser";
 import DetailProduct from "./pages/Product/DetailProduct";
 import CreateProduct from "./pages/Product/CreateProduct";
 import Login from "./components/login/Login";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRouteAdmin from "./components/ProtectedRouteAdmin";
+axios.interceptors.request.use((config) => {
+  return config;
+});
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    console.log("error.response.status", error);
+    // if (401 === error.response.status) {
+    //   window.location.href =
+    //     "/Identity/Account/Login?returnUrl=" + window.location.pathname;
+    // } else {
+    //   return Promise.reject(error);
+    // }
+  }
+);
 function App() {
   return (
-    // <Fragment className="vh-100">
-    //   <Container fluid className="h-auto p-0">
-    //     <Row className="">
-    //       <Col xs={3} className="p-0">
-    //       </Col>
-    //       <Col xs={9} className="">
-    //         2 of 3 (wider)
-    //       </Col>
-    //     </Row>
-    //   </Container>
-    // </Fragment>
     <BrowserRouter>
       <NavBar></NavBar>
       <SlideBar>
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/" element={<Dashboard />}></Route>
-          <Route path="/listProduct" element={<ListProduct />}></Route>
-          <Route path="/users" element={<Users />}></Route>
-          <Route path="/users/detail/:email" element={<DetailUser />}></Route>
-          <Route path="/categories" element={<Categories />}></Route>
           <Route path="/login" element={<Login />}></Route>
-          <Route
-            path="/categories/Detail/:id"
-            element={<DetailCategories />}
-          ></Route>
-          <Route
-            path="/dashboard/Detail/:id"
-            element={<DetailCategories />}
-          ></Route>
-          <Route
-            path="/listProduct/Detail/:id"
-            element={<DetailProduct />}
-          ></Route>
-          <Route path="/listProduct/Create" element={<CreateProduct />}></Route>
-          <Route
-            path="/categories/Create"
-            element={<CreateCategories />}
-          ></Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Dashboard />}></Route>
+            <Route element={<ProtectedRouteAdmin />}>
+              <Route path="/listProduct" element={<ListProduct />}></Route>
+              <Route path="/users" element={<Users />}></Route>
+              <Route path="/users/detail-user" element={<DetailUser />}></Route>
+              <Route path="/categories" element={<Categories />}></Route>
+              <Route
+                path="/categories/detail-categogy"
+                element={<DetailCategories />}
+              ></Route>
+              <Route
+                path="/listProduct/detail-product"
+                element={<DetailProduct />}
+              ></Route>
+              <Route
+                path="/listProduct/Create"
+                element={<CreateProduct />}
+              ></Route>
+              <Route
+                path="/categories/Create"
+                element={<CreateCategories />}
+              ></Route>
+            </Route>
+          </Route>
         </Routes>
       </SlideBar>
     </BrowserRouter>

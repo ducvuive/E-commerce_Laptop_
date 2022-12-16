@@ -9,13 +9,13 @@ namespace ShareView.DTO
     public partial class ProcessorDTO
     {
         [Key]
-        public int BoXuLyId { get; set; }
-        public string? CongNgheCPU { get; set; }
-        public int? SoNhan { get; set; } = default;
-        public int? SoLuong { get; set; } = default;
-        public string? TocDoCPU { get; set; }
-        public string? ToCDoToiDa { get; set; }
-        public string? BoNhoDem { get; set; }
+        public int ProcessorId { get; set; }
+        public string? CPUTechnology { get; set; }
+        public int? Multiplier { get; set; } = default;
+        public int? Thread { get; set; } = default;
+        public string? Speed { get; set; }
+        public string? MaxSpeed { get; set; }
+        public string? Cache { get; set; }
 
         //public virtual List<SanPhamDTO> SanPham { get; set; } = new List<SanPhamDTO>();
     }

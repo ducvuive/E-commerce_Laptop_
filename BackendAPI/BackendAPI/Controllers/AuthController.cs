@@ -9,8 +9,10 @@ using System.Text;
 
 namespace BackendAPI.Controllers
 {
-    /*[route("[controller]")]
-    [apicontroller]*/
+    /*    [route("[controller]")]
+        [apicontroller]*/
+    [Route("[controller]")]
+    [ApiController]
     public class AuthController : Controller
     {
         private readonly IConfiguration config;

@@ -8,13 +8,11 @@ namespace BackendAPI.Models
 {
     public partial class InvoiceDetail
     {
-        public int HoaDonId { get; set; }
-        public int SanPhamId { get; set; }
-
+        public int InvoiceId { get; set; }
+        public int ProductId { get; set; }
         [Required]
-        public int? SoLuong { get; set; }
-
-        public virtual Invoice HoaDon { get; set; }
-        public virtual Product SanPham { get; set; }
+        public int? Quantity { get; set; }
+        public virtual Invoice Invoice { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

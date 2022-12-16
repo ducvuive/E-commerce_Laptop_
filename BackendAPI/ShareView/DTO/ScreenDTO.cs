@@ -5,12 +5,8 @@ namespace ShareView.DTO
     public class ScreenDTO
     {
         [Key]
-        public int ManHinhId { get; set; }
-        public string? KichThuoc { get; set; }
-        public string? DoPhanGiai { get; set; }
-        public string? TanSoQuet { get; set; }
-        public string? CongNgheMH { get; set; }
-        public string? CamUng { get; set; }
+        public int ScreenId { get; set; }
+        public string? Size { get; set; }
 
         //public virtual List<SanPhamDTO> Sanpham { get; set; } = new List<SanPhamDTO>();
     }

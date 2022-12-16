@@ -14,7 +14,7 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
 
     public virtual DbSet<Ram> Ram { get; set; }
     public virtual DbSet<Processor> Processor { get; set; }
-    public virtual DbSet<Connect> Connect { get; set; }
+    //public virtual DbSet<Connect> Connect { get; set; }
     public virtual DbSet<InvoiceDetail> InvoiceDetail { get; set; }
     public virtual DbSet<Category> Category { get; set; }
     public virtual DbSet<Invoice> Invoice { get; set; }
@@ -29,7 +29,7 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
 
         builder.ApplyConfiguration(new ProcessorConfig());
 
-        builder.ApplyConfiguration(new ConnectConfig());
+        //builder.ApplyConfiguration(new ConnectConfig());
 
         builder.ApplyConfiguration(new InvoiceDetailConfig());
 

@@ -47,7 +47,7 @@ namespace BackendAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCTHD(int id, InvoiceDetailDTO cTHD_DTO)
         {
-            if (id != cTHD_DTO.SanPhamId)
+            if (id != cTHD_DTO.ProductId)
             {
                 return BadRequest();
             }
@@ -79,13 +79,13 @@ namespace BackendAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<InvoiceDetailDTO>> PostCTHD(InvoiceDetailDTO cTHD_DTO)
         {
-            var product = await _context.InvoiceDetail.FindAsync(cTHD_DTO.SanPhamId);
-            product.SoLuong = product.SoLuong - cTHD_DTO.SoLuong;
+            var product = await _context.Product.FindAsync(cTHD_DTO.ProductId);
+            product.Quantity = product.Quantity - cTHD_DTO.Quantity;
             var cTHD = new InvoiceDetail
             {
-                SanPhamId = cTHD_DTO.SanPhamId,
-                HoaDonId = cTHD_DTO.HoaDonId,
-                SoLuong = cTHD_DTO.SoLuong,
+                ProductId = cTHD_DTO.ProductId,
+                InvoiceId = cTHD_DTO.InvoiceId,
+                Quantity = cTHD_DTO.Quantity,
             };
             _context.InvoiceDetail.Add(cTHD);
             try
@@ -94,7 +94,7 @@ namespace BackendAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (CTHDExists(cTHD.SanPhamId))
+                if (CTHDExists(cTHD.ProductId))
                 {
                     return Conflict();
                 }
@@ -125,7 +125,7 @@ namespace BackendAPI.Controllers
 
         private bool CTHDExists(int id)
         {
-            return _context.InvoiceDetail.Any(e => e.SanPhamId == id);
+            return _context.InvoiceDetail.Any(e => e.ProductId == id);
         }
     }
 }

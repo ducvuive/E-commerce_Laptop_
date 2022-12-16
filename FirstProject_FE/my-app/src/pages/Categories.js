@@ -1,21 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Grid, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import ConfirmAction from "../components/modal/Modal";
 import { instanceOf } from "prop-types";
-import { withCookies, Cookies } from "react-cookie";
+import { Cookies } from "react-cookie";
 const Categories = () => {
   const [categories, setCategogies] = useState([]);
   const [idCategories, setIdCategories] = useState("");
-  console.log("Categories ~ idCategories", idCategories);
+  const navigate = useNavigate();
   const [modalShow, setModalShow] = React.useState(false);
-  console.log("Categories ~ categories", categories);
   const loadCate = async () => {
     const cookies = new Cookies();
-    console.log("cookie123", cookies.get("token"));
     const token = cookies.get("token");
     await axios
       .get("https://localhost:7123/api/Categories", {
@@ -28,7 +26,6 @@ const Categories = () => {
       });
   };
   useEffect(() => {
-    console.log("use effect");
     loadCate();
   }, []);
   function ConfirmForm(id) {
@@ -36,12 +33,13 @@ const Categories = () => {
     setIdCategories(id);
   }
   function DeleteCate() {
-    console.log("DeleteCate ~ id", idCategories);
     setModalShow(false);
     axios
       .put(`https://localhost:7123/api/Categories/delete/${idCategories}`)
       .then(
-        setCategogies(categories.filter((o, i) => o.dmspId !== idCategories))
+        setCategogies(
+          categories.filter((o, i) => o.categoryId !== idCategories)
+        )
       );
     setIdCategories();
   }
@@ -49,37 +47,37 @@ const Categories = () => {
     setIdCategories();
     setModalShow(false);
   }
+  const DetailCategory = (idCategory) => {
+    navigate(`detail-categogy`, {
+      state: {
+        idCategory: idCategory,
+      },
+    });
+  };
   const columns = [
-    { field: "dmspId", flex: 1, headerName: "ID", type: "number" },
-    { field: "tenDM", flex: 1, headerName: "Danh mục sản phẩm" },
+    { field: "categoryId", flex: 1, headerName: "ID", type: "number" },
+    { field: "name", flex: 1, headerName: "Danh mục sản phẩm" },
     {
       field: "action",
       headerName: "Tác vụ",
       flex: 1,
-      renderCell: ({ row: { dmspId } }) => {
+      renderCell: ({ row: { categoryId } }) => {
         return (
           <Grid>
-            <Link to={`/dashboard/Detail/${dmspId}`}>
-              <Button variant="outlined">Chi tiết</Button>
-            </Link>
-            {/* <Link to={`/category/update/${dmspId}`} className="ms-3"> */}
-            {/* <Button
+            <Button
               variant="outlined"
-              color="error"
-              className="ms-3"
-              onClick={() => DeleteCate(dmspId)}
+              onClick={() => DetailCategory(categoryId)}
             >
-              Xóa
-            </Button> */}
+              Chi tiết
+            </Button>
             <Button
               variant="outlined"
               color="error"
               className="ms-3"
-              onClick={() => ConfirmForm(dmspId)}
+              onClick={() => ConfirmForm(categoryId)}
             >
               Xóa
             </Button>
-            {/* </Link> */}
           </Grid>
         );
       },
@@ -106,8 +104,7 @@ const Categories = () => {
           rows={categories}
           columns={columns}
           pageSize={8}
-          //rowsPerPageOptions={[5]}
-          getRowId={(row) => row.dmspId}
+          getRowId={(row) => row.categoryId}
         />
       </div>
     </Fragment>

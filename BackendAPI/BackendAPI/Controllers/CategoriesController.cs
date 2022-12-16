@@ -15,7 +15,7 @@ namespace BackendAPI.Controllers
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
-        /*        public DanhMucSanPhamsController(UserDbContext context, IMapper mapper)
+        /*        public CategoriesController(UserDbContext context, IMapper mapper)
                 {
                     _context = context;
                     _mapper = mapper;
@@ -66,9 +66,9 @@ namespace BackendAPI.Controllers
             //DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
             Category category = new Category()
             {
-                TenDM = danhMucSanPham.TenDM,
+                Name = danhMucSanPham.Name,
                 Description = danhMucSanPham.Description,
-                isValid = 1,
+                isDisabled = 1,
             };
             //_context.DanhMucSanPham.Add(_danhMucSanPham);
             //await _context.SaveChangesAsync();
@@ -84,10 +84,10 @@ namespace BackendAPI.Controllers
         public async Task<IActionResult> UpdateCategory(int id, CategoryAdminDTO danhMucSanPhamDTO)
         {
             var category = await _categoryRepository.GetCategory(id);
-            category.TenDM = danhMucSanPhamDTO.TenDM;
+            category.Name = danhMucSanPhamDTO.Name;
             category.Description = danhMucSanPhamDTO.Description;
-            category.DMSPId = danhMucSanPhamDTO.DMSPId;
-            category.isValid = 1;
+            category.CategoryId = danhMucSanPhamDTO.CategoryId;
+            category.isDisabled = 1;
             if (category == null)
             {
                 return NotFound();
@@ -109,8 +109,6 @@ namespace BackendAPI.Controllers
             {
                 return NotFound();
             }
-            //category.isValid = 0;
-            //await _context.SaveChangesAsync();
             await _categoryRepository.DeleteCategory(category);
             return Ok("Xoa thanh cong");
         }

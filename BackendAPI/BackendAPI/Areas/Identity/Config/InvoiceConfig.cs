@@ -10,9 +10,9 @@ namespace BackendAPI.Areas.Identity.Config
         {
             builder.ToTable("Invoice");
 
-            builder.HasKey(o => o.HoaDonId);
+            builder.HasKey(o => o.InvoiceId);
 
-            builder.Property(o => o.DiaChiGiaoHang)
+            builder.Property(o => o.Address)
            .IsRequired();
 
         }

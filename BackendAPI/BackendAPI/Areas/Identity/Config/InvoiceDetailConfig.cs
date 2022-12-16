@@ -10,7 +10,7 @@ namespace BackendAPI.Areas.Identity.Config
         {
             builder.ToTable("InvoiceDetail");
 
-            builder.HasKey(o => new { o.SanPhamId, o.HoaDonId });
+            builder.HasKey(o => new { o.ProductId, o.InvoiceId });
 
         }
     }

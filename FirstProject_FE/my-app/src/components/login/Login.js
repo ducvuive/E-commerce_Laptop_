@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -38,7 +38,7 @@ const theme = createTheme();
 
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  const [error, setError] = React.useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -48,15 +48,14 @@ export default function Login() {
       password: data.get("password"),
     });
     axios
-      .post(`https://localhost:7123/login/`, {
+      .post(`https://localhost:7123/Auth/login/`, {
         UserName: data.get("email"),
         Password: data.get("password"),
       })
       .then((response) => {
         //document.cookie = "token=" + response.data.value; /*token location*/
         setCookie("token", response.data.value, "/");
-        console.log(response.data.value);
-        console.log(".then ~ document.cookie", document.cookie);
+        console.log(".then ~ document.response", response);
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.data.value}`;

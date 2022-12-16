@@ -25,7 +25,7 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult<InvoiceDTO>> GetHoaDon()
         {
             //List<Invoice> hd = new List<Invoice>();
-            var invoice = _context.Invoice.OrderByDescending(s => s.HoaDonId).FirstOrDefault();
+            var invoice = _context.Invoice.OrderByDescending(s => s.InvoiceId).FirstOrDefault();
             return Ok(invoice);
         }
 
@@ -48,8 +48,8 @@ namespace BackendAPI.Controllers
         {
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == email);
             Invoice invoice = _mapper.Map<Invoice>(hoaDonDTO);
-            invoice.KhachHang = user;
-            invoice.TrangThai = 1;
+            invoice.Customer = user;
+            invoice.Status = 1;
             _context.Invoice.Add(invoice);
             await _context.SaveChangesAsync();
 
@@ -73,9 +73,9 @@ namespace BackendAPI.Controllers
             return NoContent();
         }
 
-        private bool HoaDonExists(int id)
-        {
-            return _context.Invoice.Any(e => e.HoaDonId == id);
-        }
+        //private bool HoaDonExists(int id)
+        //{
+        //    return _context.Invoice.Any(e => e.HoaDonId == id);
+        //}
     }
 }

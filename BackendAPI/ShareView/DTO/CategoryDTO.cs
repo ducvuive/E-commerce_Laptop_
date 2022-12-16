@@ -5,11 +5,9 @@ namespace ShareView.DTO
     public class CategoryDTO
     {
         [Key]
-        public int DMSPId { get; set; }
-        public string TenDM { get; set; }
+        public int CategoryId { get; set; }
+        public string Name { get; set; }
         public string? Description { get; set; }
-        public int? isValid { get; set; }
-
-        //public virtual List<SanPhamDTO> SanPhams { get; set; } = new List<SanPhamDTO>();
+        public int? isDisabled { get; set; }
     }
 }

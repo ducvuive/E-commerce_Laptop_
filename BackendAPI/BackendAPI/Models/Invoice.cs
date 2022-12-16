@@ -11,23 +11,22 @@ namespace BackendAPI.Models
     public partial class Invoice
     {
         [Key]
-        public int HoaDonId { get; set; }
+        public int InvoiceId { get; set; }
         [Required]
-        public DateTime? NgayHD { get; set; }
+        public DateTime? DateReceived { get; set; }
 
         [MaxLength(100)]
-        public string? NguoiNhan { get; set; }
-        public string? SDT { get; set; }
+        public string? Receiver { get; set; }
+        public string? Phone { get; set; }
 
         [MaxLength(100)]
-        public string? DiaChiGiaoHang { get; set; }
+        public string? Address { get; set; }
 
         [Required]
-        public long? TongTien { get; set; }
-        public int? TrangThai { get; set; }
-        [ForeignKey("KhachHangId")]
-        public UserIdentity? KhachHang { get; set; }
-        //public virtual UserIdentity? MaKhacHangId_ { get; set; }
-        public virtual List<InvoiceDetail> CTHD { get; set; } = new List<InvoiceDetail>();
+        public long? Total { get; set; }
+        public int? Status { get; set; }
+        [ForeignKey("CustomerId")]
+        public UserIdentity? Customer { get; set; }
+        public virtual List<InvoiceDetail> InvoiceDetail { get; set; } = new List<InvoiceDetail>();
     }
 }

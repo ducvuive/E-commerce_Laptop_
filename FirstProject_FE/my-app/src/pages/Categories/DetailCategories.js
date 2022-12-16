@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Button from "react-bootstrap/esm/Button";
 const schemaValidation = yup.object({
   tenDM: yup
     .string()
@@ -17,9 +16,10 @@ const schemaValidation = yup.object({
 });
 
 const DetailCategories = () => {
+  const location = useLocation();
   const [categories, setCategogies] = useState("");
-  console.log("DetailCategories ~ categories", categories);
   const navigate = useNavigate();
+  const idCategory = location.state.idCategory;
   const { id } = useParams();
   const {
     register,
@@ -32,26 +32,23 @@ const DetailCategories = () => {
   useEffect(() => {
     console.log("render");
     axios
-      .get(`https://localhost:7123/api/Categories/${id}`)
+      .get(`https://localhost:7123/api/Categories/${idCategory}`)
       .then((response) => {
         setCategogies(response.data);
       });
   }, []);
-  console.log(123);
-  setValue("tenDM", categories.tenDM);
-  console.log("set value");
+
+  setValue("tenDM", categories.name);
   setValue("description", categories.description);
   const onSubmit = (data) => {
-    //alert(JSON.stringify(data));
     console.log("onSubmit ~ data", data);
+    console.log("onSubmit ~ idCategory", idCategory);
     if (isValid) {
       alert("Cập nhật thông tin thành công");
-      console.log("onSubmit ~ data", data);
-      console.log("onSubmit ~ data1", id, typeof parseInt(id));
       axios
-        .put(`https://localhost:7123/api/Categories/${id}`, {
-          dmspId: parseInt(id),
-          tenDM: data.tenDM,
+        .put(`https://localhost:7123/api/Categories/${idCategory}`, {
+          categoryId: parseInt(idCategory),
+          name: data.tenDM,
           description: data.description,
         })
         .then(navigate("/categories"))
@@ -72,8 +69,6 @@ const DetailCategories = () => {
           id="tenDM"
           {...register("tenDM")}
           className="form-control"
-          //defaultValue={categories.tenDM}
-          // {...register("tenDM")}
         />
         {errors.tenDM && (
           <div className="text-danger">{errors.tenDM.message}</div>

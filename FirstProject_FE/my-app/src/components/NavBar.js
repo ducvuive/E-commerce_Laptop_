@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Cookies, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 const NavBar = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  console.log("NavBar ~ cookies", cookies);
-  //const [removeCookie] = useCookies(["token"]);
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
-  console.log("NavBar ~ token", token);
-  console.log("NavBar ~ user", user);
   const loadCate = async () => {
     //const cookies = new Cookies();
     const token = cookies["token"];
     if (cookies != null) {
       const decoded = jwt_decode(token);
-      console.log("loadCate ~ decoded", decoded);
       setUser(decoded.email);
       setToken(token);
     }
-    //console.log("loadCate ~ decoded", decoded);
   };
   useEffect(() => {
     loadCate();
@@ -60,7 +54,7 @@ const NavBar = () => {
               <ul className="mb-2 navbar-nav me-auto mb-lg-0"></ul>
               <ul className="d-flex navbar-nav">
                 <li className="nav-item">
-                  <Link className="nav-link text-dark">Đăng kí</Link>
+                  {/* <Link className="nav-link text-dark">Đăng kí</Link> */}
                 </li>
                 <li className="nav-item">
                   <Link to={"/login"} className="nav-link text-dark">

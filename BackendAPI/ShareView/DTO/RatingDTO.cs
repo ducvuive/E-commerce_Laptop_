@@ -13,7 +13,7 @@ namespace ShareView.DTO
         public int? Rate { get; set; }
         public DateTime PublishedDate { get; set; }
         public string Comments { get; set; }
-        public int sanPhamId { get; set; }
-        public UserIdentityDTO? KhachHang { get; set; }
+        public int ProductId { get; set; }
+        public UserIdentityDTO? Customer { get; set; }
     }
 }

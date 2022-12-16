@@ -9,22 +9,22 @@ namespace BackendAPI.Models
     public partial class Processor
     {
         [Key]
-        public int BoXuLyId { get; set; }
+        public int ProcessorId { get; set; }
 
         [MaxLength(100)]
-        public string? CongNgheCPU { get; set; }
+        public string? CPUTechnology { get; set; }
 
         [MaxLength(100)]
-        public int? SoNhan { get; set; } = default;
+        public int? Multiplier { get; set; } = default;
 
         [MaxLength(100)]
-        public int? SoLuong { get; set; } = default;
-        public string? TocDoCPU { get; set; }
-        public string? ToCDoToiDa { get; set; }
+        public int? Thread { get; set; } = default;
+        public string? Speed { get; set; }
+        public string? MaxSpeed { get; set; }
 
         [MaxLength(100)]
-        public string? BoNhoDem { get; set; }
+        public string? Cache { get; set; }
 
-        public virtual List<Product> SanPhams { get; set; } = new List<Product>();
+        public virtual List<Product> Products { get; set; } = new List<Product>();
     }
 }

@@ -19,21 +19,22 @@ namespace CustomerSite.Clients
 
         public async Task<InvoiceDTO> GetHoaDon()
         {
-            var response = await httpClient.GetAsync("api/Invoice/");
+            var response = await httpClient.GetAsync("/api/Invoice/");
             var contents = await response.Content.ReadAsStringAsync();
             var id = JsonConvert.DeserializeObject<InvoiceDTO>(contents);
             return id;
         }
-        public async Task AddHoaDon(InvoiceDTO hoaDonDTO, string userName)
+        public async Task AddHoaDon(InvoiceDTO hoaDonDTO, string email)
         {
             var hoaDon_ = JsonConvert.SerializeObject(hoaDonDTO);
-            await httpClient.PostAsync("api/Invoice/" + userName, new StringContent(hoaDon_, Encoding.UTF8, "application/json"));
+            var a = await httpClient.PostAsync("/api/Invoice/" + email, new StringContent(hoaDon_, Encoding.UTF8, "application/json"));
+            var b = 1;
         }
 
         public async Task AddCTHD(InvoiceDetailDTO cthd_DTO)
         {
             var cthd_ = JsonConvert.SerializeObject(cthd_DTO);
-            await httpClient.PostAsync("api/InvoiceDetail/", new StringContent(cthd_, Encoding.UTF8, "application/json"));
+            var a = await httpClient.PostAsync("/api/InvoiceDetail", new StringContent(cthd_, Encoding.UTF8, "application/json"));
         }
     }
 }

@@ -10,17 +10,16 @@ const schemaValidation = yup.object({
   nameProduct: yup
     .string()
     .required("Vui lòng nhập tên sản phẩm")
-    .max(50, "Tên sản phẩm có dưới 50 kí tự"),
+    .max(150, "Tên sản phẩm có dưới 150 kí tự"),
   price: yup.string().label("Giá").required("Vui lòng nhập giá sản phấm"),
 });
 
 const CreateProduct = () => {
   const [product, setProduct] = useState("");
   const [screen, setScreen] = useState([]);
-  console.log("CreateProduct ~ screen", screen);
   const [ram, setRam] = useState([]);
   const [processor, setProcessor] = useState([]);
-  const [connect, setConnect] = useState([]);
+  console.log("CreateProduct ~ processor", processor);
   const [listCategory, setListCategory] = useState([]);
 
   const navigate = useNavigate();
@@ -56,15 +55,9 @@ const CreateProduct = () => {
       setProcessor(response.data);
     });
   };
-  const loadConnect = async () => {
-    await axios.get("https://localhost:7123/api/Connect").then((response) => {
-      setConnect(response.data);
-    });
-  };
   let date = new Date();
   useEffect(() => {
     loadCate();
-    loadConnect();
     loadProcessor();
     loadScreen();
     loadRam();
@@ -72,22 +65,20 @@ const CreateProduct = () => {
   const onSubmit = (data) => {
     console.log("onSubmit ~ data", data);
     let yourDate = new Date().toISOString();
-    //const offset = yourDate.getTimezoneOffset();
     console.log("day", yourDate);
     if (isValid) {
       alert("Thêm sản phẩm thành công");
       axios
         .post(`https://localhost:7123/api/Product/`, {
-          manHinhId: data.screen,
-          dmspId: data.listCategory,
-          congKetNoiId: data.connect,
+          screenId: data.screen,
+          categoryId: data.listCategory,
+          processorId: data.processor,
           ramId: data.ram,
-          boXuLyId: data.processor,
-          tenSP: data.nameProduct,
-          donGia: data.price,
-          soLuong: data.number,
-          ngayCapNhat: yourDate,
-          ngayTao: yourDate,
+          nameProduct: data.nameProduct,
+          price: data.price,
+          quantity: data.quantity,
+          updatedDate: yourDate,
+          publishedDate: yourDate,
         })
         .then(navigate("/listProduct"))
         .catch(function (error) {
@@ -136,8 +127,8 @@ const CreateProduct = () => {
             <option selected>Vui lòng chọn danh mục</option>
             {listCategory.map((item, index) => {
               return (
-                <option value={item.dmspId} key={index}>
-                  {item.tenDM}
+                <option value={item.categoryId} key={index}>
+                  {item.name}
                 </option>
               );
             })}
@@ -156,11 +147,11 @@ const CreateProduct = () => {
             {screen.map((item, index) => {
               return (
                 <option
-                  value={item.manHinhId}
+                  value={item.screenId}
                   key={index}
                   //{...register("screen")}
                 >
-                  {index} {item.manHinhId} {item.kichThuoc} {item.doPhanGiai}
+                  {item.size}
                 </option>
               );
             })}
@@ -176,8 +167,8 @@ const CreateProduct = () => {
             <option selected>Vui lòng chọn bộ xử lý</option>
             {processor.map((item, index) => {
               return (
-                <option value={item.boXuLyId} key={item.boXuLyId}>
-                  {item.congNgheCPU}
+                <option value={item.processorId} key={item.processorId}>
+                  {item.cpuTechnology}
                 </option>
               );
             })}
@@ -196,40 +187,23 @@ const CreateProduct = () => {
             {ram.map((item, index) => {
               return (
                 <option value={item.ramId} key={index}>
-                  {item.loaiRam} {item.dungLuongRam}
+                  {item.typee} {item.capacity}
                 </option>
               );
             })}
           </select>
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Cổng kết nối</label>
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            {...register("connect")}
-          >
-            <option selected>Vui lòng chọn cổng kết nối</option>
-            {connect.map((item, index) => {
-              return (
-                <option value={item.congKetNoiId} key={index}>
-                  {item.congKetNoiId}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-      </div>
-      <div className="row">
-        <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="number">Số lượng</label>
+          <label htmlFor="quantity">Số lượng</label>
           <input
             type="number"
             className="form-control"
-            id="number"
-            {...register("number")}
+            id="quantity"
+            {...register("quantity")}
           />
         </div>
+      </div>
+      <div className="row">
         <div className="col"></div>
       </div>
       <div className="d-flex ">

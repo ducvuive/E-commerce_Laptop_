@@ -13,7 +13,7 @@ namespace BackendAPI.Services
         }
         public async Task<List<Category>> GetCategories()
         {
-            var dmsp = await _context.Category.Where(s => s.isValid == 1).ToListAsync();
+            var dmsp = await _context.Category.Where(s => s.isDisabled == 1).ToListAsync();
             return dmsp;
         }
         public async Task<Category> GetCategory(int id)
@@ -31,10 +31,10 @@ namespace BackendAPI.Services
         {
             var category = new Category
             {
-                DMSPId = danhMucSanPham.DMSPId,
-                TenDM = danhMucSanPham.TenDM,
+                CategoryId = danhMucSanPham.CategoryId,
+                Name = danhMucSanPham.Name,
                 Description = danhMucSanPham.Description,
-                isValid = 1
+                isDisabled = 1
             };
             _context.Category.Add(category);
             await _context.SaveChangesAsync();
@@ -47,8 +47,7 @@ namespace BackendAPI.Services
         }
         public async Task<bool> DeleteCategory(Category danhMucSanPham)
         {
-            danhMucSanPham.isValid = 0;
-            //_context.DanhMucSanPham.Remove(danhMucSanPham);
+            danhMucSanPham.isDisabled = 0;
             await _context.SaveChangesAsync();
             return true;
         }
