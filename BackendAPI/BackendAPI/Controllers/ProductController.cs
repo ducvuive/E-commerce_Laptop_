@@ -182,7 +182,6 @@ namespace BackendAPI.Controllers
         {
             var skip = 12 * (page - 1);
             var results = _context.Product.Where(s => s.NameProduct.Contains(ten)).Skip(skip).Take(12);
-            ;
             if (results == null)
             {
                 return NotFound();
