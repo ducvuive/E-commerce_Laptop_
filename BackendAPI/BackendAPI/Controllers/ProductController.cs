@@ -133,15 +133,11 @@ namespace BackendAPI.Controllers
             };
         }
 
-
-
-
-
-        [HttpGet("GetSanPhamTheoDmTheoTrang/{dm}/{page}")]
-        public async Task<ActionResult> GetSanPhamTheoDmTheoTrang(int dm, int page)
+        [HttpGet("GetSanPhamTheoDmTheoTrang/{category}/{page}")]
+        public async Task<ActionResult> GetSanPhamTheoDmTheoTrang(int category, int page)
         {
             var skip = 12 * (page - 1);
-            var results = _context.Product.Where(s => s.CategoryId == dm).Skip(skip).Take(12);
+            var results = _context.Product.Where(s => s.CategoryId == category).Skip(skip).Take(12);
             ;
             if (results == null)
             {
