@@ -1,5 +1,7 @@
-using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Services;
+using BackendAPI.Application.DependencyInjection;
+using BackendAPI.Persistence.Identity;
+using BackendAPI.Persistence.Data;
+using BackendAPI.Persistence.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("UserDbContextConnection") ?? throw new InvalidOperationException("Connection string 'UserDbContextConnection' not found.");
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-builder.Services.AddDbContext<UserDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddApplication();
+builder.Services.AddPersistence(connectionString);
 
 builder.Services.AddDefaultIdentity<UserIdentity>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
@@ -22,7 +24,6 @@ builder.Services.AddDefaultIdentity<UserIdentity>(options => options.SignIn.Requ
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

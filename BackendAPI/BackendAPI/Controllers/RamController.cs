@@ -1,5 +1,6 @@
-﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
+using AutoMapper;
+using BackendAPI.Persistence.Identity;
+using BackendAPI.Persistence.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;

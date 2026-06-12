@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
+using AutoMapper;
+using BackendAPI.Persistence.Data;
+using BackendAPI.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,13 +65,34 @@ namespace BackendAPI.Controllers
         {
             var product = await _context.Product.Where(p => p.ProductId == id)
                                                 .Include(p => p.Ratings)
-                                                .ThenInclude(r => r.Customer)
                                                 .FirstOrDefaultAsync();
             if (product == null)
             {
                 return NotFound();
             }
             var mapper = _mapper.Map<ProductDTO>(product);
+            if (mapper.Ratings is not null && product.Ratings.Any())
+            {
+                var customerIds = product.Ratings
+                    .Select(r => r.CustomerId)
+                    .Where(id => id is not null)
+                    .Distinct()
+                    .ToList();
+
+                var customers = await _context.UserIdentity
+                    .Where(u => customerIds.Contains(u.Id))
+                    .ToDictionaryAsync(u => u.Id);
+
+                for (var index = 0; index < product.Ratings.Count && index < mapper.Ratings.Count; index++)
+                {
+                    var customerId = product.Ratings[index].CustomerId;
+                    if (customerId is not null && customers.TryGetValue(customerId, out var customer))
+                    {
+                        mapper.Ratings[index].Customer = _mapper.Map<UserIdentityDTO>(customer);
+                    }
+                }
+            }
+
             return mapper;
         }
         // GET: api/SanPhams/5

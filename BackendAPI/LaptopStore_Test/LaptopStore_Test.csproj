@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.2" />
+    <PackageReference Include="NetArchTest.Rules" Version="1.3.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,6 +31,9 @@
   <ItemGroup>
     <ProjectReference Include="..\BackendAPI\BackendAPI.csproj" />
     <ProjectReference Include="..\ShareView\ShareView.csproj" />
+    <ProjectReference Include="..\BackendAPI.Domain\BackendAPI.Domain.csproj" />
+    <ProjectReference Include="..\BackendAPI.Application\BackendAPI.Application.csproj" />
+    <ProjectReference Include="..\BackendAPI.Persistence\BackendAPI.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
-using BackendAPI.Services;
+using AutoMapper;
+using BackendAPI.Domain.Entities;
+using BackendAPI.Application.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShareView.DTO;
@@ -12,18 +11,12 @@ namespace BackendAPI.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly UserDbContext _context;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
-        /*        public CategoriesController(UserDbContext context, IMapper mapper)
-                {
-                    _context = context;
-                    _mapper = mapper;
-                }*/
+
         public CategoriesController(ICategoryRepository danhMucSanPhamRepository, IMapper mapper)
         {
             _categoryRepository = danhMucSanPhamRepository;
-            //_context = context;
             _mapper = mapper;
         }
 

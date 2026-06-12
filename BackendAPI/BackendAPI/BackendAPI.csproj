@@ -24,6 +24,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShareView\ShareView.csproj" />
+    <ProjectReference Include="..\BackendAPI.Domain\BackendAPI.Domain.csproj" />
+    <ProjectReference Include="..\BackendAPI.Application\BackendAPI.Application.csproj" />
+    <ProjectReference Include="..\BackendAPI.Persistence\BackendAPI.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

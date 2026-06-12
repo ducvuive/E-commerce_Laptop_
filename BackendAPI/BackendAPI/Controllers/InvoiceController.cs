@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
+using AutoMapper;
+using BackendAPI.Persistence.Data;
+using BackendAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
@@ -48,7 +48,7 @@ namespace BackendAPI.Controllers
         {
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == email);
             Invoice invoice = _mapper.Map<Invoice>(hoaDonDTO);
-            invoice.Customer = user;
+            invoice.CustomerId = user?.Id;
             invoice.Status = 1;
             _context.Invoice.Add(invoice);
             await _context.SaveChangesAsync();

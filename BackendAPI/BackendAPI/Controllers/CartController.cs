@@ -1,6 +1,7 @@
-﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
+using AutoMapper;
+using BackendAPI.Persistence.Identity;
+using BackendAPI.Persistence.Data;
+using BackendAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

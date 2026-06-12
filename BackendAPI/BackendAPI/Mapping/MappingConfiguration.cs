@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
+using AutoMapper;
+using BackendAPI.Persistence.Identity;
+using BackendAPI.Domain.Entities;
 using ShareView.DTO;
 
 namespace BackendAPI.Mapping

@@ -1,4 +1,4 @@
-using BackendAPI.Areas.Identity.Data;
+using BackendAPI.Persistence.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

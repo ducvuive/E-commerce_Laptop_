@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using BackendAPI.Areas.Identity.Data;
-using BackendAPI.Models;
+using AutoMapper;
+using BackendAPI.Persistence.Data;
+using BackendAPI.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
@@ -50,7 +50,7 @@ namespace BackendAPI.Controllers
             var sanPham = await _context.Product.FirstOrDefaultAsync(i => i.ProductId == ratingDTO.ProductId);
             var ratings = await _context.Rating.Where(s => s.Product.ProductId == ratingDTO.ProductId).ToListAsync();
             Rating rating = _mapper.Map<Rating>(ratingDTO);
-            rating.Customer = user;
+            rating.CustomerId = user?.Id;
             rating.Product = sanPham;
             _context.Rating.Add(rating);
             foreach (var item in ratings)
