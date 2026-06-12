@@ -53,12 +53,13 @@ export default function Login() {
         Password: data.get("password"),
       })
       .then((response) => {
+        const token = response.data?.value || response.data;
         //document.cookie = "token=" + response.data.value; /*token location*/
-        setCookie("token", response.data.value, "/");
+        setCookie("token", token, { path: "/" });
         console.log(".then ~ document.response", response);
         axios.defaults.headers.common[
           "Authorization"
-        ] = `Bearer ${response.data.value}`;
+        ] = `Bearer ${token}`;
         navigate("/");
       })
       //.then(console.log("dang nhap thanh cong"))

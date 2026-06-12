@@ -32,14 +32,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                           policy =>
                           {
-                              policy.WithOrigins("https://localhost:7179",
-                                                  "")
-                                                  .AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                              policy.WithOrigins("http://localhost:3000",
-                                               "")
-                                               .AllowAnyHeader()
-                                               .AllowAnyMethod();
+                              policy.WithOrigins(
+                                      "http://localhost:3000",
+                                      "https://localhost:7179",
+                                      "http://localhost:5279")
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod();
                           });
     //options.AddPolicy("Admin", authBuilder => { authBuilder.RequireRole("Admin"); });
 });
@@ -100,7 +98,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseSession();
 app.UseHttpsRedirection();
-app.UseAuthentication(); ;
+app.UseCors(MyAllowSpecificOrigins);
+app.UseAuthentication();
 /*app.UseStaticFiles();*/
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -109,7 +108,6 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseAuthorization();
-app.UseCors(MyAllowSpecificOrigins);
 app.MapControllers();
 
 app.Run();
