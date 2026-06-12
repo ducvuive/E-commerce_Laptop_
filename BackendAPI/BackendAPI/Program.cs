@@ -89,6 +89,8 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+await SeedAdminUserAsync(app);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -111,3 +113,43 @@ app.UseCors(MyAllowSpecificOrigins);
 app.MapControllers();
 
 app.Run();
+
+async Task SeedAdminUserAsync(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserIdentity>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    if (await userManager.Users.AnyAsync())
+    {
+        return;
+    }
+
+    const string adminRole = "Admin";
+    const string adminEmail = "admin@gmail.com";
+    const string adminPassword = "Admin@123";
+
+    if (!await roleManager.RoleExistsAsync(adminRole))
+    {
+        await roleManager.CreateAsync(new IdentityRole(adminRole));
+    }
+
+    var adminUser = new UserIdentity
+    {
+        UserName = adminEmail,
+        Email = adminEmail,
+        EmailConfirmed = true
+    };
+
+    var createResult = await userManager.CreateAsync(adminUser, adminPassword);
+    if (!createResult.Succeeded)
+    {
+        throw new InvalidOperationException($"Failed to seed admin user: {string.Join(", ", createResult.Errors.Select(e => e.Description))}");
+    }
+
+    var roleResult = await userManager.AddToRoleAsync(adminUser, adminRole);
+    if (!roleResult.Succeeded)
+    {
+        throw new InvalidOperationException($"Failed to assign admin role: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
+    }
+}

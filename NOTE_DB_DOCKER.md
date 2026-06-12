@@ -68,7 +68,7 @@ Use this connection string in `BackendAPI/BackendAPI/appsettings.json` if the ba
 
 ## 6. Admin dashboard login
 
-Default admin user created for local development:
+Default admin user is auto-created by `BackendAPI/BackendAPI/Program.cs` when the database has no users:
 
 ```text
 Email: admin@gmail.com
