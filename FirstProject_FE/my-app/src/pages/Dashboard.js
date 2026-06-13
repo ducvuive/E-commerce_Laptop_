@@ -9,19 +9,19 @@ const Dashboard = () => {
       {userRole === "Admin" ? (
         <div className="text-center z-index">
           <h2 className="fs-1 text-light text-uppercase">
-            Xin chào bạn đến với trang admin
+            Welcome to the admin page
           </h2>
           <p className="fs-4 text-light text-uppercase">
-            Chúc bạn 1 ngày tốt lành
+            Have a great day
           </p>
         </div>
       ) : (
         <div className="text-center z-index">
           <h2 className="fs-1 text-light text-uppercase">
-            Bạn không có quyền truy cập trang này
+            You do not have permission to access this page
           </h2>
           <p className="fs-4 text-light text-uppercase">
-            Chúc bạn 1 ngày tốt lành
+            Have a great day
           </p>
         </div>
       )}

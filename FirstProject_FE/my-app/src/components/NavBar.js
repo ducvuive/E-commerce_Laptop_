@@ -54,11 +54,11 @@ const NavBar = () => {
               <ul className="mb-2 navbar-nav me-auto mb-lg-0"></ul>
               <ul className="d-flex navbar-nav">
                 <li className="nav-item">
-                  {/* <Link className="nav-link text-dark">Đăng kí</Link> */}
+                  {/* <Link className="nav-link text-dark">Register</Link> */}
                 </li>
                 <li className="nav-item">
                   <Link to={"/login"} className="nav-link text-dark">
-                    Đăng nhập
+                    Login
                   </Link>
                 </li>
               </ul>
@@ -75,7 +75,7 @@ const NavBar = () => {
                 </li>
                 <li className="nav-item">
                   <p className="nav-link text-dark" onClick={() => Logout()}>
-                    Đăng xuất
+                    Logout
                   </p>
                 </li>
               </ul>

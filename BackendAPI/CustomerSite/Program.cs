@@ -31,12 +31,12 @@ builder.Services.AddHttpClient("", opt =>
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<IProductClient, ProductClient>();
-builder.Services.AddScoped<IDMClient, DanhMucClient>();
-builder.Services.AddScoped<IManHinhClient, ManHinhClient>();
-builder.Services.AddScoped<IBoXuLyClient, BoXuLyClieny>();
-builder.Services.AddScoped<IBoNhoRamClient, BoNhoRamClient>();
+builder.Services.AddScoped<ICategoryClient, CategoryClient>();
+builder.Services.AddScoped<IScreenClient, ScreenClient>();
+builder.Services.AddScoped<IProcessorClient, ProcessorClient>();
+builder.Services.AddScoped<IRamClient, RamClient>();
 builder.Services.AddScoped<IUserClient, UserClient>();
-builder.Services.AddScoped<IHoaDonClient, HoaDonClient>();
+builder.Services.AddScoped<IInvoiceClient, InvoiceClient>();
 
 var app = builder.Build();
 

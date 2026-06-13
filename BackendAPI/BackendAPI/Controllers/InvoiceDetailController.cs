@@ -105,7 +105,7 @@ namespace BackendAPI.Controllers
                 }
             }
             return Ok("Toa chi tiet hoa don thanh cong");
-            //return CreatedAtAction("GetCTHD", new { id = cTHD.SanPhamId }, cTHD);
+            //return CreatedAtAction("GetCTHD", new { id = cTHD.ProductId }, cTHD);
         }
 
         // DELETE: api/CTHDs/5

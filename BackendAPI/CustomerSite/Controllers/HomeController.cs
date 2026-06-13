@@ -1,4 +1,4 @@
-﻿using CustomerSite.Clients;
+using CustomerSite.Clients;
 using CustomerSite.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -18,7 +18,7 @@ namespace CustomerSite.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var products = await productClient.GetSanPhamTopRaMat();
+            var products = await productClient.GetNewestProducts();
             return View(products);
         }
 

@@ -56,10 +56,10 @@ const Categories = () => {
   };
   const columns = [
     { field: "categoryId", flex: 1, headerName: "ID", type: "number" },
-    { field: "name", flex: 1, headerName: "Danh mục sản phẩm" },
+    { field: "name", flex: 1, headerName: "Product Category" },
     {
       field: "action",
-      headerName: "Tác vụ",
+      headerName: "Actions",
       flex: 1,
       renderCell: ({ row: { categoryId } }) => {
         return (
@@ -68,7 +68,7 @@ const Categories = () => {
               variant="outlined"
               onClick={() => DetailCategory(categoryId)}
             >
-              Chi tiết
+              Details
             </Button>
             <Button
               variant="outlined"
@@ -76,7 +76,7 @@ const Categories = () => {
               className="ms-3"
               onClick={() => ConfirmForm(categoryId)}
             >
-              Xóa
+              Delete
             </Button>
           </Grid>
         );
@@ -87,8 +87,8 @@ const Categories = () => {
   return (
     <Fragment>
       <ConfirmAction
-        title="Xác nhận xóa danh mục"
-        content="Bạn có chắc chắn muốn xóa danh mục không ?"
+        title="Confirm Category Deletion"
+        content="Are you sure you want to delete this category?"
         show={modalShow}
         onHide={() => HideModal()}
         onConfirm={() => DeleteCate()}
@@ -97,7 +97,7 @@ const Categories = () => {
         to={`Create`}
         className="px-3 py-2 mb-2 d-inline-block button_action bg-primary"
       >
-        Tạo danh mục
+        Create Category
       </Link>
       <div style={{ height: "79vh", width: "85vw" }}>
         <DataGrid

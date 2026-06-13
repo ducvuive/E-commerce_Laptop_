@@ -14,27 +14,27 @@ namespace BackendAPI.Persistence.Repositories
         }
         public async Task<List<Category>> GetCategories()
         {
-            var dmsp = await _context.Category.Where(s => s.isDisabled == 1).ToListAsync();
-            return dmsp;
+            var categories = await _context.Category.Where(s => s.isDisabled == 1).ToListAsync();
+            return categories;
         }
         public async Task<Category> GetCategory(int id)
         {
-            Category dmsp = await _context.Category.FindAsync(id);
+            Category categories = await _context.Category.FindAsync(id);
 
-            if (dmsp == null)
+            if (categories == null)
             {
                 return null;
             }
-            return dmsp;
+            return categories;
         }
 
-        public async Task CreateCategory(Category danhMucSanPham)
+        public async Task CreateCategory(Category inputCategory)
         {
             var category = new Category
             {
-                CategoryId = danhMucSanPham.CategoryId,
-                Name = danhMucSanPham.Name,
-                Description = danhMucSanPham.Description,
+                CategoryId = inputCategory.CategoryId,
+                Name = inputCategory.Name,
+                Description = inputCategory.Description,
                 isDisabled = 1
             };
             _context.Category.Add(category);
@@ -46,9 +46,9 @@ namespace BackendAPI.Persistence.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> DeleteCategory(Category danhMucSanPham)
+        public async Task<bool> DeleteCategory(Category category)
         {
-            danhMucSanPham.isDisabled = 0;
+            category.isDisabled = 0;
             await _context.SaveChangesAsync();
             return true;
         }

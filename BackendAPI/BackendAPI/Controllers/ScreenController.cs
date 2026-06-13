@@ -20,27 +20,27 @@ namespace BackendAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/ManHinhs
+        // GET: api/Screens
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<List<ScreenDTO>>> GetManHinh()
+        public async Task<ActionResult<List<ScreenDTO>>> GetScreen()
         {
             var mh = await _context.Screen.ToListAsync();
             return _mapper.Map<List<ScreenDTO>>(mh);
         }
 
-        // GET: api/ManHinhs/5
+        // GET: api/Screens/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ScreenDTO>> GetManHinh(int id)
+        public async Task<ActionResult<ScreenDTO>> GetScreen(int id)
         {
-            var manHinh = await _context.Screen.FindAsync(id);
+            var screen = await _context.Screen.FindAsync(id);
 
-            if (manHinh == null)
+            if (screen == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<ScreenDTO>(manHinh);
+            return _mapper.Map<ScreenDTO>(screen);
         }
     }
 }

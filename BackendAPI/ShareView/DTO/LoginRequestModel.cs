@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShareView.DTO
 {
@@ -6,11 +6,11 @@ namespace ShareView.DTO
     {
 
         [Required]
-        [EmailAddress(ErrorMessage = "Không đúng định dạng email")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
         [Display(Name = "Email")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Mật khẩu không được để trống")]
+        [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

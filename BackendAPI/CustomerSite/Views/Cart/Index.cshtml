@@ -1,4 +1,4 @@
-﻿@using ShareView.Constants
+@using ShareView.Constants
 @using System.IdentityModel.Tokens.Jwt
 @*@using ShareView.DTO*@
 @{
@@ -25,16 +25,16 @@
         <thead>
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Sản phẩm</th>
-                <th scope="col">Giá</th>
-                <th scope="col">Số lượng</th>
-                <th scope="col">Thành tiền</th>
+                <th scope="col">Products</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Subtotal</th>
             </tr>
         </thead>
         <tbody>
             @if (Model.Count == 0)
             {
-            <th colspan="5" class="text-center">Không có sản phẩm trong giỏ hàng</th>
+            <th colspan="5" class="text-center">There are no products in the cart</th>
             }
             else
             {
@@ -48,25 +48,25 @@
                         <td>
                             @item.Product.NameProduct
                         </td>
-                        <td>@item.Product.Price.ToString("#,##0 VNĐ")</td>
+                        <td>@item.Product.Price.ToString("#,##0 VND")</td>
                         <td class="text-center">@item.Quantity</td>
-                        <td>@thanhTien.ToString("#,##0 VNĐ")</td>
+                        <td>@thanhTien.ToString("#,##0 VND")</td>
                     </tr>
                 }
             }
         </tbody>
     </table>
         <div class="card align-items-center mx-auto" style="width: 18rem">
-                <span>Tổng tiền</span>
-                <span>@tongTien.ToString("#,##0 VNĐ")</span>
+                <span>Total</span>
+                <span>@tongTien.ToString("#,##0 VND")</span>
         </div>
     <div class="d-flex justify-content-end">
         @{
             if(@tongTien ==0){
-            <a href="" class="ms-3 text-black p-3 bg-info rounded disabled btn ">Thanh toán ngay</a>
+            <a href="" class="ms-3 text-black p-3 bg-info rounded disabled btn ">Checkout Now</a>
              }
             else{
-                <a asp-controller="Cart" asp-action="CheckOut"  class="ms-3 text-black p-3 bg-info rounded btn ">Thanh toán ngay</a>
+                <a asp-controller="Cart" asp-action="CheckOut"  class="ms-3 text-black p-3 bg-info rounded btn ">Checkout Now</a>
             } 
         }
     </div>

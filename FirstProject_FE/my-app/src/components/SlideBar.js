@@ -17,17 +17,17 @@ const Sidebar = ({ children }) => {
   const menuItem = [
     {
       path: "/listProduct",
-      name: "Sản phẩm",
+      name: "Products",
       icon: <FaClipboardList />,
     },
     {
       path: "/categories",
-      name: "Danh mục",
+      name: "Categories",
       icon: <FaAlignJustify />,
     },
     {
       path: "/users",
-      name: "Người dùng",
+      name: "Users",
       icon: <FaUserEdit />,
     },
   ];

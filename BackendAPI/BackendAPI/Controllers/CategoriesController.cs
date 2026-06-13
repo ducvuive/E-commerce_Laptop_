@@ -14,13 +14,13 @@ namespace BackendAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesController(ICategoryRepository danhMucSanPhamRepository, IMapper mapper)
+        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
         {
-            _categoryRepository = danhMucSanPhamRepository;
+            _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
 
-        // GET: api/DanhMucSanPhams
+        // GET: api/Categories
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         //[Authorize(Roles = "Admin")]
         [HttpGet]
@@ -38,7 +38,7 @@ namespace BackendAPI.Controllers
             return Ok(_mapper.Map<List<CategoryDTO>>(categories));
         }
 
-        // GET: api/DanhMucSanPhams/5
+        // GET: api/Categories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
         {
@@ -46,40 +46,40 @@ namespace BackendAPI.Controllers
             var mapper = _mapper.Map<CategoryDTO>(category);
             if (mapper is null)
             {
-                return BadRequest("Khong tim thay danh muc");
+                return BadRequest("Category not found");
             }
             return Ok(mapper);
         }
 
-        // POST: api/DanhMucSanPhams
+        // POST: api/Categories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult> CreateCategory(CategoryAdminDTO danhMucSanPham)
+        public async Task<ActionResult> CreateCategory(CategoryAdminDTO categoryDTO)
         {
-            //DanhMucSanPham _danhMucSanPham = _mapper.Map<DanhMucSanPham>(danhMucSanPham);
+            //Category _category = _mapper.Map<Category>(category);
             Category category = new Category()
             {
-                Name = danhMucSanPham.Name,
-                Description = danhMucSanPham.Description,
+                Name = categoryDTO.Name,
+                Description = categoryDTO.Description,
                 isDisabled = 1,
             };
-            //_context.DanhMucSanPham.Add(_danhMucSanPham);
+            //_context.Category.Add(_category);
             //await _context.SaveChangesAsync();
             await _categoryRepository.CreateCategory(category);
-            //return _danhMucSanPham;
-            //return dmsp;
-            return Ok("Cap nhat thanh cong");
+            //return _category;
+            //return categories;
+            return Ok("Category created successfully");
         }
 
-        // PUT: api/DanhMucSanPhams/5
+        // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, CategoryAdminDTO danhMucSanPhamDTO)
+        public async Task<IActionResult> UpdateCategory(int id, CategoryAdminDTO categoryDTO)
         {
             var category = await _categoryRepository.GetCategory(id);
-            category.Name = danhMucSanPhamDTO.Name;
-            category.Description = danhMucSanPhamDTO.Description;
-            category.CategoryId = danhMucSanPhamDTO.CategoryId;
+            category.Name = categoryDTO.Name;
+            category.Description = categoryDTO.Description;
+            category.CategoryId = categoryDTO.CategoryId;
             category.isDisabled = 1;
             if (category == null)
             {
@@ -88,12 +88,12 @@ namespace BackendAPI.Controllers
             else
             {
                 await _categoryRepository.UpdateCategory();
-                return Ok("Cap nhat thanh cong");
+                return Ok("Category updated successfully");
             }
             return NoContent();
         }
 
-        // DELETE: api/DanhMucSanPhams/5
+        // DELETE: api/Categories/5
         [HttpPut("delete/{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
@@ -103,7 +103,7 @@ namespace BackendAPI.Controllers
                 return NotFound();
             }
             await _categoryRepository.DeleteCategory(category);
-            return Ok("Xoa thanh cong");
+            return Ok("Category deleted successfully");
         }
     }
 }

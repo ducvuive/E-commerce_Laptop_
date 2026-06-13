@@ -1,4 +1,4 @@
-﻿using CustomerSite.Clients;
+using CustomerSite.Clients;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShareView.Constants;
@@ -10,15 +10,15 @@ namespace CustomerSite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IProductClient productClient;
-        private readonly IHoaDonClient hoaDonClient;
+        private readonly IInvoiceClient invoiceClient;
         private readonly IUserClient userClient;
         /*public const string CARTKEY = "cart";*/
 
-        public CartController(ILogger<HomeController> logger, IProductClient productClient, IHoaDonClient hoaDonClient, IUserClient userClient)
+        public CartController(ILogger<HomeController> logger, IProductClient productClient, IInvoiceClient invoiceClient, IUserClient userClient)
         {
             _logger = logger;
             this.productClient = productClient;
-            this.hoaDonClient = hoaDonClient;
+            this.invoiceClient = invoiceClient;
             this.userClient = userClient;
         }
         List<CartDTO> GetCartItems()
@@ -31,7 +31,7 @@ namespace CustomerSite.Controllers
             }
             return new List<CartDTO>();
         }
-        //// Xóa giỏ khỏi session
+        //// Remove cart from session
         void ClearCart()
         {
             var session = HttpContext.Session;
@@ -49,16 +49,16 @@ namespace CustomerSite.Controllers
             return View(GetCartItems());
         }
 
-        // Thêm sản phẩm vô cart
+        // Add product to cart.
         public async Task<ActionResult> AddToCart([FromRoute] int Id)
         {
 
-            var products = await productClient.GetSanPham(Id);
+            var products = await productClient.GetProduct(Id);
 
             if (products == null)
-                return NotFound("Không có sản phẩm");
+                return NotFound("Product not found");
 
-            // Xử lý đưa vào Cart ...
+            // Add or increment the product in the cart.
             var cart = GetCartItems();
             var cartitem = cart.Find(p => p.Product.ProductId == Id);
             if (cartitem != null)
@@ -71,22 +71,22 @@ namespace CustomerSite.Controllers
             }
 
 
-            // Lưu cart vào Session
+            // Save cart to session.
             SaveCartSession(cart);
 
-            // Chuyển đến trang hiện thị Cart
+            // Redirect to the cart page.
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<ActionResult> AddToCartQuantity([FromForm] int Id, [FromForm] int quantity)
         {
-            var products = await productClient.GetSanPham(Id);
+            var products = await productClient.GetProduct(Id);
 
             if (products == null)
-                return NotFound("Không có sản phẩm");
+                return NotFound("Product not found");
 
-            // Xử lý đưa vào Cart ...
+            // Add or increment the product in the cart.
             var cart = GetCartItems();
             var cartitem = cart.Find(p => p.Product.ProductId == Id);
             if (cartitem != null)
@@ -98,10 +98,10 @@ namespace CustomerSite.Controllers
                 cart.Add(new CartDTO() { Quantity = quantity, Product = products });
             }
 
-            // Lưu cart vào Session
+            // Save cart to session.
             SaveCartSession(cart);
 
-            // Chuyển đến trang hiện thị Cart
+            // Redirect to the cart page.
             return RedirectToAction("Index");
         }
 
@@ -136,40 +136,40 @@ namespace CustomerSite.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckOut([FromForm] string hoten, [FromForm] string diachi, [FromForm] string sdt, [FromForm] string email)
+        public async Task<IActionResult> CheckOut([FromForm] string fullName, [FromForm] string shippingAddress, [FromForm] string phone, [FromForm] string email)
         {
             var cart = GetCartItems();
             if (!string.IsNullOrEmpty(email))
             {
-                InvoiceDTO hd = new InvoiceDTO();
+                InvoiceDTO invoice = new InvoiceDTO();
                 long? total = 0;
-                hd.Receiver = hoten;
-                hd.Address = diachi;
-                hd.Phone = sdt;
-                hd.DateReceived = DateTime.Now;
+                invoice.Receiver = fullName;
+                invoice.Address = shippingAddress;
+                invoice.Phone = phone;
+                invoice.DateReceived = DateTime.Now;
                 foreach (var item in cart)
                 {
                     total += item.Product.Price * item.Quantity;
                 }
-                hd.Total = total;
-                await hoaDonClient.AddHoaDon(hd, email);
-                var _hoaDon = await hoaDonClient.GetHoaDon();
+                invoice.Total = total;
+                await invoiceClient.AddInvoice(invoice, email);
+                var _invoice = await invoiceClient.GetInvoice();
                 int temp;
-                if (_hoaDon == null)
+                if (_invoice == null)
                 {
                     temp = 1;
                 }
                 else
                 {
-                    temp = _hoaDon.InvoiceId;
+                    temp = _invoice.InvoiceId;
                 }
                 foreach (var item in cart)
                 {
-                    InvoiceDetailDTO ct = new InvoiceDetailDTO();
-                    ct.InvoiceId = temp;
-                    ct.ProductId = item.Product.ProductId;
-                    ct.Quantity = item.Quantity;
-                    await hoaDonClient.AddCTHD(ct);
+                    InvoiceDetailDTO invoiceDetail = new InvoiceDetailDTO();
+                    invoiceDetail.InvoiceId = temp;
+                    invoiceDetail.ProductId = item.Product.ProductId;
+                    invoiceDetail.Quantity = item.Quantity;
+                    await invoiceClient.AddInvoiceDetail(invoiceDetail);
                 }
                 ClearCart();
                 RedirectToAction(nameof(Index));

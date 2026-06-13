@@ -7,9 +7,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const schemaValidation = yup.object({
   nameProduct: yup
     .string()
-    .required("Vui lòng nhập danh mục")
-    .max(200, "Danh mục có dưới 200 kí tự"),
-  price: yup.number().required("Vui lòng nhập số tiền"),
+    .required("Please enter a category")
+    .max(200, "Category must be under 200 characters"),
+  price: yup.number().required("Please enter the amount"),
 });
 
 const DetailProduct = () => {
@@ -100,7 +100,7 @@ const DetailProduct = () => {
   const onSubmit = (data) => {
     let yourDate = new Date().toISOString();
     if (isValid) {
-      alert("Cập nhật thông tin thành công");
+      alert("Information updated successfully");
       axios
         .put(`https://localhost:7123/api/Product/${productId}`, {
           productId: productId,
@@ -125,10 +125,10 @@ const DetailProduct = () => {
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
-        <h3>Thông tin sản phẩm</h3>
+        <h3>Product Details</h3>
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="nameProduct">Tên sản phẩm</label>
+        <label htmlFor="nameProduct">Product Name</label>
         <textarea
           className="form-control"
           placeholder="Leave a comment here"
@@ -142,7 +142,7 @@ const DetailProduct = () => {
       </div>
       <div className="row">
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="price">Đơn giá</label>
+          <label htmlFor="price">Unit Price</label>
           <input
             type="text"
             className="form-control"
@@ -154,7 +154,7 @@ const DetailProduct = () => {
           )}
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Danh mục sản phẩm</label>
+          <label htmlFor="nameCategory">Product Category</label>
           <select
             className="form-select"
             aria-label="Default select example"
@@ -177,7 +177,7 @@ const DetailProduct = () => {
       </div>
       <div className="row">
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Màn hình</label>
+          <label htmlFor="nameCategory">Screen</label>
           <select
             className="form-select"
             aria-label="Default select example"
@@ -194,13 +194,13 @@ const DetailProduct = () => {
           </select>
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Bộ xử lý</label>
+          <label htmlFor="nameCategory">Processor</label>
           <select
             className="form-select"
             aria-label="Default select example"
             {...register("processor")}
           >
-            <option selected>{product.boXuLyId}</option>
+            <option selected>{product.processorId}</option>
             {processor.map((item, index) => {
               return (
                 <option value={item.processorId} key={index}>
@@ -230,7 +230,7 @@ const DetailProduct = () => {
           </select>
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="number">Số lượng</label>
+          <label htmlFor="number">Quantity</label>
           <input
             type="number"
             className="form-control"
@@ -241,7 +241,7 @@ const DetailProduct = () => {
       </div>
       <div className="row">
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="createDate">Ngày tạo</label>
+          <label htmlFor="createDate">Created Date</label>
           <input
             type="datetime-local"
             id="createDate"
@@ -250,7 +250,7 @@ const DetailProduct = () => {
           />
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="createDate">Ngày sửa lần cuối</label>
+          <label htmlFor="createDate">Last Updated Date</label>
           <input
             type="datetime-local"
             id="createDate"
@@ -261,7 +261,7 @@ const DetailProduct = () => {
       </div>
       <div className="row">
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="rating">Đánh giá</label>
+          <label htmlFor="rating">Rating</label>
           <input
             type="number"
             className="form-control"
@@ -272,7 +272,7 @@ const DetailProduct = () => {
         </div>
       </div>
       <div className="mb-2 flex-column d-flex">
-        <label>Hình ảnh</label>
+        <label>Image</label>
         <div className="d-flex justify-content-center">
           <img
             style={{ width: "400px" }}
@@ -283,7 +283,7 @@ const DetailProduct = () => {
       </div>
       <div className="d-flex ">
         <button type="submit" className="p-2 ms-auto bg-primary text-light">
-          Thay đổi thông tin
+          Update Information
         </button>
       </div>
     </form>

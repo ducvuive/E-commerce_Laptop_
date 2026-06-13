@@ -93,10 +93,10 @@ a {
         transform: scale(1.2);
     }
 
-/*.dmsp:hover i{
+/*.categories:hover i{
     color: burlywood !important;
 }*/
-.dmsp:hover a,.dmsp:hover i {
+.categories:hover a,.categories:hover i {
     color: burlywood !important;
 }
 

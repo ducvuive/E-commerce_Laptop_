@@ -20,26 +20,26 @@ namespace BackendAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/HoaDons
+        // GET: api/Ratings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RatingDTO>>> GetRating()
         {
-            var hd = await _context.Rating.ToListAsync();
-            return _mapper.Map<List<RatingDTO>>(hd);
+            var ratings = await _context.Rating.ToListAsync();
+            return _mapper.Map<List<RatingDTO>>(ratings);
         }
 
-        // GET: api/HoaDons/5
+        // GET: api/Ratings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RatingDTO>> GetRating(int Id)
+        public async Task<ActionResult<RatingDTO>> GetRating(int id)
         {
-            var hoaDon = await _context.Rating.FindAsync(Id);
+            var rating = await _context.Rating.FindAsync(id);
 
-            if (hoaDon == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<RatingDTO>(hoaDon);
+            return _mapper.Map<RatingDTO>(rating);
         }
 
         [HttpPost("{userName}")]
@@ -47,11 +47,15 @@ namespace BackendAPI.Controllers
         {
             float rateAvg = 0;
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == userName);
-            var sanPham = await _context.Product.FirstOrDefaultAsync(i => i.ProductId == ratingDTO.ProductId);
+            var product = await _context.Product.FirstOrDefaultAsync(i => i.ProductId == ratingDTO.ProductId);
+            if (product == null)
+            {
+                return NotFound();
+            }
             var ratings = await _context.Rating.Where(s => s.Product.ProductId == ratingDTO.ProductId).ToListAsync();
             Rating rating = _mapper.Map<Rating>(ratingDTO);
             rating.CustomerId = user?.Id;
-            rating.Product = sanPham;
+            rating.Product = product;
             _context.Rating.Add(rating);
             foreach (var item in ratings)
             {
@@ -59,32 +63,32 @@ namespace BackendAPI.Controllers
             }
             rateAvg = (rateAvg + (float)ratingDTO.Rate) / (ratings.Count() + 1);
             int rateAvg_ = (int)Math.Ceiling(rateAvg);
-            sanPham.Rating = rateAvg_;
+            product.Rating = rateAvg_;
             await _context.SaveChangesAsync();
 
-            return Ok("Danh gia thanh cong");
+            return Ok("Rating submitted successfully");
 
         }
 
-        // DELETE: api/HoaDons/5
+        // DELETE: api/Ratings/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHoaDon(int id)
+        public async Task<IActionResult> DeleteRating(int id)
         {
-            var hoaDon = await _context.Invoice.FindAsync(id);
-            if (hoaDon == null)
+            var rating = await _context.Rating.FindAsync(id);
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            _context.Invoice.Remove(hoaDon);
+            _context.Rating.Remove(rating);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool HoaDonExists(int id)
+        private bool RatingExists(int id)
         {
-            return _context.Invoice.Any(e => e.InvoiceId == id);
+            return _context.Rating.Any(e => e.RatingID == id);
         }
     }
 }

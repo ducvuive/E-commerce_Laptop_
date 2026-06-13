@@ -22,24 +22,24 @@ namespace BackendAPI.Controllers
 
         // GET: api/BoXuLies
         [HttpGet]
-        public async Task<ActionResult<List<ProcessorDTO>>> GetBoXuLy()
+        public async Task<ActionResult<List<ProcessorDTO>>> GetProcessor()
         {
-            var boXuLy = await _context.Processor.ToListAsync();
-            return _mapper.Map<List<ProcessorDTO>>(boXuLy);
+            var processor = await _context.Processor.ToListAsync();
+            return _mapper.Map<List<ProcessorDTO>>(processor);
         }
 
         // GET: api/BoXuLies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProcessorDTO>> GetBoXuLy(int id)
+        public async Task<ActionResult<ProcessorDTO>> GetProcessor(int id)
         {
-            var boXuLy = await _context.Processor.FindAsync(id);
+            var processor = await _context.Processor.FindAsync(id);
 
-            if (boXuLy == null)
+            if (processor == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<ProcessorDTO>(boXuLy);
+            return _mapper.Map<ProcessorDTO>(processor);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@using ShareView.DTO
+@using ShareView.DTO
 @{
     ViewData["Title"] = "Product Page";
     Layout = "~/Views/Shared/_Layout_Slider.cshtml";
@@ -8,17 +8,17 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-2">
-                <h2 class="fs-3 fw-bold">Danh mục</h2>
+                <h2 class="fs-3 fw-bold">Categories</h2>
                 <div class="mt-4" role="tab" id="headingOne">
                     @foreach (var item in ViewBag.CategoryList)
                     {
-                        <div class="d-flex justify-content-between mt-2 dmsp">
-                            <a class="fs-5 text-muted" href="@Url.Action("index", "SanPham", new { category = @item.CategoryId})">@item.Name</a>
+                        <div class="d-flex justify-content-between mt-2 categories">
+                            <a class="fs-5 text-muted" href="@Url.Action("index", "Product", new { category = @item.CategoryId})">@item.Name</a>
                             <i class="fa-solid fa-angle-right"></i>
                         </div>
                     }
-                    <div class="d-flex justify-content-between mt-2 dmsp">
-                        <a class="fs-5 text-muted" href="/SanPham">Xem tất cả</a>
+                    <div class="d-flex justify-content-between mt-2 categories">
+                        <a class="fs-5 text-muted" href="/products">View All</a>
                         <i class="fa-solid fa-angle-right"></i>
                     </div>
                 </div>
@@ -30,12 +30,12 @@
                                name="searchString"
                                id="searchString"
                                class="form-control py-3 text-center"
-                               placeholder="Nhập tên sản phẩm cần tìm"
+                               placeholder="Enter a product name to search"
                                style="border-radius: 10px" />
                     </div>
                     <div class="">
                         <button type="submit" value="submit" class="btn btn-primary py-3">
-                            Tìm kiếm
+                            Search
                         </button>
                     </div>
                 </form>
@@ -48,17 +48,17 @@
                                     <img src="https://localhost:7123/wwwroot/@item.Image" class="card-img-top" alt="..." />
                                 </div>
                                 <div class="card-body">
-                                    <a class="card-title name-pd fs-6 fw-bold" asp-controller="Sanpham" asp-action="ProductSingle" asp-route-id="@item.ProductId">@item.NameProduct</a>
+                                    <a class="card-title name-pd fs-6 fw-bold" asp-controller="Product" asp-action="ProductSingle" asp-route-id="@item.ProductId">@item.NameProduct</a>
                                 </div>
                                 <div class=" bt-10 position-absolute w-100">
                                     <div class="card-text mb-3 d-flex justify-content-between">
-                                        <span class="ms-3 fs-5 fw-bold">Giá</span>
+                                        <span class="ms-3 fs-5 fw-bold">Price</span>
                                         <p class=" me-3 card-text fs-5">
-                                            @item.Price.ToString("#,##0 VNĐ")
+                                            @item.Price.ToString("#,##0 VND")
                                         </p>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <div class="ms-3 fs-5 fw-bold">Đánh giá</div>
+                                        <div class="ms-3 fs-5 fw-bold">Rating</div>
                                         <div class="me-3">
                                             @for (int i = 1; i <= 5; i++){
                                                 if (i <= item.Rating)
@@ -72,8 +72,8 @@
                                         </div>
                                     </div>
                                     <div class="mx-3 mt-2 d-flex justify-content-between">
-                                        <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Thêm vào giỏ hàng</a>
-                                        <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Mua ngay</a>
+                                        <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Add to Cart</a>
+                                        <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Buy Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -86,12 +86,12 @@
                         {
                             if(i == ViewBag.page){
                                 <li id="@i" class="mx-4">
-                                    <a class="text-warning" href="@Url.Action("index", "SanPham", new {category=@ViewBag.category,searchString=ViewBag.searchString, page = @i })">@i</a>
+                                    <a class="text-warning" href="@Url.Action("index", "Product", new {category=@ViewBag.category,searchString=ViewBag.searchString, page = @i })">@i</a>
                                 </li>
                             }
                             else{
                                 <li id="@i" class="mx-4">
-                                    <a href="@Url.Action("index", "SanPham", new {category=@ViewBag.category,searchString=ViewBag.searchString, page = @i })">@i</a>
+                                    <a href="@Url.Action("index", "Product", new {category=@ViewBag.category,searchString=ViewBag.searchString, page = @i })">@i</a>
                                 </li>
                             }
                         }

@@ -88,18 +88,18 @@ const ListProduct = () => {
   }
   // const columns = [
   //   { field: "productId", flex: 1, headerName: "ID", type: "number" },
-  //   { field: "nameProduct", flex: 1, headerName: "Tên sản phẩm" },
-  //   { field: "quantity", flex: 1, headerName: "Số lượng" },
-  //   { field: "price", flex: 1, headerName: "Giá" },
+  //   { field: "nameProduct", flex: 1, headerName: "Product Name" },
+  //   { field: "quantity", flex: 1, headerName: "Quantity" },
+  //   { field: "price", flex: 1, headerName: "Price" },
   //   {
   //     field: "action",
-  //     headerName: "Tác vụ",
+  //     headerName: "Actions",
   //     flex: 1,
   //     renderCell: ({ row: { productId } }) => {
   //       return (
   //         <Grid>
   //           <Button variant="outlined" onClick={() => editProduct(productId)}>
-  //             Chi tiết
+  //             Details
   //           </Button>
   //           <Button
   //             variant="outlined"
@@ -107,7 +107,7 @@ const ListProduct = () => {
   //             className="ms-3"
   //             onClick={() => ConfirmForm(productId)}
   //           >
-  //             Xóa
+  //             Delete
   //           </Button>
   //         </Grid>
   //       );
@@ -121,16 +121,16 @@ const ListProduct = () => {
         to={`Create`}
         className="px-3 py-2 mb-2 d-inline-block button_action bg-primary"
       >
-        Tạo sản phẩm
+        Create Product
       </Link>
       <table class="table table-hover">
         <thead>
           <tr>
             <th scope="col">Id</th>
-            <th scope="col">Tên sản phẩm</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col">Giá</th>
-            <th scope="col">Thao tác</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -145,7 +145,7 @@ const ListProduct = () => {
                   variant="outlined"
                   onClick={() => editProduct(item.productId)}
                 >
-                  Chi tiết
+                  Details
                 </Button>
                 <Button
                   variant="outlined"
@@ -153,7 +153,7 @@ const ListProduct = () => {
                   className="ms-3"
                   onClick={() => ConfirmForm(item.productId)}
                 >
-                  Xóa
+                  Delete
                 </Button>
               </td>
             </tr>
@@ -170,8 +170,8 @@ const ListProduct = () => {
         />
       </div>
       <ConfirmAction
-        title="Xác nhận xóa sản phẩm"
-        content="Bạn có chắc chắn muốn xóa sản phẩm không ?"
+        title="Confirm Product Deletion"
+        content="Are you sure you want to delete this product?"
         show={modalShow}
         onHide={() => HideModal()}
         onConfirm={() => DeleteProduct()}
@@ -179,8 +179,8 @@ const ListProduct = () => {
     </div>
     // <Fragment>
     //   <ConfirmAction
-    //     title="Xác nhận xóa sản phẩm"
-    //     content="Bạn có chắc chắn muốn xóa sản phẩm không ?"
+    //     title="Confirm Product Deletion"
+    //     content="Are you sure you want to delete this product?"
     //     show={modalShow}
     //     onHide={() => HideModal()}
     //     onConfirm={() => DeleteProduct()}
@@ -189,7 +189,7 @@ const ListProduct = () => {
     //     to={`Create`}
     //     className="px-3 py-2 mb-2 d-inline-block button_action bg-primary"
     //   >
-    //     Tạo sản phẩm
+    //     Create Product
     //   </Link>
     //   <div style={{ height: "79vh", width: "85vw" }}>
     //     <DataGrid

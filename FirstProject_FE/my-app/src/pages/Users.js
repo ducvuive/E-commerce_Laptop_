@@ -236,7 +236,7 @@ const Users = () => {
   return (
     <div style={{ width: "85vw", minHeight: "85vh" }}>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h3>Quan ly nguoi dung</h3>
+        <h3>User Management</h3>
         <div>
           <Button variant={activeTab === "users" ? "contained" : "outlined"} onClick={() => setActiveTab("users")}>
             Users

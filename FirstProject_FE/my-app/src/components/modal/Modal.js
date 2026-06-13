@@ -15,10 +15,10 @@ function ConfirmAction(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={props.onHide}>
-          Đóng
+          Close
         </Button>
         <Button variant="primary" onClick={props.onConfirm}>
-          Xác nhận
+          Confirm
         </Button>
       </Modal.Footer>
     </Modal>

@@ -5,10 +5,10 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 const schemaValidation = yup.object({
-  tenDM: yup
+  categoryName: yup
     .string()
-    .required("Vui lòng nhập danh mục")
-    .max(50, "Danh mục có dưới 50 kí tự"),
+    .required("Please enter a category")
+    .max(50, "Category must be under 50 characters"),
 });
 
 const DetailUser = () => {
@@ -40,7 +40,7 @@ const DetailUser = () => {
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
-        <h3>Thông tin người dùng</h3>
+        <h3>User Details</h3>
       </div>
       <div className="mb-2 d-flex flex-column">
         <label htmlFor="">UserName</label>
@@ -61,7 +61,7 @@ const DetailUser = () => {
         />
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="">Số điện thoại</label>
+        <label htmlFor="">Phone Number</label>
         {user.phoneNumber ? (
           <input
             type="text"

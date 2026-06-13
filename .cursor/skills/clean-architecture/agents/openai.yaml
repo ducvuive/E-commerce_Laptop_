@@ -1,4 +1,0 @@
-interface:
-  display_name: "Clean Architecture"
-  short_description: "Review and scaffold layered architecture"
-  default_prompt: "Use $clean-architecture to review this solution and tighten dependency rules."

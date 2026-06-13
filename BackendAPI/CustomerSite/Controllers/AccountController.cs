@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShareView.Constants;
 using ShareView.DTO;
@@ -35,7 +35,7 @@ namespace CustomerSite.Controllers
                 var contents = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
-                    TempData["Error"] = "Tên đăng nhập hoặc mật khẩu không chính xác";
+                    TempData["Error"] = "Username or password is incorrect";
                     return View();
                 }
                 //var contents = await response.Content.ReadAsStringAsync();
@@ -80,7 +80,7 @@ namespace CustomerSite.Controllers
             var response = await clientFactory.PostAsync("/Auth/register", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                TempData["ErrorRegister"] = "Email đã được đăng kí !!!";
+                TempData["ErrorRegister"] = "Email is already registered.";
                 return View();
             }
             var contents = await response.Content.ReadAsStringAsync();

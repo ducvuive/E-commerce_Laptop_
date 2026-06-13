@@ -20,26 +20,26 @@ namespace BackendAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/BoNhoRams
+        // GET: api/Rams
         [HttpGet]
-        public async Task<ActionResult<List<RamDTO>>> GetBoNhoRam()
+        public async Task<ActionResult<List<RamDTO>>> GetRam()
         {
-            var boNhoRam = await _context.Ram.ToListAsync();
-            return _mapper.Map<List<RamDTO>>(boNhoRam);
+            var ram = await _context.Ram.ToListAsync();
+            return _mapper.Map<List<RamDTO>>(ram);
         }
 
-        // GET: api/BoNhoRams/5
+        // GET: api/Rams/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RamDTO>> GetBoNhoRam(int id)
+        public async Task<ActionResult<RamDTO>> GetRam(int id)
         {
-            var boNhoRam = await _context.Ram.FindAsync(id);
+            var ram = await _context.Ram.FindAsync(id);
 
-            if (boNhoRam == null)
+            if (ram == null)
             {
                 return NotFound();
             }
 
-            return _mapper.Map<RamDTO>(boNhoRam);
+            return _mapper.Map<RamDTO>(ram);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -17,6 +17,6 @@ namespace ShareView.DTO
         public string? MaxSpeed { get; set; }
         public string? Cache { get; set; }
 
-        //public virtual List<SanPhamDTO> SanPham { get; set; } = new List<SanPhamDTO>();
+        //public virtual List<ProductDTO> Product { get; set; } = new List<ProductDTO>();
     }
 }

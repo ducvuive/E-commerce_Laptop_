@@ -6,9 +6,9 @@ namespace BackendAPI.Application.Abstractions
     {
         Task<List<Category>> GetCategories();
         Task<Category> GetCategory(int id);
-        //public Task<DanhMucSanPham> PostDanhMucSanPham(DanhMucSanPham danhMucSanPham);
-        public Task CreateCategory(Category danhMucSanPham);
+        //public Task<Category> PostCategory(Category category);
+        public Task CreateCategory(Category category);
         public Task<bool> UpdateCategory();
-        public Task<bool> DeleteCategory(Category danhMucSanPham);
+        public Task<bool> DeleteCategory(Category category);
     }
 }

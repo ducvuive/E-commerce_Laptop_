@@ -1,4 +1,4 @@
-﻿@using System.IdentityModel.Tokens.Jwt
+@using System.IdentityModel.Tokens.Jwt
 @using System.Security.Claims
 @using ShareView.Constants
 <!DOCTYPE html>
@@ -68,16 +68,16 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
                     <ul class="d-flex navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" aria-current="page" href="/home">Trang chủ</a>
+                            <a class="nav-link text-dark" aria-current="page" href="/home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Sanpham" asp-action="Index">Sản phẩm</a>
+                            <a class="nav-link text-dark" asp-controller="Product" asp-action="Index">Products</a>
                         </li>
                         @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Đăng kí</a>
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
                         </li>*@
                         @if (token != null)
                         {
@@ -91,16 +91,16 @@
                                 </li>
                             }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Đăng xuất</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>            
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Đăng kí</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Đăng nhập</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                         }
                         <li class="nav-item">

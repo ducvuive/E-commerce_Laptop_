@@ -7,12 +7,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const schemaValidation = yup.object({
   nameCategory: yup
     .string()
-    .required("Vui lòng nhập danh mục")
-    .max(50, "Danh mục có dưới 50 kí tự"),
+    .required("Please enter a category")
+    .max(50, "Category must be under 50 characters"),
   description: yup
     .string()
-    .required("Vui lòng nhập mô tả")
-    .max(50, "Danh mục có dưới 50 kí tự"),
+    .required("Please enter a description")
+    .max(50, "Category must be under 50 characters"),
 });
 const CreateCategories = () => {
   const [categories, setCategogies] = useState("");
@@ -45,29 +45,29 @@ const CreateCategories = () => {
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
-        <h3>Tạo danh mục</h3>
+        <h3>Create Category</h3>
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="">Tên danh mục</label>
+        <label htmlFor="">Category Name</label>
         <input
           type="text"
           className="form-control"
           {...register("nameCategory")}
-          placeholder="Vui lòng nhập tên danh mục"
+          placeholder="Please enter a category name"
         />
         {errors.nameCategory && (
           <div className="text-danger">{errors.nameCategory.message}</div>
         )}
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="description">Mô tả</label>
+        <label htmlFor="description">Description</label>
         <input
           type="text"
           id="description"
           className="form-control"
           {...register("description")}
           defaultValue={categories.description}
-          placeholder="Vui lòng nhập tên mô tả"
+          placeholder="Please enter a description"
         />
         {errors.description && (
           <div className="text-danger">{errors.description.message}</div>
@@ -75,7 +75,7 @@ const CreateCategories = () => {
       </div>
       <div className="d-flex ">
         <button className="p-2 ms-auto bg-primary text-light" type="">
-          Tạo danh mục
+          Create Category
         </button>
       </div>
     </form>

@@ -5,14 +5,14 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 const schemaValidation = yup.object({
-  tenDM: yup
+  categoryName: yup
     .string()
-    .required("Vui lòng nhập danh mục")
-    .max(50, "Danh mục có dưới 50 kí tự"),
+    .required("Please enter a category")
+    .max(50, "Category must be under 50 characters"),
   description: yup
     .string()
-    .required("Vui lòng nhập mô tả")
-    .max(50, "Danh mục có dưới 50 kí tự"),
+    .required("Please enter a description")
+    .max(50, "Category must be under 50 characters"),
 });
 
 const DetailCategories = () => {
@@ -38,17 +38,17 @@ const DetailCategories = () => {
       });
   }, []);
 
-  setValue("tenDM", categories.name);
+  setValue("categoryName", categories.name);
   setValue("description", categories.description);
   const onSubmit = (data) => {
     console.log("onSubmit ~ data", data);
     console.log("onSubmit ~ idCategory", idCategory);
     if (isValid) {
-      alert("Cập nhật thông tin thành công");
+      alert("Information updated successfully");
       axios
         .put(`https://localhost:7123/api/Categories/${idCategory}`, {
           categoryId: parseInt(idCategory),
-          name: data.tenDM,
+          name: data.categoryName,
           description: data.description,
         })
         .then(navigate("/categories"))
@@ -60,28 +60,28 @@ const DetailCategories = () => {
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
-        <h3>Thông tin danh mục</h3>
+        <h3>Category Details</h3>
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="tenDM">Tên danh mục</label>
+        <label htmlFor="categoryName">Category Name</label>
         <input
           type="text"
-          id="tenDM"
-          {...register("tenDM")}
+          id="categoryName"
+          {...register("categoryName")}
           className="form-control"
         />
-        {errors.tenDM && (
-          <div className="text-danger">{errors.tenDM.message}</div>
+        {errors.categoryName && (
+          <div className="text-danger">{errors.categoryName.message}</div>
         )}
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="description">Mô tả</label>
+        <label htmlFor="description">Description</label>
         <input
           type="text"
           id="description"
           className="form-control"
           {...register("description")}
-          placeholder="Vui lòng nhập tên mô tả"
+          placeholder="Please enter a description"
         />
         {errors.description && (
           <div className="text-danger">{errors.description.message}</div>
@@ -89,7 +89,7 @@ const DetailCategories = () => {
       </div>
       <div className="d-flex ">
         <button type="submit" className="p-2 ms-auto bg-primary text-light">
-          Thay đổi thông tin
+          Update Information
         </button>
       </div>
     </form>

@@ -12,7 +12,7 @@ namespace BackendAPI.Persistence.Configurations
 
             builder.HasKey(o => o.ProductId);
 
-            //builder.Property(o => o.CardManHinh)
+            //builder.Property(o => o.CardScreen)
             //.HasMaxLength(100);
 
             //builder.Property(o => o.DacBiet)

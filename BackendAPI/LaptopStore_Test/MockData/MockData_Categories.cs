@@ -1,4 +1,4 @@
-﻿/*
+/*
 
 using BackendAPI.Models;
 using ShareView.DTO;
@@ -13,13 +13,13 @@ namespace LaptopStore_Test.MockData
             {
                 new CategoryDTO
                 {
-                    DMSPId = 1,
+                    CategoryId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
                 new CategoryDTO
                 {
-                    DMSPId = 2,
+                    CategoryId = 2,
                     TenDM = "Danh muc 2",
                     Description = "Day la danh muc 2",
                 }
@@ -31,13 +31,13 @@ namespace LaptopStore_Test.MockData
             {
                 new Category
                 {
-                    DMSPId = 1,
+                    CategoryId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
                 new Category
                 {
-                    DMSPId = 2,
+                    CategoryId = 2,
                     TenDM = "Danh muc 2",
                     Description = "Day la danh muc 2",
                 },
@@ -50,13 +50,13 @@ namespace LaptopStore_Test.MockData
             {
                 new CategoryAdminDTO
                 {
-                    DMSPId = 1,
+                    CategoryId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
                 new CategoryAdminDTO
                 {
-                    DMSPId = 2,
+                    CategoryId = 2,
                     TenDM = "Danh muc 2",
                     Description = "Day la danh muc 2",
                 },
@@ -68,13 +68,13 @@ namespace LaptopStore_Test.MockData
             {
                 new CategoryAdminDTO
                 {
-                    DMSPId = 1,
+                    CategoryId = 1,
                     TenDM = "Danh muc 1",
                     Description = "Day la danh muc 1",
                 },
                 new CategoryAdminDTO
                 {
-                    DMSPId = 2,
+                    CategoryId = 2,
                     TenDM = "Danh muc 2",
                     Description = "Day la danh muc 2",
                 },

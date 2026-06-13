@@ -64,7 +64,7 @@ export default function Login() {
       })
       //.then(console.log("dang nhap thanh cong"))
       .catch(function (error) {
-        setError("Tên đăng nhập hoặc mật khẩu không đúng");
+        setError("Username or password is incorrect");
       });
   };
 

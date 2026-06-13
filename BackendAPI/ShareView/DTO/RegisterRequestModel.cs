@@ -1,26 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace ShareView.DTO
 {
     public class RegisterRequestModel
     {
-        [Required(ErrorMessage = "Username không được để trống")]
-        [EmailAddress(ErrorMessage = "Không đúng định dạng email")]
+        [Required(ErrorMessage = "Username is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
         [Display(Name = "Email")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Mật khẩu không được để trống")]
-        [StringLength(20, ErrorMessage = "Độ dài mật khẩu phải từ 3 đến 20 kí tự.", MinimumLength = 3)]
+        [Required(ErrorMessage = "Password is required")]
+        [StringLength(20, ErrorMessage = "Password length must be between 3 and 20 characters.", MinimumLength = 3)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Mật khẩu xác nhận không được để trống")]
-        [Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
+        [Required(ErrorMessage = "Password confirmation is required")]
+        [Compare("Password", ErrorMessage = "Password confirmation does not match.")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
-        [Required(ErrorMessage = "Số điện thoại không được để trống")]
-        [Phone(ErrorMessage = "Số điện thoại không đúng định dạng")]
-        [StringLength(10, ErrorMessage = "Số điện thoại phải dưới 10 ký tự")]
+        [Required(ErrorMessage = "Phone number is required")]
+        [Phone(ErrorMessage = "Invalid phone number format")]
+        [StringLength(10, ErrorMessage = "Phone number must be under 10 characters")]
         public string PhoneNumber { get; set; }
     }
 

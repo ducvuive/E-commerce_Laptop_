@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShareView.DTO
 {
@@ -8,6 +8,6 @@ namespace ShareView.DTO
         public int ScreenId { get; set; }
         public string? Size { get; set; }
 
-        //public virtual List<SanPhamDTO> Sanpham { get; set; } = new List<SanPhamDTO>();
+        //public virtual List<ProductDTO> Sanpham { get; set; } = new List<ProductDTO>();
     }
 }

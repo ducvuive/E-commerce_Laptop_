@@ -1,4 +1,4 @@
-﻿@using ShareView.DTO
+@using ShareView.DTO
 @model List<ProductDTO>
 @{
     ViewData["Title"] = "Home Page";  
@@ -23,8 +23,8 @@
     <div class="container">
         <div class="row justify-content-center mb-3 pb-3">
             <div class="col-md-12 heading-section text-center ftco-animate">
-                <h2 class="mb-4 fs-1 fw-bold">Sản phẩm mới về</h2>
-                <p class="text-secondary">Cập nhật những máy mới nhất trong năm.</p>
+                                <h2 class="mb-4 fs-1 fw-bold">New Arrivals</h2>
+                <p class="text-secondary">Discover the latest laptops this year.</p>
             </div>
         </div>
     </div>
@@ -38,18 +38,18 @@
                             <img src="https://localhost:7123/wwwroot/@item.Image" class="card-img-top" alt="..." />
                         </div>
                         <div class="card-body">
-                            <a class="card-title name-pd fs-5 fw-bold" asp-controller="Sanpham" asp-action="ProductSingle" asp-route-id="@item.ProductId">@item.NameProduct</a>
+                            <a class="card-title name-pd fs-5 fw-bold" asp-controller="Product" asp-action="ProductSingle" asp-route-id="@item.ProductId">@item.NameProduct</a>
                         </div>
                         <div class=" bt-10 position-absolute w-100">
                             <div class="card-text mb-3 d-flex justify-content-between">
-                                <span class="ms-3 fs-5 fw-bold">Giá</span>
+                                <span class="ms-3 fs-5 fw-bold">Price</span>
                                 <p class=" me-3 card-text fs-5">
                                     @item.Price
                                     @*@item.Price*@
                                 </p>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <div class="ms-3 fs-5 fw-bold">Đánh giá</div>
+                                <div class="ms-3 fs-5 fw-bold">Rating</div>
                                 <div class="me-3">
                                     @for (int i = 1; i <= 5; i++)
                                     {
@@ -65,8 +65,8 @@
                                 </div>
                             </div>
                             <div class="mx-3 mt-2 d-flex justify-content-between">
-                                <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Thêm vào giỏ hàng</a>
-                                <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Mua ngay</a>
+                                <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Add to Cart</a>
+                                <a class="p-2 button align-items-center text-black" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">Buy Now</a>
                             </div>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
             }
         </div>
         <div class="d-flex align-items-center justify-content-center mt-5 pb-5">
-            <a class="fs-5 fw-bold text-muted" href="/sanpham">Xem thêm</a>
+            <a class="fs-5 fw-bold text-muted" href="/products">View More</a>
         </div>
     </div>
 </section>
@@ -87,13 +87,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Notification</h5>
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
-            <div class="modal-body">Bạn đã thêm 1 sản phẩm</div>
+            <div class="modal-body">You added 1 product</div>
         </div>
     </div>
 </div>

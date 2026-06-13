@@ -9,9 +9,9 @@ import Moment from "react-moment";
 const schemaValidation = yup.object({
   nameProduct: yup
     .string()
-    .required("Vui lòng nhập tên sản phẩm")
-    .max(150, "Tên sản phẩm có dưới 150 kí tự"),
-  price: yup.string().label("Giá").required("Vui lòng nhập giá sản phấm"),
+    .required("Please enter a product name")
+        .max(150, "Product name must be under 150 characters"),
+  price: yup.string().label("Price").required("Please enter the product price"),
 });
 
 const CreateProduct = () => {
@@ -67,7 +67,7 @@ const CreateProduct = () => {
     let yourDate = new Date().toISOString();
     console.log("day", yourDate);
     if (isValid) {
-      alert("Thêm sản phẩm thành công");
+      alert("Product added successfully");
       axios
         .post(`https://localhost:7123/api/Product/`, {
           screenId: data.screen,
@@ -89,10 +89,10 @@ const CreateProduct = () => {
   return (
     <form className="_form " onSubmit={handleSubmit(onSubmit)}>
       <div className="d-flex justify-content-center">
-        <h3>Tạo sản phẩm</h3>
+        <h3>Create Product</h3>
       </div>
       <div className="mb-2 d-flex flex-column">
-        <label htmlFor="nameProduct">Tên sản phẩm</label>
+        <label htmlFor="nameProduct">Product Name</label>
         <textarea
           className="form-control"
           placeholder="Leave a comment here"
@@ -106,7 +106,7 @@ const CreateProduct = () => {
       </div>
       <div className="row">
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="price">Đơn giá</label>
+          <label htmlFor="price">Unit Price</label>
           <input
             type="number"
             className="form-control"
@@ -118,13 +118,13 @@ const CreateProduct = () => {
           )}
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Danh mục sản phẩm</label>
+          <label htmlFor="nameCategory">Product Category</label>
           <select
             className="form-select"
             aria-label="Default select example"
             {...register("listCategory")}
           >
-            <option selected>Vui lòng chọn danh mục</option>
+            <option selected>Please select a category</option>
             {listCategory.map((item, index) => {
               return (
                 <option value={item.categoryId} key={index}>
@@ -137,13 +137,13 @@ const CreateProduct = () => {
       </div>
       <div className="row">
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Màn hình</label>
+          <label htmlFor="nameCategory">Screen</label>
           <select
             className="form-select"
             aria-label="Default select example"
             {...register("screen")}
           >
-            <option selected>Vui lòng chọn màn hình</option>
+            <option selected>Please select a screen</option>
             {screen.map((item, index) => {
               return (
                 <option
@@ -158,13 +158,13 @@ const CreateProduct = () => {
           </select>
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="nameCategory">Bộ xử lý</label>
+          <label htmlFor="nameCategory">Processor</label>
           <select
             className="form-select"
             aria-label="Default select example"
             {...register("processor")}
           >
-            <option selected>Vui lòng chọn bộ xử lý</option>
+            <option selected>Please select a processor</option>
             {processor.map((item, index) => {
               return (
                 <option value={item.processorId} key={item.processorId}>
@@ -183,7 +183,7 @@ const CreateProduct = () => {
             aria-label="Default select example"
             {...register("ram")}
           >
-            <option selected>Vui lòng chọn ram</option>
+            <option selected>Please select RAM</option>
             {ram.map((item, index) => {
               return (
                 <option value={item.ramId} key={index}>
@@ -194,7 +194,7 @@ const CreateProduct = () => {
           </select>
         </div>
         <div className="mb-2 col d-flex flex-column">
-          <label htmlFor="quantity">Số lượng</label>
+          <label htmlFor="quantity">Quantity</label>
           <input
             type="number"
             className="form-control"
@@ -208,7 +208,7 @@ const CreateProduct = () => {
       </div>
       <div className="d-flex ">
         <button type="submit" className="p-2 ms-auto bg-primary text-light">
-          Tạo sản phẩm
+          Create Product
         </button>
       </div>
     </form>

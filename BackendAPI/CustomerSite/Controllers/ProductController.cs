@@ -1,4 +1,4 @@
-﻿using CustomerSite.Clients;
+using CustomerSite.Clients;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShareView.Constants;
@@ -7,39 +7,39 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace CustomerSite.Controllers
 {
-    [Route("sanpham")]
-    public class SanPhamController : Controller
+    [Route("products")]
+    public class ProductController : Controller
     {
 
         //protected readonly HttpClient productService;
-        /*private readonly ManHinhController productService;*/
-        /* public SanPhamController(HttpClient productService)
+        /*private readonly ScreenController productService;*/
+        /* public ProductController(HttpClient productService)
          {
              this.productService = productService;
          }*/
-        private readonly ILogger<SanPhamController> _logger;
+        private readonly ILogger<ProductController> _logger;
         private readonly IProductClient productClient;
-        private readonly IDMClient dMClient;
-        private readonly IManHinhClient manHinhlient;
-        private readonly IBoNhoRamClient boNhoRamClient;
-        private readonly IBoXuLyClient boXuLyClient;
+        private readonly ICategoryClient categoryClient;
+        private readonly IScreenClient screenClient;
+        private readonly IRamClient ramClient;
+        private readonly IProcessorClient processorClient;
         private readonly IUserClient userClient;
         /*public const string CARTKEY = "cart";*/
-        public SanPhamController(ILogger<SanPhamController> logger, IProductClient productClient, IDMClient dMClient, IManHinhClient manHinhlient, IBoNhoRamClient boNhoRamClient, IBoXuLyClient boXuLyClient, IUserClient userClient)
+        public ProductController(ILogger<ProductController> logger, IProductClient productClient, ICategoryClient categoryClient, IScreenClient screenClient, IRamClient ramClient, IProcessorClient processorClient, IUserClient userClient)
         {
             _logger = logger;
             this.productClient = productClient;
-            this.dMClient = dMClient;
-            this.manHinhlient = manHinhlient;
-            this.boNhoRamClient = boNhoRamClient;
-            this.boXuLyClient = boXuLyClient;
+            this.categoryClient = categoryClient;
+            this.screenClient = screenClient;
+            this.ramClient = ramClient;
+            this.processorClient = processorClient;
             this.userClient = userClient;
         }
         public async Task<IActionResult> Index(int category, string searchString, int page = 1)
         {
             int totalPage;
             List<ProductDTO> products = new List<ProductDTO>();
-            var categoryList = await dMClient.GetDMSP();
+            var categoryList = await categoryClient.GetCategories();
             ViewBag.CategoryList = categoryList;
             ViewBag.category = category;
             ViewBag.searchString = searchString;
@@ -47,25 +47,25 @@ namespace CustomerSite.Controllers
             {
                 if (category <= 0)
                 {
-                    products = await productClient.GetTatCaSanPham();
+                    products = await productClient.GetAllProducts();
                     float temp = products.Count() / (float)12;
                     totalPage = (int)Math.Ceiling(temp);
-                    products = await productClient.GetSanPhamTheoTrang(page);
+                    products = await productClient.GetProductsByPage(page);
                 }
                 else
                 {
-                    products = await productClient.GetSanPhamTheoDM(category);
+                    products = await productClient.GetProductsByCategory(category);
                     float temp = products.Count() / (float)12;
                     totalPage = (int)Math.Ceiling(temp);
-                    products = await productClient.GetSanPhamTheoDmTheoTrang(category, page);
+                    products = await productClient.GetProductsByCategoryPage(category, page);
                 }
             }
             else
             {
-                products = await productClient.GetSanPhamTheoTen(searchString);
+                products = await productClient.GetProductsByName(searchString);
                 float temp = products.Count() / (float)12;
                 totalPage = (int)Math.Ceiling(temp);
-                products = await productClient.GetSanPhamTheoTenTheoTrang(searchString, page);
+                products = await productClient.GetProductsByNamePage(searchString, page);
             }
             ViewBag.totalPage = totalPage;
             ViewBag.page = page;
@@ -73,7 +73,7 @@ namespace CustomerSite.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Rating([FromForm] string comment, [FromForm] int ratingsValue, [FromForm] int SanPhamId)
+        public async Task<IActionResult> Rating([FromForm] string comment, [FromForm] int ratingsValue, [FromForm] int ProductId)
         {
             //var session = Request.HttpContext.Session.GetString(Variable.JWT);
             var token = Request.Cookies[Variable.JWT_Token];
@@ -90,23 +90,23 @@ namespace CustomerSite.Controllers
             rating.Comments = comment;
             rating.Rate = ratingsValue;
             rating.PublishedDate = DateTime.Now;
-            rating.ProductId = SanPhamId;
+            rating.ProductId = ProductId;
 
             await productClient.CreateRating(rating, email);
 
-            return Redirect("/SanPham/pd?id=" + SanPhamId);
+            return Redirect("/Product/pd?id=" + ProductId);
         }
 
         [Route("pd")]
         public async Task<IActionResult> ProductSingle(int Id)
         {
-            var products = await productClient.GetSanPham(Id);
-            var manhinh = await manHinhlient.GetManHinh(products.ScreenId);
-            var boNhoRam = await boNhoRamClient.GetBoNhoRam(products.RamId);
-            var boXuLy = await boXuLyClient.GetBoXuLy(products.ProcessorId);
-            ViewBag.manHinh = manhinh;
-            ViewBag.boNhoRam = boNhoRam;
-            ViewBag.boXuLy = boXuLy;
+            var products = await productClient.GetProduct(Id);
+            var screen = await screenClient.GetScreen(products.ScreenId);
+            var ram = await ramClient.GetRam(products.RamId);
+            var processor = await processorClient.GetProcessor(products.ProcessorId);
+            ViewBag.screen = screen;
+            ViewBag.ram = ram;
+            ViewBag.processor = processor;
 
             var session = HttpContext.Session;
             string jsoncart = session.GetString(Variable.CARTKEY);

@@ -21,7 +21,7 @@ namespace BackendAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/SanPhams
+        // GET: api/Products
         [HttpGet]
         [Route("all")]
         public async Task<ActionResult<List<ProductDTO>>> GetProduct()
@@ -29,7 +29,7 @@ namespace BackendAPI.Controllers
             var product = await _context.Product.ToListAsync();
             return Ok(_mapper.Map<List<ProductDTO>>(product));
         }
-        // GET: api/SanPhams
+        // GET: api/Products
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpGet("[action]")]
         public async Task<ActionResult<List<ProductDTO>>> GetProductAdmin()
@@ -38,8 +38,8 @@ namespace BackendAPI.Controllers
             return Ok(_mapper.Map<List<ProductDTO>>(product));
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetSanPhamAdmin()
+        [HttpGet("entities")]
+        public async Task<ActionResult<List<Product>>> GetProductEntities()
         {
             var product = await _context.Product.ToListAsync();
             return product;
@@ -48,7 +48,7 @@ namespace BackendAPI.Controllers
         [HttpGet]
         [Route("month")]
         /*[Authorize(Roles = "Admin")]*/
-        public async Task<ActionResult<List<ProductDTO>>> GetSanPhamTopRaMat()
+        public async Task<ActionResult<List<ProductDTO>>> GetNewestProducts()
         {
             var results = _context.Product.OrderByDescending(x => x.PublishedDate).Take(6);
             if (results == null)
@@ -59,9 +59,9 @@ namespace BackendAPI.Controllers
             return Ok(mapper);
         }
 
-        // GET: api/SanPhams/5
+        // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDTO>> GetSanPham(int id)
+        public async Task<ActionResult<ProductDTO>> GetProduct(int id)
         {
             var product = await _context.Product.Where(p => p.ProductId == id)
                                                 .Include(p => p.Ratings)
@@ -95,33 +95,33 @@ namespace BackendAPI.Controllers
 
             return mapper;
         }
-        // GET: api/SanPhams/5
-        //[Route("api/SanPhams/admin_product")]
+        // GET: api/Products/5
+        //[Route("api/Products/admin_product")]
         [HttpGet("admin_product/{id}")]
-        public async Task<ActionResult<ProductAdminDTO>> GetSanPhamAdmin(int id)
+        public async Task<ActionResult<ProductAdminDTO>> GetProductAdmin(int id)
         {
-            /*            var sanPham = await _context.SanPham
-                                                            .Where(p => p.SanPhamId == id)
+            /*            var product = await _context.Product
+                                                            .Where(p => p.ProductId == id)
                                                             .Include(p => p.Rating)
-                                                            .ThenInclude(r => r.KhachHang)
+                                                            .ThenInclude(r => r.Customer)
                                                             .FirstOrDefaultAsync();*/
             var product = await _context.Product.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
-            /*            var mapper = new SanPhamDTO_Admin()
+            /*            var mapper = new ProductDTO_Admin()
                         {
-                            SanPhamId = sanPham.SanPhamId,
-                            TenDM = sanPham.DMSPId.tenDM,
+                            ProductId = product.ProductId,
+                            CategoryName = product.CategoryId.categoryName,
                         }*/
             var mapper = _mapper.Map<ProductAdminDTO>(product);
             //var mapper = new 
             return Ok(product);
         }
-        // GET: api/SanPhams/5
-        [HttpGet("GetSanPhamTheoTrang/{page}")]
-        public async Task<ActionResult> GetSanPhamTheoTrang(int page = 1)
+        // GET: api/Products/5
+        [HttpGet("GetProductsByPage/{page}")]
+        public async Task<ActionResult> GetProductsByPage(int page = 1)
         {
             var skip = 12 * (page - 1);
             var results = _context.Product.OrderByDescending(x => x.Price).Skip(skip).Take(12);
@@ -136,7 +136,7 @@ namespace BackendAPI.Controllers
 
 
 
-        // GET: api/SanPhams/5
+        // GET: api/Products/5
         [HttpGet("[action]")]
         public ProductPagingDTO GetProductWithPage([FromQuery] PaginationParameters paginationParameters)
         {
@@ -154,8 +154,8 @@ namespace BackendAPI.Controllers
             };
         }
 
-        [HttpGet("GetSanPhamTheoDmTheoTrang/{category}/{page}")]
-        public async Task<ActionResult> GetSanPhamTheoDmTheoTrang(int category, int page)
+        [HttpGet("GetProductsByCategoryPage/{category}/{page}")]
+        public async Task<ActionResult> GetProductsByCategoryPage(int category, int page)
         {
             var skip = 12 * (page - 1);
             var results = _context.Product.Where(s => s.CategoryId == category).Skip(skip).Take(12);
@@ -168,10 +168,10 @@ namespace BackendAPI.Controllers
             return Ok(mapper);
         }
 
-        [HttpGet("GetSanPhamTheoDm/{dm}/")]
-        public async Task<ActionResult<ProductDTO>> GetSanPhamTheoDm(int dm)
+        [HttpGet("GetProductsByCategory/{categoryId}/")]
+        public async Task<ActionResult<ProductDTO>> GetProductsByCategory(int categoryId)
         {
-            var results = _context.Product.Where(s => s.CategoryId == dm);
+            var results = _context.Product.Where(s => s.CategoryId == categoryId);
             ;
             if (results == null)
             {
@@ -181,10 +181,10 @@ namespace BackendAPI.Controllers
             return Ok(mapper);
         }
 
-        [HttpGet("GetSanPhamTheoTen/{ten}/")]
-        public async Task<ActionResult> GetSanPhamTheoTen(string ten)
+        [HttpGet("GetProductsByName/{name}/")]
+        public async Task<ActionResult> GetProductsByName(string name)
         {
-            var results = _context.Product.Where(s => s.NameProduct.Contains(ten));
+            var results = _context.Product.Where(s => s.NameProduct.Contains(name));
             ;
             if (results == null)
             {
@@ -194,11 +194,11 @@ namespace BackendAPI.Controllers
             return Ok(mapper);
         }
 
-        [HttpGet("GetSanPhamTheoTenTheoTrang/{ten}/{page}")]
-        public async Task<ActionResult> GetSanPhamTheoTenTheoTrang(string ten, int page)
+        [HttpGet("GetProductsByNamePage/{name}/{page}")]
+        public async Task<ActionResult> GetProductsByNamePage(string name, int page)
         {
             var skip = 12 * (page - 1);
-            var results = _context.Product.Where(s => s.NameProduct.Contains(ten)).Skip(skip).Take(12);
+            var results = _context.Product.Where(s => s.NameProduct.Contains(name)).Skip(skip).Take(12);
             if (results == null)
             {
                 return NotFound();
@@ -207,25 +207,25 @@ namespace BackendAPI.Controllers
             return Ok(mapper);
         }
 
-        // PUT: api/SanPhams/5
+        // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSanPham(int id, ProductAdminDTO sanPhamDTO)
+        public async Task<IActionResult> PutProduct(int id, ProductAdminDTO productDTO)
         {
             var product = await _context.Product.Where(p => p.ProductId == id).FirstOrDefaultAsync();
             if (product != null)
             {
-                product.ProductId = sanPhamDTO.ProductId;
-                product.ProcessorId = sanPhamDTO.ProcessorId;
-                product.CategoryId = sanPhamDTO.CategoryId;
-                product.RamId = sanPhamDTO.RamId;
-                product.ScreenId = sanPhamDTO.ScreenId;
-                product.NameProduct = sanPhamDTO.NameProduct;
-                product.Price = sanPhamDTO.Price;
-                product.UpdatedDate = sanPhamDTO.UpdatedDate;
-                product.Quantity = sanPhamDTO.Quantity;
+                product.ProductId = productDTO.ProductId;
+                product.ProcessorId = productDTO.ProcessorId;
+                product.CategoryId = productDTO.CategoryId;
+                product.RamId = productDTO.RamId;
+                product.ScreenId = productDTO.ScreenId;
+                product.NameProduct = productDTO.NameProduct;
+                product.Price = productDTO.Price;
+                product.UpdatedDate = productDTO.UpdatedDate;
+                product.Quantity = productDTO.Quantity;
 
-                //SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
+                //Product product = _mapper.Map<Product>(productDTO);
                 _context.Entry(product).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return Ok("Update success");
@@ -233,34 +233,34 @@ namespace BackendAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/SanPhams
+        // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Product>> PostSanPham(ProductAdminDTO sanPhamDTO)
+        public async Task<ActionResult<Product>> PostProduct(ProductAdminDTO productDTO)
         {
             var product = new Product
             {
-                //ProductId = sanPhamDTO.SanPhamId,
-                ProcessorId = sanPhamDTO.ProcessorId,
-                //CongKetNoiId = sanPhamDTO.CongKetNoiId,
-                CategoryId = sanPhamDTO.CategoryId,
-                RamId = sanPhamDTO.RamId,
-                ScreenId = sanPhamDTO.ScreenId,
-                NameProduct = sanPhamDTO.NameProduct,
-                Price = sanPhamDTO.Price,
-                UpdatedDate = sanPhamDTO.UpdatedDate,
-                PublishedDate = sanPhamDTO.PublishedDate,
-                Quantity = sanPhamDTO.Quantity,
+                //ProductId = productDTO.ProductId,
+                ProcessorId = productDTO.ProcessorId,
+                //CongKetNoiId = productDTO.CongKetNoiId,
+                CategoryId = productDTO.CategoryId,
+                RamId = productDTO.RamId,
+                ScreenId = productDTO.ScreenId,
+                NameProduct = productDTO.NameProduct,
+                Price = productDTO.Price,
+                UpdatedDate = productDTO.UpdatedDate,
+                PublishedDate = productDTO.PublishedDate,
+                Quantity = productDTO.Quantity,
                 Rating = 0,
             };
-            //SanPham sanPham = _mapper.Map<SanPham>(sanPhamDTO);
+            //Product product = _mapper.Map<Product>(productDTO);
             _context.Product.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSanPham", new { id = product.ProductId }, product);
+            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
         }
 
-        // DELETE: api/SanPhams/5
+        // DELETE: api/Products/5
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
@@ -277,7 +277,7 @@ namespace BackendAPI.Controllers
             return NoContent();
         }
 
-        private bool SanPhamExists(int id)
+        private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.ProductId == id);
         }

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShareView.DTO
 {
@@ -13,7 +13,7 @@ namespace ShareView.DTO
         public long? Total { get; set; }
         public int? Status { get; set; }
         public UserIdentityDTO? Customer { get; set; }
-        //public virtual UserIdentityDTO? MaKhacHangId { get; set; }
+        //public virtual UserIdentityDTO? CustomerId { get; set; }
         //public virtual List<CTHD_DTO> CTHD { get; set; } = new List<CTHD_DTO>();
     }
 }
