@@ -15,7 +15,7 @@ const Dashboard = () => {
             Have a great day
           </p>
         </div>
-      ) : (
+      ) : userRole === null ? null : (
         <div className="text-center z-index">
           <h2 className="fs-1 text-light text-uppercase">
             You do not have permission to access this page

@@ -97,6 +97,7 @@ namespace BackendAPI.Controllers
         }
         // GET: api/Products/5
         //[Route("api/Products/admin_product")]
+        [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpGet("admin_product/{id}")]
         public async Task<ActionResult<ProductAdminDTO>> GetProductAdmin(int id)
         {
@@ -137,6 +138,7 @@ namespace BackendAPI.Controllers
 
 
         // GET: api/Products/5
+        [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpGet("[action]")]
         public ProductPagingDTO GetProductWithPage([FromQuery] PaginationParameters paginationParameters)
         {
@@ -209,6 +211,7 @@ namespace BackendAPI.Controllers
 
         // PUT: api/Products/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(int id, ProductAdminDTO productDTO)
         {
@@ -235,6 +238,7 @@ namespace BackendAPI.Controllers
 
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(ProductAdminDTO productDTO)
         {
@@ -261,6 +265,7 @@ namespace BackendAPI.Controllers
         }
 
         // DELETE: api/Products/5
+        [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpPut("[action]/{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {

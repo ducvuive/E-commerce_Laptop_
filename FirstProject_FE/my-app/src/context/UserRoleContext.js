@@ -1,23 +1,30 @@
 import { useState, useEffect, createContext } from "react";
-import axios from "axios";
 import { useCookies } from "react-cookie";
-import jwt_decode from "jwt-decode";
-export const UserRoleContext = createContext();
+import {
+    ACCESS_TOKEN_COOKIE,
+    AUTH_CHANGED_EVENT,
+    getAccessToken,
+    getUserRole,
+    isTokenExpired,
+    refreshAccessToken,
+} from "../utils/auth";
+export const UserRoleContext = createContext(null);
 
 const UserRoleProvider = ({ children }) => {
-    const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-    const [userRole, setUserRole] = useState("");
+    const [cookies, setCookie, removeCookie] = useCookies([ACCESS_TOKEN_COOKIE]);
+    const [userRole, setUserRole] = useState(null);
     const loadCate = async () => {
-        const token = cookies["token"];
-        if (cookies != null) {
-          const decoded = jwt_decode(token);
-          //console.log("loadCate ~ decoded", decoded);
-          setUserRole(decoded.role)
+        let token = getAccessToken();
+        if (!token || isTokenExpired(token)) {
+          token = await refreshAccessToken();
         }
-        //console.log("loadCate ~ decoded", decoded);
+
+        setUserRole(token ? getUserRole(token) : "");
       };
       useEffect(() => {
         loadCate();
+        window.addEventListener(AUTH_CHANGED_EVENT, loadCate);
+        return () => window.removeEventListener(AUTH_CHANGED_EVENT, loadCate);
       }, [cookies]);
     // useEffect(() => {
     //     axios

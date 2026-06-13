@@ -1,29 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
-import jwt_decode from "jwt-decode";
+import {
+  ACCESS_TOKEN_COOKIE,
+  AUTH_CHANGED_EVENT,
+  REFRESH_TOKEN_COOKIE,
+  REFRESH_USER_ID_COOKIE,
+  clearAuthCookies,
+  getAccessToken,
+  getUserEmail,
+  isTokenExpired,
+} from "../utils/auth";
 const NavBar = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    ACCESS_TOKEN_COOKIE,
+    REFRESH_TOKEN_COOKIE,
+    REFRESH_USER_ID_COOKIE,
+  ]);
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   const loadCate = async () => {
-    //const cookies = new Cookies();
-    const token = cookies["token"];
-    if (cookies != null) {
-      const decoded = jwt_decode(token);
-      setUser(decoded.email);
+    const token = getAccessToken();
+    if (token && !isTokenExpired(token)) {
+      setUser(getUserEmail(token));
       setToken(token);
+      return;
     }
+
+    setUser("");
+    setToken("");
   };
   useEffect(() => {
     loadCate();
+    window.addEventListener(AUTH_CHANGED_EVENT, loadCate);
+    return () => window.removeEventListener(AUTH_CHANGED_EVENT, loadCate);
   }, [cookies]);
 
   function Logout() {
     if (token == "") {
       console.log("nullnull");
     }
-    removeCookie("token", { path: "/" });
+    clearAuthCookies(removeCookie);
     setToken("");
   }
   //console.log("cookie123", cookies.get("token"));

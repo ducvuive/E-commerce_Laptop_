@@ -1,3 +1,4 @@
+using CustomerSite.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ShareView.Constants;
@@ -33,7 +34,7 @@ namespace CustomerSite.Controllers
                 //var response = await clientFactory.PostAsync("login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
                 var response = await clientFactory.PostAsync("/Auth/login", new StringContent(jsonInString, Encoding.UTF8, "application/json"));
                 var contents = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                if (!response.IsSuccessStatusCode)
                 {
                     TempData["Error"] = "Username or password is incorrect";
                     return View();
@@ -43,13 +44,7 @@ namespace CustomerSite.Controllers
 
                 if (data != null && data.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    var cookieOption = new CookieOptions()
-                    {
-                        HttpOnly = true,
-                        Expires = DateTime.UtcNow.AddMinutes(15),
-                        IsEssential = true
-                    };
-                    Response.Cookies.Append(Variable.JWT_Token, data.Value, cookieOption);
+                    AuthCookieHelper.AppendAuthCookies(HttpContext, data);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -61,7 +56,7 @@ namespace CustomerSite.Controllers
         public IActionResult Logout()
         {
             var session = HttpContext.Session;
-            Response.Cookies.Delete(Variable.JWT_Token);
+            AuthCookieHelper.DeleteAuthCookies(HttpContext);
             //session.Remove(Variable.JWT);
             session.Remove(Variable.CARTKEY);
             return RedirectToAction("Index", "Home");

@@ -14,7 +14,13 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {
+  ACCESS_TOKEN_COOKIE,
+  REFRESH_TOKEN_COOKIE,
+  REFRESH_USER_ID_COOKIE,
+  persistAuthResponse,
+} from "../../utils/auth";
 
 function Copyright(props) {
   return (
@@ -37,7 +43,11 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    ACCESS_TOKEN_COOKIE,
+    REFRESH_TOKEN_COOKIE,
+    REFRESH_USER_ID_COOKIE,
+  ]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleSubmit = (event) => {
@@ -53,9 +63,8 @@ export default function Login() {
         Password: data.get("password"),
       })
       .then((response) => {
-        const token = response.data?.value || response.data;
-        //document.cookie = "token=" + response.data.value; /*token location*/
-        setCookie("token", token, { path: "/" });
+        const token = response.data?.accessToken || response.data?.value || response.data;
+        persistAuthResponse(response.data, setCookie);
         console.log(".then ~ document.response", response);
         axios.defaults.headers.common[
           "Authorization"

@@ -1,5 +1,6 @@
 using CustomerSite.Clients;
 using CustomerSite.Data;
+using CustomerSite.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,6 +57,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseSession();
+app.UseMiddleware<RefreshAccessTokenMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

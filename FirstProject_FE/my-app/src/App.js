@@ -22,21 +22,39 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProtectedRouteAdmin from "./components/ProtectedRouteAdmin";
+import { getAccessToken, refreshAccessToken } from "./utils/auth";
 axios.interceptors.request.use((config) => {
+  const token = getAccessToken();
+  if (token && !config.headers?.Authorization) {
+    config.headers = {
+      ...config.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
   return config;
 });
 axios.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
     console.log("error.response.status", error);
-    // if (401 === error.response.status) {
-    //   window.location.href =
-    //     "/Identity/Account/Login?returnUrl=" + window.location.pathname;
-    // } else {
-    //   return Promise.reject(error);
-    // }
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const token = await refreshAccessToken();
+      if (token) {
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${token}`,
+        };
+        return axios(originalRequest);
+      }
+    }
+
+    return Promise.reject(error);
   }
 );
 function App() {
