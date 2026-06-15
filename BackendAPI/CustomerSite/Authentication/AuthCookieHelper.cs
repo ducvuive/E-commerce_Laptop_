@@ -13,6 +13,7 @@ public static class AuthCookieHelper
         context.Response.Cookies.Append(Variable.JWT_Token, loginResponse.Value, accessTokenCookieOption);
         context.Response.Cookies.Append(Variable.Refresh_Token, loginResponse.RefreshToken, refreshTokenCookieOption);
         context.Response.Cookies.Append(Variable.Refresh_UserId, loginResponse.UserId, refreshTokenCookieOption);
+        context.Response.Cookies.Append(Variable.Refresh_SessionId, loginResponse.RefreshSessionId, refreshTokenCookieOption);
     }
 
     public static void DeleteAuthCookies(HttpContext context)
@@ -20,6 +21,7 @@ public static class AuthCookieHelper
         context.Response.Cookies.Delete(Variable.JWT_Token);
         context.Response.Cookies.Delete(Variable.Refresh_Token);
         context.Response.Cookies.Delete(Variable.Refresh_UserId);
+        context.Response.Cookies.Delete(Variable.Refresh_SessionId);
     }
 
     private static CookieOptions BuildCookieOptions(HttpContext context, DateTime expiresAtUtc)

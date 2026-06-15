@@ -17,6 +17,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import {
   ACCESS_TOKEN_COOKIE,
+  REFRESH_SESSION_ID_COOKIE,
   REFRESH_TOKEN_COOKIE,
   REFRESH_USER_ID_COOKIE,
   persistAuthResponse,
@@ -45,6 +46,7 @@ const theme = createTheme();
 export default function Login() {
   const [cookies, setCookie, removeCookie] = useCookies([
     ACCESS_TOKEN_COOKIE,
+    REFRESH_SESSION_ID_COOKIE,
     REFRESH_TOKEN_COOKIE,
     REFRESH_USER_ID_COOKIE,
   ]);

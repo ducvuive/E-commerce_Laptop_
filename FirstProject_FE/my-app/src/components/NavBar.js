@@ -4,16 +4,19 @@ import { Link } from "react-router-dom";
 import {
   ACCESS_TOKEN_COOKIE,
   AUTH_CHANGED_EVENT,
+  REFRESH_SESSION_ID_COOKIE,
   REFRESH_TOKEN_COOKIE,
   REFRESH_USER_ID_COOKIE,
   clearAuthCookies,
   getAccessToken,
   getUserEmail,
   isTokenExpired,
+  revokeAuthSession,
 } from "../utils/auth";
 const NavBar = () => {
   const [cookies, setCookie, removeCookie] = useCookies([
     ACCESS_TOKEN_COOKIE,
+    REFRESH_SESSION_ID_COOKIE,
     REFRESH_TOKEN_COOKIE,
     REFRESH_USER_ID_COOKIE,
   ]);
@@ -36,10 +39,11 @@ const NavBar = () => {
     return () => window.removeEventListener(AUTH_CHANGED_EVENT, loadCate);
   }, [cookies]);
 
-  function Logout() {
+  async function Logout() {
     if (token == "") {
       console.log("nullnull");
     }
+    await revokeAuthSession();
     clearAuthCookies(removeCookie);
     setToken("");
   }

@@ -53,13 +53,45 @@ namespace CustomerSite.Controllers
 
             return View(model);
         }
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             var session = HttpContext.Session;
+            await RevokeCurrentRefreshToken();
             AuthCookieHelper.DeleteAuthCookies(HttpContext);
             //session.Remove(Variable.JWT);
             session.Remove(Variable.CARTKEY);
             return RedirectToAction("Index", "Home");
+        }
+
+        private async Task RevokeCurrentRefreshToken()
+        {
+            var userId = Request.Cookies[Variable.Refresh_UserId];
+            var refreshToken = Request.Cookies[Variable.Refresh_Token];
+            var refreshSessionId = Request.Cookies[Variable.Refresh_SessionId];
+
+            if (string.IsNullOrWhiteSpace(userId) ||
+                string.IsNullOrWhiteSpace(refreshToken) ||
+                string.IsNullOrWhiteSpace(refreshSessionId))
+            {
+                return;
+            }
+
+            try
+            {
+                var request = new RefreshTokenRequestModel
+                {
+                    UserId = userId,
+                    RefreshToken = refreshToken,
+                    RefreshSessionId = refreshSessionId
+                };
+                var jsonInString = JsonConvert.SerializeObject(request);
+                await clientFactory.PostAsync(
+                    "/Auth/revoke",
+                    new StringContent(jsonInString, Encoding.UTF8, "application/json"));
+            }
+            catch
+            {
+            }
         }
 
         public IActionResult Register()

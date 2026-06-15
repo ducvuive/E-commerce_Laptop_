@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 export const ACCESS_TOKEN_COOKIE = "token";
 export const REFRESH_TOKEN_COOKIE = "refreshToken";
 export const REFRESH_USER_ID_COOKIE = "refreshUserId";
+export const REFRESH_SESSION_ID_COOKIE = "refreshSessionId";
 export const AUTH_CHANGED_EVENT = "auth-changed";
 
 const API_BASE_URL = "https://localhost:7123";
@@ -94,6 +95,14 @@ export const persistAuthResponse = (data, setCookie) => {
     );
   }
 
+  if (data?.refreshSessionId) {
+    writeCookie(
+      REFRESH_SESSION_ID_COOKIE,
+      data.refreshSessionId,
+      cookieOptions(data?.refreshTokenExpiresAtUtc)
+    );
+  }
+
   emitAuthChanged();
 };
 
@@ -102,12 +111,34 @@ export const clearAuthCookies = (removeCookie) => {
   remove(ACCESS_TOKEN_COOKIE, { path: "/" });
   remove(REFRESH_TOKEN_COOKIE, { path: "/" });
   remove(REFRESH_USER_ID_COOKIE, { path: "/" });
+  remove(REFRESH_SESSION_ID_COOKIE, { path: "/" });
   emitAuthChanged();
+};
+
+export const revokeAuthSession = async () => {
+  const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE);
+  const userId = cookieStore.get(REFRESH_USER_ID_COOKIE);
+  const refreshSessionId = cookieStore.get(REFRESH_SESSION_ID_COOKIE);
+
+  if (!refreshToken || !userId || !refreshSessionId) {
+    return;
+  }
+
+  try {
+    await axios.post(`${API_BASE_URL}/Auth/revoke`, {
+      userId,
+      refreshToken,
+      refreshSessionId,
+    });
+  } catch {
+    // Logout should still clear local cookies if server-side revoke fails.
+  }
 };
 
 const requestNewAccessToken = async () => {
   const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE);
   const userId = cookieStore.get(REFRESH_USER_ID_COOKIE);
+  const refreshSessionId = cookieStore.get(REFRESH_SESSION_ID_COOKIE);
 
   if (!refreshToken || !userId) {
     return null;
@@ -117,6 +148,7 @@ const requestNewAccessToken = async () => {
     const response = await axios.post(`${API_BASE_URL}/Auth/refresh`, {
       userId,
       refreshToken,
+      refreshSessionId,
     });
 
     persistAuthResponse(response.data);

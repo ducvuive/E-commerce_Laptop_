@@ -1,9 +1,10 @@
 using BackendAPI.Persistence.Identity;
+using BackendAPI.Persistence.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ShareView.DTO;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -18,27 +19,30 @@ namespace BackendAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private const string RefreshTokenProvider = "BackendAPI";
-        private const string RefreshTokenName = "RefreshToken";
-        private const string RefreshTokenExpiresName = "RefreshTokenExpiresUtc";
-        private static readonly TimeSpan AccessTokenLifetime = TimeSpan.FromMinutes(1);
-        private static readonly TimeSpan RefreshTokenLifetime = TimeSpan.FromDays(7);
+        private static readonly TimeSpan DefaultAccessTokenLifetime = TimeSpan.FromMinutes(30);
+        private static readonly TimeSpan DefaultRefreshTokenLifetime = TimeSpan.FromDays(7);
 
         private readonly IConfiguration config;
         private readonly UserManager<UserIdentity> userManager;
+        private readonly UserDbContext userDbContext;
 
-        public AuthController(IConfiguration config, UserManager<UserIdentity> userManager)
+        private TimeSpan AccessTokenLifetime =>
+            GetConfiguredLifetime("RefreshTokens:AccessTokenLifetimeMinutes", DefaultAccessTokenLifetime, TimeSpan.FromMinutes);
+
+        private TimeSpan RefreshTokenLifetime =>
+            GetConfiguredLifetime("RefreshTokens:RefreshTokenLifetimeDays", DefaultRefreshTokenLifetime, TimeSpan.FromDays);
+
+        public AuthController(IConfiguration config, UserManager<UserIdentity> userManager, UserDbContext userDbContext)
         {
             this.config = config;
             this.userManager = userManager;
+            this.userDbContext = userDbContext;
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IResult> Register([FromBody] RegisterRequestModel registerRequestModel)
         {
-            //var a = 1;
-            // khong bi loi require,...
             if (ModelState.IsValid)
             {
                 var user = new UserIdentity
@@ -48,9 +52,7 @@ namespace BackendAPI.Controllers
                     PhoneNumber = registerRequestModel.PhoneNumber,
                 };
 
-                // tao user trong database
                 var createUserResult = await userManager.CreateAsync(user, registerRequestModel.Password);
-                //a = 1;
 
                 if (createUserResult.Succeeded)
                 {
@@ -97,29 +99,23 @@ namespace BackendAPI.Controllers
                 return Results.Unauthorized();
             }
 
-            var storedRefreshTokenHash = await userManager.GetAuthenticationTokenAsync(
-                identityUser,
-                RefreshTokenProvider,
-                RefreshTokenName);
-            var storedRefreshTokenExpires = await userManager.GetAuthenticationTokenAsync(
-                identityUser,
-                RefreshTokenProvider,
-                RefreshTokenExpiresName);
-
-            if (string.IsNullOrWhiteSpace(storedRefreshTokenHash) ||
-                storedRefreshTokenHash != HashToken(refreshTokenRequestModel.RefreshToken) ||
-                !DateTime.TryParse(
-                    storedRefreshTokenExpires,
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.AdjustToUniversal,
-                    out var refreshTokenExpiresAtUtc) ||
-                refreshTokenExpiresAtUtc <= DateTime.UtcNow)
+            var refreshSessionId = refreshTokenRequestModel.RefreshSessionId?.Trim() ?? string.Empty;
+            if (!IsValidRefreshSessionId(refreshSessionId))
             {
-                await RemoveRefreshToken(identityUser);
                 return Results.Unauthorized();
             }
 
-            var response = await BuildLoginResponse(identityUser);
+            var refreshToken = await userDbContext.RefreshTokens
+                .SingleOrDefaultAsync(token =>
+                    token.UserId == identityUser.Id &&
+                    token.SessionId == refreshSessionId);
+
+            if (!IsRefreshTokenValid(refreshToken, refreshTokenRequestModel.RefreshToken))
+            {
+                return Results.Unauthorized();
+            }
+
+            var response = await BuildLoginResponse(identityUser, refreshToken);
             return Results.Ok(response);
         }
 
@@ -127,32 +123,66 @@ namespace BackendAPI.Controllers
         [Route("revoke")]
         public async Task<IResult> Revoke([FromBody] RefreshTokenRequestModel refreshTokenRequestModel)
         {
-            var identityUser = await userManager.FindByIdAsync(refreshTokenRequestModel.UserId);
-            if (identityUser != null)
+            if (!ModelState.IsValid)
             {
-                await RemoveRefreshToken(identityUser);
+                return Results.BadRequest(ModelState.Values.SelectMany(x => x.Errors));
             }
+
+            var identityUser = await userManager.FindByIdAsync(refreshTokenRequestModel.UserId);
+            var refreshSessionId = refreshTokenRequestModel.RefreshSessionId?.Trim() ?? string.Empty;
+            if (identityUser == null || !IsValidRefreshSessionId(refreshSessionId))
+            {
+                return Results.Unauthorized();
+            }
+
+            var refreshToken = await userDbContext.RefreshTokens
+                .SingleOrDefaultAsync(token =>
+                    token.UserId == identityUser.Id &&
+                    token.SessionId == refreshSessionId);
+
+            if (!IsRefreshTokenValid(refreshToken, refreshTokenRequestModel.RefreshToken))
+            {
+                return Results.Unauthorized();
+            }
+
+            refreshToken!.RevokedAtUtc = DateTime.UtcNow;
+            await userDbContext.SaveChangesAsync();
 
             return Results.NoContent();
         }
 
-        private async Task<LoginResponseModel> BuildLoginResponse(UserIdentity identityUser)
+        private async Task<LoginResponseModel> BuildLoginResponse(UserIdentity identityUser, RefreshToken? refreshTokenRecord = null)
         {
+            var now = DateTime.UtcNow;
             var expiresAtUtc = DateTime.UtcNow.Add(AccessTokenLifetime);
             var accessToken = await GenerateAccessToken(identityUser, expiresAtUtc);
             var refreshToken = GenerateRefreshToken();
             var refreshTokenExpiresAtUtc = DateTime.UtcNow.Add(RefreshTokenLifetime);
+            var isNewRefreshTokenRecord = refreshTokenRecord == null;
 
-            await userManager.SetAuthenticationTokenAsync(
-                identityUser,
-                RefreshTokenProvider,
-                RefreshTokenName,
-                HashToken(refreshToken));
-            await userManager.SetAuthenticationTokenAsync(
-                identityUser,
-                RefreshTokenProvider,
-                RefreshTokenExpiresName,
-                refreshTokenExpiresAtUtc.ToString("O", CultureInfo.InvariantCulture));
+            refreshTokenRecord ??= new RefreshToken
+            {
+                UserId = identityUser.Id,
+                SessionId = GenerateRefreshSessionId(),
+                CreatedAtUtc = now
+            };
+
+            refreshTokenRecord.TokenHash = HashToken(refreshToken);
+            refreshTokenRecord.ExpiresAtUtc = refreshTokenExpiresAtUtc;
+            refreshTokenRecord.RevokedAtUtc = null;
+            refreshTokenRecord.UserAgent = GetRequestUserAgent();
+            refreshTokenRecord.IpAddress = GetRequestIpAddress();
+            if (!isNewRefreshTokenRecord)
+            {
+                refreshTokenRecord.LastUsedAtUtc = now;
+            }
+
+            if (isNewRefreshTokenRecord)
+            {
+                await userDbContext.RefreshTokens.AddAsync(refreshTokenRecord);
+            }
+
+            await userDbContext.SaveChangesAsync();
 
             return new LoginResponseModel
             {
@@ -161,6 +191,7 @@ namespace BackendAPI.Controllers
                 ExpiresAtUtc = expiresAtUtc,
                 RefreshToken = refreshToken,
                 RefreshTokenExpiresAtUtc = refreshTokenExpiresAtUtc,
+                RefreshSessionId = refreshTokenRecord.SessionId,
                 UserId = identityUser.Id,
                 StatusCode = HttpStatusCode.OK
             };
@@ -209,6 +240,11 @@ namespace BackendAPI.Controllers
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         }
 
+        private static string GenerateRefreshSessionId()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
+        }
+
         private static string HashToken(string token)
         {
             var tokenBytes = Encoding.UTF8.GetBytes(token);
@@ -216,10 +252,35 @@ namespace BackendAPI.Controllers
             return Convert.ToBase64String(hashBytes);
         }
 
-        private async Task RemoveRefreshToken(UserIdentity identityUser)
+        private static bool IsValidRefreshSessionId(string refreshSessionId)
         {
-            await userManager.RemoveAuthenticationTokenAsync(identityUser, RefreshTokenProvider, RefreshTokenName);
-            await userManager.RemoveAuthenticationTokenAsync(identityUser, RefreshTokenProvider, RefreshTokenExpiresName);
+            return !string.IsNullOrWhiteSpace(refreshSessionId) &&
+                refreshSessionId.Length <= 64 &&
+                refreshSessionId.All(char.IsAsciiHexDigit);
+        }
+
+        private static bool IsRefreshTokenValid(RefreshToken? refreshTokenRecord, string refreshToken)
+        {
+            return refreshTokenRecord != null &&
+                refreshTokenRecord.RevokedAtUtc == null &&
+                refreshTokenRecord.ExpiresAtUtc > DateTime.UtcNow &&
+                refreshTokenRecord.TokenHash == HashToken(refreshToken);
+        }
+
+        private string? GetRequestUserAgent()
+        {
+            return HttpContext?.Request.Headers.UserAgent.ToString();
+        }
+
+        private string? GetRequestIpAddress()
+        {
+            return HttpContext?.Connection.RemoteIpAddress?.ToString();
+        }
+
+        private TimeSpan GetConfiguredLifetime(string key, TimeSpan defaultValue, Func<double, TimeSpan> convert)
+        {
+            var value = config.GetValue<double?>(key);
+            return value is > 0 ? convert(value.Value) : defaultValue;
         }
 
     }

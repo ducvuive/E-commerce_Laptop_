@@ -39,7 +39,8 @@ public class RefreshAccessTokenMiddleware
         }
 
         if (string.IsNullOrEmpty(context.Request.Cookies[Variable.Refresh_Token]) ||
-            string.IsNullOrEmpty(context.Request.Cookies[Variable.Refresh_UserId]))
+            string.IsNullOrEmpty(context.Request.Cookies[Variable.Refresh_UserId]) ||
+            string.IsNullOrEmpty(context.Request.Cookies[Variable.Refresh_SessionId]))
         {
             return false;
         }
@@ -54,11 +55,13 @@ public class RefreshAccessTokenMiddleware
     {
         var refreshToken = context.Request.Cookies[Variable.Refresh_Token];
         var userId = context.Request.Cookies[Variable.Refresh_UserId];
+        var refreshSessionId = context.Request.Cookies[Variable.Refresh_SessionId];
 
         var request = new RefreshTokenRequestModel
         {
             UserId = userId ?? string.Empty,
-            RefreshToken = refreshToken ?? string.Empty
+            RefreshToken = refreshToken ?? string.Empty,
+            RefreshSessionId = refreshSessionId ?? string.Empty
         };
 
         try

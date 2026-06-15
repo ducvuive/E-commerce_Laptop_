@@ -23,6 +23,7 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
     public virtual DbSet<Product> Product { get; set; }
     public virtual DbSet<Rating> Rating { get; set; }
     public virtual DbSet<UserIdentity> UserIdentity { get; set; }
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
 
@@ -38,9 +39,13 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
 
         builder.ApplyConfiguration(new InvoiceConfig());
 
+        builder.ApplyConfiguration(new RatingConfig());
+
         builder.ApplyConfiguration(new ScreenConfig());
 
         builder.ApplyConfiguration(new ProductConfig());
+
+        builder.ApplyConfiguration(new RefreshTokenConfig());
 
         base.OnModelCreating(builder);
 

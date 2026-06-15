@@ -1,4 +1,5 @@
 using BackendAPI.Domain.Entities;
+using BackendAPI.Persistence.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +15,10 @@ namespace BackendAPI.Persistence.Configurations
 
             builder.Property(o => o.Address)
            .IsRequired();
+
+            builder.HasOne<UserIdentity>()
+                .WithMany()
+                .HasForeignKey(o => o.CustomerId);
 
         }
     }

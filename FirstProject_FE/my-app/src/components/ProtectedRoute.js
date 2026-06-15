@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation } from "react-router";
 import { useCookies } from "react-cookie";
 import {
     ACCESS_TOKEN_COOKIE,
+    REFRESH_SESSION_ID_COOKIE,
     REFRESH_TOKEN_COOKIE,
     REFRESH_USER_ID_COOKIE,
     clearAuthCookies,
@@ -13,6 +14,7 @@ import {
 const ProtectedRoute = () => {
     const [cookies, setCookie, removeCookie] = useCookies([
         ACCESS_TOKEN_COOKIE,
+        REFRESH_SESSION_ID_COOKIE,
         REFRESH_TOKEN_COOKIE,
         REFRESH_USER_ID_COOKIE,
     ]);

@@ -1,4 +1,5 @@
 using BackendAPI.Application.DependencyInjection;
+using BackendAPI.Services;
 using BackendAPI.Persistence.Identity;
 using BackendAPI.Persistence.Data;
 using BackendAPI.Persistence.DependencyInjection;
@@ -83,6 +84,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = true;
 });
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddHostedService<RefreshTokenCleanupService>();
 
 builder.Services.AddSession(options =>
 {
