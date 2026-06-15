@@ -20,6 +20,29 @@ Check container status:
 docker ps
 ```
 
+## 1.1. Run Redis for CustomerSite cart session
+
+CustomerSite stores cart session data in Redis through `IDistributedCache`.
+Logged-in customer carts use `cart:user:{userId}` so the same account shares one cart across browsers.
+
+```powershell
+docker run --name laptopstore-redis -p 6379:6379 -d redis:7-alpine
+```
+
+If the container already exists, start it:
+
+```powershell
+docker start laptopstore-redis
+```
+
+CustomerSite reads the Redis connection from:
+
+```json
+"ConnectionStrings": {
+  "Redis": "localhost:6379"
+}
+```
+
 ## 2. Create database schema from EF migrations
 
 Run from the repository root:
