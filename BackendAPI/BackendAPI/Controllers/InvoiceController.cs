@@ -1,8 +1,11 @@
 using AutoMapper;
 using BackendAPI.Persistence.Data;
 using BackendAPI.Domain.Entities;
+using BackendAPI.Services.Orders;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ShareView.Constants;
 using ShareView.DTO;
 
 namespace BackendAPI.Controllers
@@ -13,11 +16,13 @@ namespace BackendAPI.Controllers
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IOrderCheckoutService _orderCheckoutService;
 
-        public InvoiceController(UserDbContext context, IMapper mapper)
+        public InvoiceController(UserDbContext context, IMapper mapper, IOrderCheckoutService orderCheckoutService)
         {
             _context = context;
             _mapper = mapper;
+            _orderCheckoutService = orderCheckoutService;
         }
 
         // GET: api/Invoices
@@ -48,12 +53,38 @@ namespace BackendAPI.Controllers
             var user = await _context.UserIdentity.FirstOrDefaultAsync(i => i.Email == email);
             Invoice invoice = _mapper.Map<Invoice>(invoiceDTO);
             invoice.CustomerId = user?.Id;
-            invoice.Status = 1;
+            invoice.Status = InvoiceStatus.Pending;
             _context.Invoice.Add(invoice);
             await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetInvoice", new { id = invoice.InvoiceId }, invoice);
             return Ok("Invoice created successfully");
+        }
+
+        [Authorize]
+        [HttpPost("checkout")]
+        public async Task<ActionResult<CheckoutOrderResponseDTO>> Checkout(
+            [FromBody] CheckoutOrderRequestDTO request,
+            CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var response = await _orderCheckoutService.CheckoutAsync(request, User, cancellationToken);
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Invoices/5

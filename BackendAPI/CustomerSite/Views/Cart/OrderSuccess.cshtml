@@ -1,0 +1,15 @@
+@{
+    ViewData["Title"] = "Order Success";
+    Layout = "~/Views/Shared/_Layout_Slider.cshtml";
+    var invoiceId = ViewData["InvoiceId"];
+}
+
+<section class="cart container mt-5">
+    <h3>Order placed successfully</h3>
+    <p>Your order #@invoiceId has been received and is being confirmed.</p>
+    <p>A confirmation email will be sent after the order is processed.</p>
+    <div class="d-flex gap-2">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-info text-black">Continue Shopping</a>
+        <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">Back to Cart</a>
+    </div>
+</section>

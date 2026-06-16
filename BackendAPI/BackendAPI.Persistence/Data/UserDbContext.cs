@@ -1,6 +1,7 @@
 using BackendAPI.Domain.Entities;
 using BackendAPI.Persistence.Identity;
 using BackendAPI.Persistence.Configurations;
+using BackendAPI.Persistence.Messaging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,9 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
     public virtual DbSet<Rating> Rating { get; set; }
     public virtual DbSet<UserIdentity> UserIdentity { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+    public virtual DbSet<OutboxMessage> OutboxMessages { get; set; }
+    public virtual DbSet<ProcessedMessage> ProcessedMessages { get; set; }
+    public virtual DbSet<EmailOutboxMessage> EmailOutboxMessages { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
 
@@ -46,6 +50,12 @@ public class UserDbContext : IdentityDbContext<UserIdentity>
         builder.ApplyConfiguration(new ProductConfig());
 
         builder.ApplyConfiguration(new RefreshTokenConfig());
+
+        builder.ApplyConfiguration(new OutboxMessageConfig());
+
+        builder.ApplyConfiguration(new ProcessedMessageConfig());
+
+        builder.ApplyConfiguration(new EmailOutboxMessageConfig());
 
         base.OnModelCreating(builder);
 

@@ -1,4 +1,7 @@
 using BackendAPI.Application.DependencyInjection;
+using BackendAPI.Services.Email;
+using BackendAPI.Services.Messaging;
+using BackendAPI.Services.Orders;
 using BackendAPI.Services;
 using BackendAPI.Persistence.Identity;
 using BackendAPI.Persistence.Data;
@@ -25,6 +28,16 @@ builder.Services.AddDefaultIdentity<UserIdentity>(options => options.SignIn.Requ
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("RabbitMq"));
+builder.Services.Configure<OutboxOptions>(builder.Configuration.GetSection("Outbox"));
+builder.Services.Configure<SmtpEmailOptions>(builder.Configuration.GetSection("SmtpEmail"));
+builder.Services.Configure<EmailOutboxOptions>(builder.Configuration.GetSection("EmailOutbox"));
+builder.Services.AddScoped<IOrderCheckoutService, OrderCheckoutService>();
+builder.Services.AddScoped<IOrderEventPublisher, RabbitMqOrderEventPublisher>();
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+builder.Services.AddHostedService<ProcessOutboxMessagesService>();
+builder.Services.AddHostedService<OrderPlacedConsumerService>();
+builder.Services.AddHostedService<ProcessEmailOutboxService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

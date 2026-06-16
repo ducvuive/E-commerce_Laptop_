@@ -312,40 +312,41 @@ namespace CustomerSite.Controllers
                     return View(cart);
                 }
 
-                InvoiceDTO invoice = new InvoiceDTO();
-                long? total = 0;
-                invoice.Receiver = fullName;
-                invoice.Address = shippingAddress;
-                invoice.Phone = phone;
-                invoice.DateReceived = DateTime.Now;
-                foreach (var item in cart)
+                var checkoutRequest = new CheckoutOrderRequestDTO
                 {
-                    total += item.Product.Price * item.Quantity;
-                }
-                invoice.Total = total;
-                await invoiceClient.AddInvoice(invoice, email);
-                var _invoice = await invoiceClient.GetInvoice();
-                int temp;
-                if (_invoice == null)
+                    Receiver = fullName,
+                    Address = shippingAddress,
+                    Phone = phone,
+                    Email = email,
+                    PaymentMethod = "COD",
+                    Items = cart.Select(item => new CheckoutOrderItemDTO
+                    {
+                        ProductId = item.Product.ProductId,
+                        Quantity = item.Quantity
+                    }).ToList()
+                };
+
+                CheckoutOrderResponseDTO checkoutResponse;
+                try
                 {
-                    temp = 1;
+                    checkoutResponse = await invoiceClient.CheckoutOrder(checkoutRequest);
                 }
-                else
+                catch (InvalidOperationException ex)
                 {
-                    temp = _invoice.InvoiceId;
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return View(cart);
                 }
-                foreach (var item in cart)
-                {
-                    InvoiceDetailDTO invoiceDetail = new InvoiceDetailDTO();
-                    invoiceDetail.InvoiceId = temp;
-                    invoiceDetail.ProductId = item.Product.ProductId;
-                    invoiceDetail.Quantity = item.Quantity;
-                    await invoiceClient.AddInvoiceDetail(invoiceDetail);
-                }
+
                 await ClearCartForCurrentCustomer();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(OrderSuccess), new { id = checkoutResponse.InvoiceId });
             }
             return Redirect("/Home/Index");
+        }
+
+        public IActionResult OrderSuccess([FromRoute] int id)
+        {
+            ViewData["InvoiceId"] = id;
+            return View();
         }
     }
 }
