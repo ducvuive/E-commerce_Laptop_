@@ -81,7 +81,7 @@ namespace BackendAPI.Controllers
         public async Task<ActionResult<InvoiceDetailDTO>> PostCTHD(InvoiceDetailDTO cTHD_DTO)
         {
             var product = await _context.Product.FindAsync(cTHD_DTO.ProductId);
-            product.Quantity = product.Quantity - cTHD_DTO.Quantity;
+            product.Quantity -= cTHD_DTO.Quantity.GetValueOrDefault();
             var cTHD = new InvoiceDetail
             {
                 ProductId = cTHD_DTO.ProductId,

@@ -62,7 +62,7 @@ internal static class ProductMapping
         product.Price = dto.Price;
         product.UpdatedDate = dto.UpdatedDate ?? DateTime.UtcNow;
         product.PublishedDate = dto.PublishedDate;
-        product.Quantity = dto.Quantity;
+        product.Quantity = dto.Quantity.GetValueOrDefault();
         product.Image = dto.Image;
         product.IsDisable = dto.IsDisable;
     }

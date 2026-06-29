@@ -141,12 +141,12 @@ namespace CustomerSite.Controllers
             foreach (var cartItem in cartItems)
             {
                 var product = await productClient.GetProduct(cartItem.ProductId);
-                if (product.ProductId == 0 || product.IsDisable || product.Quantity.GetValueOrDefault() <= 0 || product.Price is null)
+                if (product.ProductId == 0 || product.IsDisable || product.Quantity <= 0 || product.Price is null)
                 {
                     continue;
                 }
 
-                var availableQuantity = product.Quantity.GetValueOrDefault();
+                var availableQuantity = product.Quantity;
                 var quantity = Math.Min(cartItem.Quantity, availableQuantity);
                 hydratedCart.Add(new CartDTO
                 {
@@ -209,7 +209,7 @@ namespace CustomerSite.Controllers
 
             if (products == null)
                 return NotFound("Product not found");
-            if (products.ProductId == 0 || products.IsDisable || products.Quantity.GetValueOrDefault() <= 0 || products.Price is null)
+            if (products.ProductId == 0 || products.IsDisable || products.Quantity <= 0 || products.Price is null)
                 return NotFound("Product not available");
 
             // Add or increment the product in the cart.
@@ -217,7 +217,7 @@ namespace CustomerSite.Controllers
             var cartitem = cart.Find(p => p.ProductId == Id);
             if (cartitem != null)
             {
-                cartitem.Quantity = Math.Min(cartitem.Quantity + 1, products.Quantity.GetValueOrDefault());
+                cartitem.Quantity = Math.Min(cartitem.Quantity + 1, products.Quantity);
             }
             else
             {
@@ -239,7 +239,7 @@ namespace CustomerSite.Controllers
 
             if (products == null)
                 return NotFound("Product not found");
-            if (products.ProductId == 0 || products.IsDisable || products.Quantity.GetValueOrDefault() <= 0 || products.Price is null)
+            if (products.ProductId == 0 || products.IsDisable || products.Quantity <= 0 || products.Price is null)
                 return NotFound("Product not available");
             if (quantity <= 0)
                 return RedirectToAction("Index");
@@ -249,11 +249,11 @@ namespace CustomerSite.Controllers
             var cartitem = cart.Find(p => p.ProductId == Id);
             if (cartitem != null)
             {
-                cartitem.Quantity = Math.Min(cartitem.Quantity + quantity, products.Quantity.GetValueOrDefault());
+                cartitem.Quantity = Math.Min(cartitem.Quantity + quantity, products.Quantity);
             }
             else
             {
-                cart.Add(new CartSessionItem() { Quantity = Math.Min(quantity, products.Quantity.GetValueOrDefault()), ProductId = products.ProductId });
+                cart.Add(new CartSessionItem() { Quantity = Math.Min(quantity, products.Quantity), ProductId = products.ProductId });
             }
 
             // Save cart to session.
@@ -305,7 +305,7 @@ namespace CustomerSite.Controllers
                 }
 
                 if (cart.Any(item => item.Product.IsDisable
-                    || item.Product.Quantity.GetValueOrDefault() < item.Quantity
+                    || item.Product.Quantity < item.Quantity
                     || item.Product.Price is null))
                 {
                     ModelState.AddModelError(string.Empty, "Some products in your cart are no longer available.");

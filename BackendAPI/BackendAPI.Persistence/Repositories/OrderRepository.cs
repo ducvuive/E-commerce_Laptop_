@@ -31,8 +31,55 @@ public sealed class OrderRepository : IOrderRepository
         CancellationToken cancellationToken)
     {
         return await context.Product
+            .AsNoTracking()
             .Where(product => productIds.Contains(product.ProductId))
             .ToDictionaryAsync(product => product.ProductId, cancellationToken);
+    }
+
+    public async Task<StockDecreaseResult> TryDecreaseStockAsync(
+        int productId,
+        int quantity,
+        CancellationToken cancellationToken)
+    {
+        var affectedRows = await context.Product
+            .Where(product =>
+                product.ProductId == productId &&
+                !product.IsDisable &&
+                product.Price != null &&
+                product.Quantity >= quantity)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(
+                    product => product.Quantity,
+                    product => product.Quantity - quantity),
+                cancellationToken);
+
+        if (affectedRows == 1)
+        {
+            return StockDecreaseResult.Success;
+        }
+
+        var product = await context.Product
+            .AsNoTracking()
+            .Where(product => product.ProductId == productId)
+            .Select(product => new
+            {
+                product.IsDisable,
+                product.Price,
+                product.Quantity
+            })
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (product is null)
+        {
+            return StockDecreaseResult.ProductNotFound;
+        }
+
+        if (product.IsDisable || product.Price is null)
+        {
+            return StockDecreaseResult.ProductUnavailable;
+        }
+
+        return StockDecreaseResult.InsufficientStock;
     }
 
     public Task AddInvoiceAsync(Invoice invoice, CancellationToken cancellationToken)

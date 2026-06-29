@@ -10,7 +10,7 @@
         //public int CongKetNoiId { get; set; }
         public int CategoryId { get; set; }
         public string? NameProduct { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
         public bool IsDisable { get; set; }
         public long? Price { get; set; }
         public string? Image { get; set; }

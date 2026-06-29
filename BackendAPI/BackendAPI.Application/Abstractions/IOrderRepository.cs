@@ -11,6 +11,11 @@ public interface IOrderRepository
         IReadOnlyCollection<int> productIds,
         CancellationToken cancellationToken);
 
+    Task<StockDecreaseResult> TryDecreaseStockAsync(
+        int productId,
+        int quantity,
+        CancellationToken cancellationToken);
+
     Task AddInvoiceAsync(Invoice invoice, CancellationToken cancellationToken);
 
     Task AddOrderPlacedEventAsync(OrderPlacedEvent orderPlaced, CancellationToken cancellationToken);
@@ -19,3 +24,11 @@ public interface IOrderRepository
 }
 
 public sealed record CustomerSnapshot(string Id, string? Email, string? UserName);
+
+public enum StockDecreaseResult
+{
+    Success,
+    ProductNotFound,
+    ProductUnavailable,
+    InsufficientStock
+}

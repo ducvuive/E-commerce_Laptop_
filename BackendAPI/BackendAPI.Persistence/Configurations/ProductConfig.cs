@@ -12,6 +12,10 @@ namespace BackendAPI.Persistence.Configurations
 
             builder.HasKey(o => o.ProductId);
 
+            builder.Property(o => o.Quantity)
+                .IsRequired()
+                .HasDefaultValue(0);
+
             //builder.Property(o => o.CardScreen)
             //.HasMaxLength(100);
 

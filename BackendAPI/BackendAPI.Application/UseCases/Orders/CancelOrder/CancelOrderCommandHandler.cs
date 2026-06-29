@@ -54,7 +54,7 @@ public sealed class CancelOrderCommandHandler : IRequestHandler<CancelOrderComma
                 {
                     if (detail.Product is not null)
                     {
-                        detail.Product.Quantity = detail.Product.Quantity.GetValueOrDefault() +
+                        detail.Product.Quantity = detail.Product.Quantity +
                             detail.Quantity.GetValueOrDefault();
                     }
                 }

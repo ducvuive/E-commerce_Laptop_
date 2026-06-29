@@ -39,6 +39,7 @@ public sealed class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderC
                 ProductId = group.Key,
                 Quantity = group.Sum(item => item.Quantity)
             })
+            .OrderBy(item => item.ProductId)
             .ToList();
 
         CheckoutOrderResponseDTO? response = null;
@@ -62,13 +63,19 @@ public sealed class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderC
                         throw new InvalidOperationException($"Product {product.NameProduct} is not available.");
                     }
 
-                    var availableQuantity = product.Quantity.GetValueOrDefault();
-                    if (availableQuantity < item.Quantity)
+                    var stockDecreaseResult = await orderRepository.TryDecreaseStockAsync(
+                        item.ProductId,
+                        item.Quantity,
+                        token);
+
+                    if (stockDecreaseResult != StockDecreaseResult.Success)
                     {
-                        throw new InvalidOperationException($"Product {product.NameProduct} does not have enough stock.");
+                        throw new InvalidOperationException(GetStockDecreaseFailureMessage(
+                            product.NameProduct,
+                            item.ProductId,
+                            stockDecreaseResult));
                     }
 
-                    product.Quantity = availableQuantity - item.Quantity;
                     total += product.Price.Value * item.Quantity;
                 }
 
@@ -126,5 +133,22 @@ public sealed class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderC
         }
 
         return Result<CheckoutOrderResponseDTO>.Success(response!);
+    }
+
+    private static string GetStockDecreaseFailureMessage(
+        string? productName,
+        int productId,
+        StockDecreaseResult result)
+    {
+        var displayName = string.IsNullOrWhiteSpace(productName)
+            ? $"Product {productId}"
+            : productName;
+
+        return result switch
+        {
+            StockDecreaseResult.ProductNotFound => $"Product {productId} does not exist.",
+            StockDecreaseResult.ProductUnavailable => $"Product {displayName} is not available.",
+            _ => $"Product {displayName} does not have enough stock."
+        };
     }
 }

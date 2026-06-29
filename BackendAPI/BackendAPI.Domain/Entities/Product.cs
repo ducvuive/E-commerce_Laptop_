@@ -14,7 +14,7 @@ namespace BackendAPI.Domain.Entities
         //public int CongKetNoiId { get; set; }
         public int CategoryId { get; set; }
         public string? NameProduct { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
         public long? Price { get; set; }
         public string? Image { get; set; }
         public float? Rating { get; set; }
