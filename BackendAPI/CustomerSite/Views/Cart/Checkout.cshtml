@@ -33,6 +33,7 @@
 <section class="cart container mt-5">
     <h3 class="">Order Details</h3>
     <form class="row" method="post" asp-controller="Cart" asp-action="CheckOut">
+        <input type="hidden" name="idempotencyKey" value="@ViewData["CheckoutIdempotencyKey"]" />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="col-6">
             <div class="form-group">

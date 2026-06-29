@@ -26,6 +26,19 @@ public sealed class OrderRepository : IOrderRepository
             .SingleOrDefaultAsync(cancellationToken);
     }
 
+    public Task<Invoice?> GetByIdempotencyKeyAsync(
+        string customerId,
+        string idempotencyKey,
+        CancellationToken cancellationToken)
+    {
+        return context.Invoice
+            .AsNoTracking()
+            .SingleOrDefaultAsync(invoice =>
+                invoice.CustomerId == customerId &&
+                invoice.IdempotencyKey == idempotencyKey,
+                cancellationToken);
+    }
+
     public async Task<IReadOnlyDictionary<int, Product>> GetProductsByIdsAsync(
         IReadOnlyCollection<int> productIds,
         CancellationToken cancellationToken)

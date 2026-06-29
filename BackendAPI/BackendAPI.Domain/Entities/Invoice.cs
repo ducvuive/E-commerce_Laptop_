@@ -24,6 +24,8 @@ namespace BackendAPI.Domain.Entities
         public long? Total { get; set; }
         public int? Status { get; set; }
         public string? CustomerId { get; set; }
+        [MaxLength(80)]
+        public string? IdempotencyKey { get; set; }
         public virtual List<InvoiceDetail> InvoiceDetail { get; set; } = new List<InvoiceDetail>();
     }
 }

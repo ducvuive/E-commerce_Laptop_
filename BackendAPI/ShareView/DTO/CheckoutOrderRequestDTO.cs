@@ -5,6 +5,10 @@ namespace ShareView.DTO;
 public class CheckoutOrderRequestDTO
 {
     [Required]
+    [MaxLength(80)]
+    public string? IdempotencyKey { get; set; }
+
+    [Required]
     [MaxLength(100)]
     public string? Receiver { get; set; }
 

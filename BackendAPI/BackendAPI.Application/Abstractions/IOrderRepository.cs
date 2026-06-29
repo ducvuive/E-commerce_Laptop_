@@ -7,6 +7,11 @@ public interface IOrderRepository
 {
     Task<CustomerSnapshot?> GetCustomerAsync(string customerId, CancellationToken cancellationToken);
 
+    Task<Invoice?> GetByIdempotencyKeyAsync(
+        string customerId,
+        string idempotencyKey,
+        CancellationToken cancellationToken);
+
     Task<IReadOnlyDictionary<int, Product>> GetProductsByIdsAsync(
         IReadOnlyCollection<int> productIds,
         CancellationToken cancellationToken);

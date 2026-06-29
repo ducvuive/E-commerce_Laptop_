@@ -289,14 +289,25 @@ namespace CustomerSite.Controllers
                 return Redirect("/Account/Login");
             }
             var cart = await GetCartItems();
+            ViewData["CheckoutIdempotencyKey"] = Guid.NewGuid().ToString("N");
 
             return View(cart);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckOut([FromForm] string fullName, [FromForm] string shippingAddress, [FromForm] string phone, [FromForm] string email)
+        public async Task<IActionResult> CheckOut(
+            [FromForm] string fullName,
+            [FromForm] string shippingAddress,
+            [FromForm] string phone,
+            [FromForm] string email,
+            [FromForm] string idempotencyKey)
         {
             var cart = await GetCartItems();
+            var checkoutIdempotencyKey = string.IsNullOrWhiteSpace(idempotencyKey)
+                ? Guid.NewGuid().ToString("N")
+                : idempotencyKey.Trim();
+            ViewData["CheckoutIdempotencyKey"] = checkoutIdempotencyKey;
+
             if (!string.IsNullOrEmpty(email))
             {
                 if (cart.Count == 0)
@@ -318,6 +329,7 @@ namespace CustomerSite.Controllers
                     Address = shippingAddress,
                     Phone = phone,
                     Email = email,
+                    IdempotencyKey = checkoutIdempotencyKey,
                     PaymentMethod = "COD",
                     Items = cart.Select(item => new CheckoutOrderItemDTO
                     {

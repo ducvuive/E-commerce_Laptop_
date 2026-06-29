@@ -45,8 +45,22 @@ public sealed class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderC
         CheckoutOrderResponseDTO? response = null;
         try
         {
+            var idempotencyKey = request.Request.IdempotencyKey!.Trim();
             await unitOfWork.ExecuteInTransactionAsync(async token =>
             {
+                var existingOrder = await orderRepository.GetByIdempotencyKeyAsync(
+                    customer.Id,
+                    idempotencyKey,
+                    token);
+
+                if (existingOrder is not null)
+                {
+                    response = ToCheckoutResponse(
+                        existingOrder,
+                        "Order already exists for this checkout request.");
+                    return;
+                }
+
                 var productIds = items.Select(item => item.ProductId).ToList();
                 var products = await orderRepository.GetProductsByIdsAsync(productIds, token);
 
@@ -88,6 +102,7 @@ public sealed class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderC
                     Total = total,
                     Status = InvoiceStatus.Pending,
                     CustomerId = customer.Id,
+                    IdempotencyKey = idempotencyKey,
                     InvoiceDetail = items.Select(item => new InvoiceDetail
                     {
                         ProductId = item.ProductId,
@@ -133,6 +148,17 @@ public sealed class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderC
         }
 
         return Result<CheckoutOrderResponseDTO>.Success(response!);
+    }
+
+    private static CheckoutOrderResponseDTO ToCheckoutResponse(Invoice invoice, string message)
+    {
+        return new CheckoutOrderResponseDTO
+        {
+            InvoiceId = invoice.InvoiceId,
+            Status = invoice.Status.GetValueOrDefault(),
+            Total = invoice.Total.GetValueOrDefault(),
+            Message = message
+        };
     }
 
     private static string GetStockDecreaseFailureMessage(

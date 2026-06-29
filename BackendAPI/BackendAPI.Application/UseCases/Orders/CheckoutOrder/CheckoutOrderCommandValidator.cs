@@ -10,6 +10,9 @@ public sealed class CheckoutOrderCommandValidator : AbstractValidator<CheckoutOr
         RuleFor(command => command.Request).NotNull();
         When(command => command.Request is not null, () =>
         {
+            RuleFor(command => command.Request.IdempotencyKey)
+                .NotEmpty()
+                .MaximumLength(80);
             RuleFor(command => command.Request.Receiver)
                 .NotEmpty()
                 .MaximumLength(100);

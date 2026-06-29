@@ -16,6 +16,13 @@ namespace BackendAPI.Persistence.Configurations
             builder.Property(o => o.Address)
            .IsRequired();
 
+            builder.Property(o => o.IdempotencyKey)
+                .HasMaxLength(80);
+
+            builder.HasIndex(o => new { o.CustomerId, o.IdempotencyKey })
+                .IsUnique()
+                .HasFilter("[IdempotencyKey] IS NOT NULL");
+
             builder.HasOne<UserIdentity>()
                 .WithMany()
                 .HasForeignKey(o => o.CustomerId);
