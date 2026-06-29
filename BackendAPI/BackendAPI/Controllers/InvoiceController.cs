@@ -1,10 +1,15 @@
 using AutoMapper;
+using BackendAPI.Application.Common.Errors;
+using BackendAPI.Application.Common.Results;
+using BackendAPI.Application.UseCases.Orders.CancelOrder;
+using BackendAPI.Application.UseCases.Orders.CheckoutOrder;
 using BackendAPI.Persistence.Data;
 using BackendAPI.Domain.Entities;
-using BackendAPI.Services.Orders;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using ShareView.Constants;
 using ShareView.DTO;
 
@@ -16,13 +21,13 @@ namespace BackendAPI.Controllers
     {
         private readonly UserDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IOrderCheckoutService _orderCheckoutService;
+        private readonly ISender sender;
 
-        public InvoiceController(UserDbContext context, IMapper mapper, IOrderCheckoutService orderCheckoutService)
+        public InvoiceController(UserDbContext context, IMapper mapper, ISender sender)
         {
             _context = context;
             _mapper = mapper;
-            _orderCheckoutService = orderCheckoutService;
+            this.sender = sender;
         }
 
         // GET: api/Invoices
@@ -67,45 +72,69 @@ namespace BackendAPI.Controllers
             [FromBody] CheckoutOrderRequestDTO request,
             CancellationToken cancellationToken)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await sender.Send(new CheckoutOrderCommand(request, customerId), cancellationToken);
+            return ToActionResult(result);
+        }
 
-            try
-            {
-                var response = await _orderCheckoutService.CheckoutAsync(request, User, cancellationToken);
-                return Ok(response);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                return Unauthorized();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+        [Authorize]
+        [HttpPut("{id}/cancel")]
+        public async Task<ActionResult<CheckoutOrderResponseDTO>> CancelInvoice(
+            int id,
+            CancellationToken cancellationToken)
+        {
+            var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await sender.Send(new CancelOrderCommand(
+                id,
+                customerId,
+                User.IsInRole("Admin")), cancellationToken);
+
+            return ToActionResult(result);
         }
 
         // DELETE: api/Invoices/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInvoice(int id)
         {
-            var invoice = await _context.Invoice.FindAsync(id);
-            if (invoice == null)
-            {
-                return NotFound();
-            }
+            var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await sender.Send(new CancelOrderCommand(
+                id,
+                customerId,
+                User.IsInRole("Admin")));
 
-            _context.Invoice.Remove(invoice);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return result.IsSuccess ? NoContent() : ToActionResult((Result)result);
         }
 
         //private bool InvoiceExists(int id)
         //{
         //    return _context.Invoice.Any(e => e.InvoiceId == id);
         //}
+
+        private ActionResult<TValue> ToActionResult<TValue>(Result<TValue> result)
+        {
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return ToActionResult((Result)result);
+        }
+
+        private ObjectResult ToActionResult(Result result)
+        {
+            var firstError = result.FirstError;
+            var statusCode = firstError?.Type switch
+            {
+                ErrorType.NotFound => StatusCodes.Status404NotFound,
+                ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+                ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+                ErrorType.Conflict => StatusCodes.Status409Conflict,
+                ErrorType.Validation => StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status400BadRequest
+            };
+
+            return StatusCode(statusCode, result.Errors.Select(error => error.Message));
+        }
     }
 }

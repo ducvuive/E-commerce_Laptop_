@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.Json;
+using BackendAPI.Application.UseCases.Orders.Events;
 using BackendAPI.Persistence.Data;
 using BackendAPI.Persistence.Messaging;
 using BackendAPI.Services.Email;
-using BackendAPI.Services.Orders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;

@@ -1,11 +1,17 @@
-using AutoMapper;
-using BackendAPI.Persistence.Data;
+using BackendAPI.Application.Abstractions;
+using BackendAPI.Application.Common.Errors;
+using BackendAPI.Application.Common.Results;
+using BackendAPI.Application.UseCases.Products.CreateProduct;
+using BackendAPI.Application.UseCases.Products.DisableProduct;
+using BackendAPI.Application.UseCases.Products.GetProduct;
+using BackendAPI.Application.UseCases.Products.GetProductAdmin;
+using BackendAPI.Application.UseCases.Products.SearchProducts;
+using BackendAPI.Application.UseCases.Products.UpdateProduct;
 using BackendAPI.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ShareView.DTO;
-using System.Data;
 
 namespace BackendAPI.Controllers
 {
@@ -13,278 +19,227 @@ namespace BackendAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly UserDbContext _context;
-        private readonly IMapper _mapper;
-        public ProductController(UserDbContext context, IMapper mapper)
+        private readonly ISender sender;
+
+        public ProductController(ISender sender)
         {
-            _context = context;
-            _mapper = mapper;
+            this.sender = sender;
         }
 
-        // GET: api/Products
         [HttpGet]
         [Route("all")]
-        public async Task<ActionResult<List<ProductDTO>>> GetProduct()
+        public async Task<ActionResult<List<ProductDTO>>> GetProduct(CancellationToken cancellationToken)
         {
-            var product = await _context.Product.ToListAsync();
-            return Ok(_mapper.Map<List<ProductDTO>>(product));
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: 1,
+                Limit: 100,
+                IncludeDisabled: true), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
-        // GET: api/Products
+
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpGet("[action]")]
-        public async Task<ActionResult<List<ProductDTO>>> GetProductAdmin()
+        public async Task<ActionResult<List<ProductDTO>>> GetProductAdmin(CancellationToken cancellationToken)
         {
-            var product = await _context.Product.ToListAsync();
-            return Ok(_mapper.Map<List<ProductDTO>>(product));
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: 1,
+                Limit: 100,
+                IncludeDisabled: true), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
         [HttpGet("entities")]
-        public async Task<ActionResult<List<Product>>> GetProductEntities()
+        public async Task<ActionResult<List<ProductDTO>>> GetProductEntities(CancellationToken cancellationToken)
         {
-            var product = await _context.Product.ToListAsync();
-            return product;
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: 1,
+                Limit: 100,
+                IncludeDisabled: true), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
         [HttpGet]
         [Route("month")]
-        /*[Authorize(Roles = "Admin")]*/
-        public async Task<ActionResult<List<ProductDTO>>> GetNewestProducts()
+        public async Task<ActionResult<List<ProductDTO>>> GetNewestProducts(CancellationToken cancellationToken)
         {
-            var results = _context.Product.OrderByDescending(x => x.PublishedDate).Take(6);
-            if (results == null)
-            {
-                return NotFound();
-            }
-            var mapper = _mapper.Map<List<ProductDTO>>(results);
-            return Ok(mapper);
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: 1,
+                Limit: 6), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
-        // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDTO>> GetProduct(int id)
+        public async Task<ActionResult<ProductDTO>> GetProduct(int id, CancellationToken cancellationToken)
         {
-            var product = await _context.Product.Where(p => p.ProductId == id)
-                                                .Include(p => p.Ratings)
-                                                .FirstOrDefaultAsync();
-            if (product == null)
-            {
-                return NotFound();
-            }
-            var mapper = _mapper.Map<ProductDTO>(product);
-            if (mapper.Ratings is not null && product.Ratings.Any())
-            {
-                var customerIds = product.Ratings
-                    .Select(r => r.CustomerId)
-                    .Where(id => id is not null)
-                    .Distinct()
-                    .ToList();
-
-                var customers = await _context.UserIdentity
-                    .Where(u => customerIds.Contains(u.Id))
-                    .ToDictionaryAsync(u => u.Id);
-
-                for (var index = 0; index < product.Ratings.Count && index < mapper.Ratings.Count; index++)
-                {
-                    var customerId = product.Ratings[index].CustomerId;
-                    if (customerId is not null && customers.TryGetValue(customerId, out var customer))
-                    {
-                        mapper.Ratings[index].Customer = _mapper.Map<UserIdentityDTO>(customer);
-                    }
-                }
-            }
-
-            return mapper;
+            var result = await sender.Send(new GetProductQuery(id), cancellationToken);
+            return ToActionResult(result);
         }
-        // GET: api/Products/5
-        //[Route("api/Products/admin_product")]
+
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpGet("admin_product/{id}")]
-        public async Task<ActionResult<ProductAdminDTO>> GetProductAdmin(int id)
+        public async Task<ActionResult<ProductAdminDTO>> GetProductAdmin(int id, CancellationToken cancellationToken)
         {
-            /*            var product = await _context.Product
-                                                            .Where(p => p.ProductId == id)
-                                                            .Include(p => p.Rating)
-                                                            .ThenInclude(r => r.Customer)
-                                                            .FirstOrDefaultAsync();*/
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            /*            var mapper = new ProductDTO_Admin()
-                        {
-                            ProductId = product.ProductId,
-                            CategoryName = product.CategoryId.categoryName,
-                        }*/
-            var mapper = _mapper.Map<ProductAdminDTO>(product);
-            //var mapper = new 
-            return Ok(product);
+            var result = await sender.Send(new GetProductAdminQuery(id), cancellationToken);
+            return ToActionResult(result);
         }
-        // GET: api/Products/5
+
         [HttpGet("GetProductsByPage/{page}")]
-        public async Task<ActionResult> GetProductsByPage(int page = 1)
+        public async Task<ActionResult<List<ProductDTO>>> GetProductsByPage(int page = 1, CancellationToken cancellationToken = default)
         {
-            var skip = 12 * (page - 1);
-            var results = _context.Product.OrderByDescending(x => x.Price).Skip(skip).Take(12);
-            if (results == null)
-            {
-                return NotFound();
-            }
-            var mapper = _mapper.Map<List<ProductDTO>>(results);
-            return Ok(mapper);
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: page,
+                Limit: 12,
+                Sort: ProductSort.PriceDesc), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
-
-
-
-        // GET: api/Products/5
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpGet("[action]")]
-        public ProductPagingDTO GetProductWithPage([FromQuery] PaginationParameters paginationParameters)
+        public async Task<ActionResult<ProductPagingDTO>> GetProductWithPage(
+            [FromQuery] PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
-            var query = _context.Product.Where(d => d.IsDisable == false);
-            var total = query.Count();
-            var results = query.Skip((paginationParameters.Page - 1) * paginationParameters.Limit).Take(paginationParameters.Limit);
-            var productDTO = _mapper.Map<List<ProductDTO>>(results.ToList());
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: paginationParameters.Page,
+                Limit: paginationParameters.Limit), cancellationToken);
 
-            return new ProductPagingDTO
-            {
-                Products = productDTO,
-                TotalItem = total,
-                Page = paginationParameters.Page,
-                LastPage = (int)Math.Ceiling(Decimal.Divide(total, paginationParameters.Limit))
-            };
+            return ToActionResult(result);
         }
 
         [HttpGet("GetProductsByCategoryPage/{category}/{page}")]
-        public async Task<ActionResult> GetProductsByCategoryPage(int category, int page)
+        public async Task<ActionResult<List<ProductDTO>>> GetProductsByCategoryPage(
+            int category,
+            int page,
+            CancellationToken cancellationToken)
         {
-            var skip = 12 * (page - 1);
-            var results = _context.Product.Where(s => s.CategoryId == category).Skip(skip).Take(12);
-            ;
-            if (results == null)
-            {
-                return NotFound();
-            }
-            var mapper = _mapper.Map<List<ProductDTO>>(results);
-            return Ok(mapper);
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: page,
+                Limit: 12,
+                CategoryId: category), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
         [HttpGet("GetProductsByCategory/{categoryId}/")]
-        public async Task<ActionResult<ProductDTO>> GetProductsByCategory(int categoryId)
+        public async Task<ActionResult<List<ProductDTO>>> GetProductsByCategory(
+            int categoryId,
+            CancellationToken cancellationToken)
         {
-            var results = _context.Product.Where(s => s.CategoryId == categoryId);
-            ;
-            if (results == null)
-            {
-                return NotFound();
-            }
-            var mapper = _mapper.Map<List<ProductDTO>>(results);
-            return Ok(mapper);
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: 1,
+                Limit: 100,
+                CategoryId: categoryId), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
         [HttpGet("GetProductsByName/{name}/")]
-        public async Task<ActionResult> GetProductsByName(string name)
+        public async Task<ActionResult<List<ProductDTO>>> GetProductsByName(
+            string name,
+            CancellationToken cancellationToken)
         {
-            var results = _context.Product.Where(s => s.NameProduct.Contains(name));
-            ;
-            if (results == null)
-            {
-                return NotFound();
-            }
-            var mapper = _mapper.Map<List<ProductDTO>>(results);
-            return Ok(mapper);
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: 1,
+                Limit: 100,
+                Name: name), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
         [HttpGet("GetProductsByNamePage/{name}/{page}")]
-        public async Task<ActionResult> GetProductsByNamePage(string name, int page)
+        public async Task<ActionResult<List<ProductDTO>>> GetProductsByNamePage(
+            string name,
+            int page,
+            CancellationToken cancellationToken)
         {
-            var skip = 12 * (page - 1);
-            var results = _context.Product.Where(s => s.NameProduct.Contains(name)).Skip(skip).Take(12);
-            if (results == null)
-            {
-                return NotFound();
-            }
-            var mapper = _mapper.Map<List<ProductDTO>>(results);
-            return Ok(mapper);
+            var result = await sender.Send(new SearchProductsQuery(
+                Page: page,
+                Limit: 12,
+                Name: name), cancellationToken);
+
+            return ToActionResult(result, paging => paging.Products);
         }
 
-        // PUT: api/Products/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, ProductAdminDTO productDTO)
+        public async Task<IActionResult> PutProduct(
+            int id,
+            ProductAdminDTO productDTO,
+            CancellationToken cancellationToken)
         {
-            var product = await _context.Product.Where(p => p.ProductId == id).FirstOrDefaultAsync();
-            if (product != null)
+            var result = await sender.Send(new UpdateProductCommand(id, productDTO), cancellationToken);
+            if (result.IsFailure)
             {
-                product.ProductId = productDTO.ProductId;
-                product.ProcessorId = productDTO.ProcessorId;
-                product.CategoryId = productDTO.CategoryId;
-                product.RamId = productDTO.RamId;
-                product.ScreenId = productDTO.ScreenId;
-                product.NameProduct = productDTO.NameProduct;
-                product.Price = productDTO.Price;
-                product.UpdatedDate = productDTO.UpdatedDate;
-                product.Quantity = productDTO.Quantity;
-
-                //Product product = _mapper.Map<Product>(productDTO);
-                _context.Entry(product).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return Ok("Update success");
+                return ToActionResult((Result)result);
             }
-            return NoContent();
+
+            return Ok("Update success");
         }
 
-        // POST: api/Products
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(ProductAdminDTO productDTO)
+        public async Task<ActionResult<ProductAdminDTO>> PostProduct(
+            ProductAdminDTO productDTO,
+            CancellationToken cancellationToken)
         {
-            var product = new Product
+            var result = await sender.Send(new CreateProductCommand(productDTO), cancellationToken);
+            if (result.IsFailure)
             {
-                //ProductId = productDTO.ProductId,
-                ProcessorId = productDTO.ProcessorId,
-                //CongKetNoiId = productDTO.CongKetNoiId,
-                CategoryId = productDTO.CategoryId,
-                RamId = productDTO.RamId,
-                ScreenId = productDTO.ScreenId,
-                NameProduct = productDTO.NameProduct,
-                Price = productDTO.Price,
-                UpdatedDate = productDTO.UpdatedDate,
-                PublishedDate = productDTO.PublishedDate,
-                Quantity = productDTO.Quantity,
-                Rating = 0,
-            };
-            //Product product = _mapper.Map<Product>(productDTO);
-            _context.Product.Add(product);
-            await _context.SaveChangesAsync();
+                return ToActionResult((Result)result);
+            }
 
-            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            return CreatedAtAction(nameof(GetProduct), new { id = result.Value!.ProductId }, result.Value);
         }
 
-        // DELETE: api/Products/5
         [Authorize(Roles = "Admin", AuthenticationSchemes = "Bearer")]
         [HttpPut("[action]/{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(int id, CancellationToken cancellationToken)
         {
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-            product.IsDisable = true;
-            await _context.SaveChangesAsync();
-            /*            _context.Product.Remove(product);
-                        await _context.SaveChangesAsync();*/
-
-            return NoContent();
+            var result = await sender.Send(new DisableProductCommand(id), cancellationToken);
+            return result.IsSuccess ? NoContent() : ToActionResult(result);
         }
 
-        private bool ProductExists(int id)
+        private ActionResult<TValue> ToActionResult<TValue>(Result<TValue> result)
         {
-            return _context.Product.Any(e => e.ProductId == id);
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+
+            return ToActionResult((Result)result);
+        }
+
+        private ActionResult<TValue> ToActionResult<TSource, TValue>(
+            Result<TSource> result,
+            Func<TSource, TValue> map)
+        {
+            if (result.IsSuccess)
+            {
+                return Ok(map(result.Value!));
+            }
+
+            return ToActionResult((Result)result);
+        }
+
+        private ObjectResult ToActionResult(Result result)
+        {
+            var firstError = result.FirstError;
+            var statusCode = firstError?.Type switch
+            {
+                ErrorType.NotFound => StatusCodes.Status404NotFound,
+                ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+                ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+                ErrorType.Conflict => StatusCodes.Status409Conflict,
+                ErrorType.Validation => StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status400BadRequest
+            };
+
+            return StatusCode(statusCode, result.Errors.Select(error => error.Message));
         }
     }
 }

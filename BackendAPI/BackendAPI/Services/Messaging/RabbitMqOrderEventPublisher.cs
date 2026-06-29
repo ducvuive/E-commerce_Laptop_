@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using BackendAPI.Application.UseCases.Orders.Events;
 using BackendAPI.Services.Orders;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;

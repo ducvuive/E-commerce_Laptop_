@@ -1,4 +1,4 @@
-namespace BackendAPI.Services.Orders;
+namespace BackendAPI.Application.UseCases.Orders.Events;
 
 public sealed class OrderPlacedEvent
 {

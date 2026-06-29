@@ -1,4 +1,5 @@
 using System.Text.Json;
+using BackendAPI.Application.UseCases.Orders.Events;
 using BackendAPI.Persistence.Data;
 using BackendAPI.Services.Orders;
 using Microsoft.EntityFrameworkCore;
